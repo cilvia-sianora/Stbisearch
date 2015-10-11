@@ -29,22 +29,22 @@ public class Util {
 	}
 	
 	public double logTF(Vector vec, String term){
-            return 1+log(vec.getTF(term));
-        }
+         return 1+log(vec.getTF(term));
+    }
 	
-	public float augTF(Vector vec,String term){
-            return (float) (0.5+(0.5*vec.getTF(term)/vec.getMaxTF()));
+	public double augTF(Vector vec,String term){
+         return (0.5+(0.5*vec.getTF(term)/vec.getMaxTF()));
 	}
 	
 	public int binaryTF(Vector vec,String term){
-            if((vec.getTF(term))>0){
-                return 1;
-            }else{
-                return 0;
-            }             
+		if((vec.getTF(term))>0){
+			return 1;
+		}else{
+			return 0;
+		}             
 	}
 	
-	public float idf(){
+	public double idf(){
 		return 0f;
 	}
 	
