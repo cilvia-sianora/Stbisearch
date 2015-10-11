@@ -1,6 +1,9 @@
 package stbisearch;
 
+import java.io.IOException;
 import static java.lang.Math.log;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  *
@@ -8,20 +11,28 @@ import static java.lang.Math.log;
  */
 public class Util {
 	
-	public void getRelevanceJudgement(String Location){
-	
+	public String getRelevanceJudgement(String Location) throws IOException{
+            String content;
+            content = new String(Files.readAllBytes(Paths.get(Location)));
+            return content;	
 	}
 	
-	public void getDocument(String Location){
-	
+	public String getDocument(String Location) throws IOException{
+            String content;
+            content = new String(Files.readAllBytes(Paths.get(Location)));
+            return content;
 	}
 	
-	public void getQueries(String Location){
-	
+	public String getQueries(String Location) throws IOException{
+            String content;
+            content = new String(Files.readAllBytes(Paths.get(Location)));
+            return content;
 	}
 	
-	public void getStopWords(String Location){
-	
+	public String getStopWords(String Location) throws IOException{
+            String content;
+            content = new String(Files.readAllBytes(Paths.get(Location)));
+            return content;
 	}
 	
 	public int rawTF(Vector vec, String term){
