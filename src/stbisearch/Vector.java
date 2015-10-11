@@ -19,7 +19,20 @@ public class Vector {
 	}
 	
 	public int getTF(String term){
-		return 0;
+		boolean found = false;
+		int i = 0;
+		while(!found && i<terms.length){
+			if(terms[i].equals(term)){
+				found = true;
+			} else {
+				i++;
+			}
+		}
+		if(found){
+			return tf[i];
+		} else {
+			return 0;
+		}
 	}
 	
 	public float getLength(){
