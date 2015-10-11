@@ -4,7 +4,7 @@ package stbisearch;
  *
  * @author 
  */
-public class Vektor {
+public class Vector {
 	public String[] terms;
 	public float[] weight;
 	public float length;
