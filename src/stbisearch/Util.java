@@ -6,23 +6,23 @@ package stbisearch;
  */
 public class Util {
 	
-	public void getRelevanceJudgement(){
+	public void getRelevanceJudgement(String Location){
 	
 	}
 	
-	public void getDocument(){
+	public void getDocument(String Location){
 	
 	}
 	
-	public void getQueries(){
+	public void getQueries(String Location){
 	
 	}
 	
-	public void getStopWords(){
+	public void getStopWords(String Location){
 	
 	}
 	
-	public float rawTF(){
+	public float rawTF(Vector vec, String term){
 		return 0f;
 	}
 	
