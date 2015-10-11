@@ -26,19 +26,15 @@ public class Util {
 		return 0f;
 	}
 	
-	public float rawTF(){
+	public float logTF(){
 		return 0f;
 	}
 	
-	public float rawTF(){
+	public float augTF(){
 		return 0f;
 	}
 	
-	public float rawTF(){
-		return 0f;
-	}
-	
-	public float rawTF(){
+	public float binaryTF(){
 		return 0f;
 	}
 	
