@@ -21,6 +21,16 @@ public class Vector {
 	public int getTF(String term){
 		return 0;
 	}
+        
+        public int getMaxTF(){
+            int max=0;
+            for(int i = 0 ;i<tf.length;i++){
+                if(tf[i]>max){
+                    max = tf[i];
+                }
+            }
+            return max;
+        }
 	
 	public float getLength(){
 		return 0f;

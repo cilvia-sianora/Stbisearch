@@ -1,5 +1,7 @@
 package stbisearch;
 
+import static java.lang.Math.log;
+
 /**
  *
  * @author Cilvia
@@ -22,20 +24,24 @@ public class Util {
 	
 	}
 	
-	public float rawTF(Vector vec, String term){
-		return 0f;
+	public int rawTF(Vector vec, String term){
+            return vec.getTF(term);
 	}
 	
-	public float logTF(){
-		return 0f;
+	public double logTF(Vector vec, String term){
+            return 1+log(vec.getTF(term));
+        }
+	
+	public float augTF(Vector vec,String term){
+            return (float) (0.5+(0.5*vec.getTF(term)/vec.getMaxTF()));
 	}
 	
-	public float augTF(){
-		return 0f;
-	}
-	
-	public float binaryTF(){
-		return 0f;
+	public int binaryTF(Vector vec,String term){
+            if((vec.getTF(term))>0){
+                return 1;
+            }else{
+                return 0;
+            }             
 	}
 	
 	public float idf(){
