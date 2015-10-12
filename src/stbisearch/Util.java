@@ -6,8 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -16,22 +14,33 @@ import java.util.logging.Logger;
 public class Util {
 	public List<Vector> docs;
 	public List<Vector> queries;
+	public List<Integer> judgeNoQuery;
+	public List<Integer> judgeNoDoc;
 	
-	public String readFile(String Location){
+	public void clear(){
+		docs.clear();
+		queries.clear();
+		judgeNoQuery.clear();
+		judgeNoDoc.clear();
+	}
+	
+	// return content of file
+	public String readFile(String location){
 		String content = "";
 		try {
-			content = new String(Files.readAllBytes(Paths.get(Location)));
+			content = new String(Files.readAllBytes(Paths.get(location)));
 		} catch (IOException ex) {
 		}
 		return content;
 	}
 	
-	public List getVectors(String Location){
+	// read documents/queries from file
+	private List getVectors(String location){
 		List vectors = new ArrayList<>();    
-		String temp = readFile(Location);
 		int no;
-		String title,author,content;		
-		String state;
+		String title,author,content,state;
+		
+		String temp = readFile(location);
 		for(String doc: temp.split(".I ")){
 			if(doc.length()>0){
 				title = "";
@@ -75,40 +84,53 @@ public class Util {
 		return vectors;
 	}
 	
-	public void getDocuments(String Location){
+	// get documents from file
+	public void getDocuments(String location){
 		docs = new ArrayList<>();
-		docs = getVectors(Location);
+		docs = getVectors(location);
 	}
 	
-	public void getQueries(String Location){
+	// get queries from file
+	public void getQueries(String location){
 		queries = new ArrayList<>();
-		queries = getVectors(Location);
+		queries = getVectors(location);
 	}
 	
-	public String getRelevanceJudgement(String Location) throws IOException{
-            String content;
-            content = new String(Files.readAllBytes(Paths.get(Location)));
-            return content;	
+	// get relevance judgement from file
+	public void getRelevanceJudgement(String location){
+        judgeNoQuery = new ArrayList<>();
+		judgeNoDoc = new ArrayList<>();
+		String temp = readFile(location);
+		String[] arr;
+		for(String line: temp.split("\n")){
+			arr = line.split("\\s+");
+			judgeNoQuery.add(Integer.parseInt(arr[0]));
+			judgeNoDoc.add(Integer.parseInt(arr[1]));
+		}
 	}
 	
-	public String getStopWords(String Location) throws IOException{
+	public String getStopWords(String location) throws IOException{
             String content;
-            content = new String(Files.readAllBytes(Paths.get(Location)));
+            content = new String(Files.readAllBytes(Paths.get(location)));
             return content;
 	}
 	
+	// computing term-weighting method: rawTF
 	public int rawTF(Vector vec, String term){
             return vec.getTF(term);
 	}
 	
+	// computing term-weighting method: logarithmTF
 	public double logTF(Vector vec, String term){
          return 1+log(vec.getTF(term));
     }
 	
+	// computing term-weighting method: augmentedTF
 	public double augTF(Vector vec,String term){
          return (0.5+(0.5*vec.getTF(term)/vec.getMaxTF()));
 	}
 	
+	// computing term-weighting method: binaryTF
 	public int binaryTF(Vector vec,String term){
 		if((vec.getTF(term))>0){
 			return 1;
@@ -117,6 +139,7 @@ public class Util {
 		}             
 	}
 	
+	// computing term-weighting method: idf
 	public double idf(String term){
 		int count = 0;
 		for(Vector doc: docs){
@@ -127,7 +150,9 @@ public class Util {
 		return log(docs.size()/count);
 	}
 	
-	public void termWeighting(String methodTF, boolean bIdf, boolean bNormalize){
+	// do term-weighting
+	// TODO: still incomplete (both parameter and body)
+	public void termWeighting(Vector vec,String methodTF, boolean bIdf, boolean bNormalize){
 		//TF
 		switch(methodTF){
 			case "raw":
@@ -147,10 +172,12 @@ public class Util {
 		}
 	}
 	
+	// do stemming
 	public void stemming(){
 	
 	}
 	
+	// do stop word removal
 	public void stopWordRemoval(){
 	
 	}
@@ -170,6 +197,15 @@ public class Util {
 		System.out.println("=========================");
 		for(Vector q: queries){
 			q.printVector();
+		}
+	}
+	
+	public void printJudgement(){
+		System.out.println("=========================");
+		System.out.println("==  J U D G E M E N T  ==");
+		System.out.println("=========================");
+		for(int i=0;i<judgeNoDoc.size();i++){
+			System.out.println(judgeNoQuery.get(i)+" "+judgeNoDoc.get(i));
 		}
 	}
 }
