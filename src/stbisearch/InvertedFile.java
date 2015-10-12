@@ -12,9 +12,9 @@ import java.util.List;
  */
 public class InvertedFile {
 	private Util util;
-	List<String> terms;
-	List<Integer> docs;
-	List<Double> weights;
+	public List<String> terms;
+	public List<Integer> docs;
+	public List<Double> weights;
 	
 	
 	public InvertedFile(){
@@ -24,26 +24,7 @@ public class InvertedFile {
 		weights = new ArrayList<>();
 	}
 	
-	public void indexing(String location){
-//		util.getDocuments(location);
-//		util.stemming();
-//		util.stopWordRemoval();
-//		util.termWeighting("raw", true, true);
-		
-		// put to inverted file
-		int index;
-		for(Vector doc: util.docs){
-			for(Term t: doc.terms){
-				// mencari index yang cocok
-				index = findIndex(t.getContent(), doc.no);
-				
-				// tambahkan di index setelah ditemukan index yang cocok
-				terms.add(index, t.getContent());
-				docs.add(index, doc.no);
-				weights.add(index, t.getWeight());
-			}
-		}
-		
+	public void write(String location){
 		// membuat inverted file
 		PrintWriter writer;
 		try {
@@ -76,7 +57,7 @@ public class InvertedFile {
 		return i;
 	}
 	
-	public void getInvertedFile(){
+	public void read(String location){
 		
 	}
 }

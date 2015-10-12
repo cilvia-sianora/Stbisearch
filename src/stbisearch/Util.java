@@ -5,11 +5,7 @@ import static java.lang.Math.log;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -28,6 +24,7 @@ public class Util {
 		judgeNoDoc.clear();
 	}
 	
+	// return content of file
 	public String readFile(String location){
 		String content = "";
 		try {
@@ -37,12 +34,13 @@ public class Util {
 		return content;
 	}
 	
-	public List getVectors(String location){
+	// read documents/queries from file
+	private List getVectors(String location){
 		List vectors = new ArrayList<>();    
-		String temp = readFile(location);
 		int no;
-		String title,author,content;		
-		String state;
+		String title,author,content,state;
+		
+		String temp = readFile(location);
 		for(String doc: temp.split(".I ")){
 			if(doc.length()>0){
 				title = "";
@@ -86,16 +84,19 @@ public class Util {
 		return vectors;
 	}
 	
+	// get documents from file
 	public void getDocuments(String location){
 		docs = new ArrayList<>();
 		docs = getVectors(location);
 	}
 	
+	// get queries from file
 	public void getQueries(String location){
 		queries = new ArrayList<>();
 		queries = getVectors(location);
 	}
 	
+	// get relevance judgement from file
 	public void getRelevanceJudgement(String location){
         judgeNoQuery = new ArrayList<>();
 		judgeNoDoc = new ArrayList<>();
@@ -114,18 +115,22 @@ public class Util {
             return content;
 	}
 	
+	// computing term-weighting method: rawTF
 	public int rawTF(Vector vec, String term){
             return vec.getTF(term);
 	}
 	
+	// computing term-weighting method: logarithmTF
 	public double logTF(Vector vec, String term){
          return 1+log(vec.getTF(term));
     }
 	
+	// computing term-weighting method: augmentedTF
 	public double augTF(Vector vec,String term){
          return (0.5+(0.5*vec.getTF(term)/vec.getMaxTF()));
 	}
 	
+	// computing term-weighting method: binaryTF
 	public int binaryTF(Vector vec,String term){
 		if((vec.getTF(term))>0){
 			return 1;
@@ -134,6 +139,7 @@ public class Util {
 		}             
 	}
 	
+	// computing term-weighting method: idf
 	public double idf(String term){
 		int count = 0;
 		for(Vector doc: docs){
@@ -144,6 +150,8 @@ public class Util {
 		return log(docs.size()/count);
 	}
 	
+	// do term-weighting
+	// TODO: still incomplete (both parameter and body)
 	public void termWeighting(String methodTF, boolean bIdf, boolean bNormalize){
 		//TF
 		switch(methodTF){
@@ -164,10 +172,12 @@ public class Util {
 		}
 	}
 	
+	// do stemming
 	public void stemming(){
 	
 	}
 	
+	// do stop word removal
 	public void stopWordRemoval(){
 	
 	}
