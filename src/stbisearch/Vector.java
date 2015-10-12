@@ -13,14 +13,10 @@ public class Vector {
 	public String content;
 	public String author;
 	
-	public List<String> terms;
-	public List<Integer> tf;
-	public List<Double> weight;
+	public List<Term> terms;
 	
 	public Vector(){
 		terms = new ArrayList<>();
-		tf = new ArrayList<>();
-		weight = new ArrayList<>();
 		no = 0;
 		title = "";
 		content = "";
@@ -33,55 +29,74 @@ public class Vector {
 		this.title = title;
 		this.author = author;
 		terms = new ArrayList<>();
-		tf = new ArrayList<>();
-		weight = new ArrayList<>();
 	}
 	
-	// get from raw document
+	// get frequency of term from raw document/query
 	public void countFreq(){
 		int index;
 		for (String term: content.split(" ")){
 			index = terms.indexOf(term);
 			if(index == -1){
-				terms.add(term);
-				tf.add(1);
+				terms.add(new Term(term,1,0));
 			} else {
-				tf.add(index, tf.get(index)+1);
+				terms.get(index).incrementFreq();
 			}
+		}
+	}	
+	
+	// get frequency of term
+	// return -1 if term not found
+	public int getTF(String term){
+		boolean found = false;
+		int i = 0;
+		while(!found && i<terms.size()){
+			if(terms.get(i).getContent().equals(term)){
+				found = true;
+			} else {
+				i++;
+			}
+		}
+		
+		if(found){
+			return terms.get(i).getFreq();
+		} else {
+			return -1;
 		}
 	}
 	
-	public void normalization(){
-		
-	}
-	
-	public int getTF(String term){
-		return tf.get(terms.indexOf(term));
-	}
-
+	// get maximun term frequency in document/query
 	public int getMaxTF(){
 		int max=0;
-		for(int i = 0 ;i<tf.size();i++){
-			if(tf.get(i)>max){
-				max = tf.get(i);
+		for(int i=0;i<terms.size();i++){
+			if(terms.get(i).getFreq()>max){
+				max = terms.get(i).getFreq();
 			}
 		}
 		return max;
 	}
 	
+	// get length of document/query
 	public double getLength(){
 		double sum = 0;
-		for(double w: weight){
-			sum += Math.pow(w,2);
+		for(Term t: terms){
+			sum += Math.pow(t.getWeight(),2);
 		}
 		return Math.sqrt(sum);
 	}
 	
+	// do normalization to document/query
+	public void normalization(){
+		double length = getLength();
+		for(int i=0;i<terms.size();i++){
+			terms.get(i).setWeight(terms.get(i).getWeight()/length);
+		}
+	}
+	
 	public void printVector(){
-				System.out.println(no);
-				System.out.println(title);
-				System.out.println(author);
-				System.out.println(content);
-				System.out.println("--------------------------------------");
+		System.out.println(no);
+		System.out.println(title);
+		System.out.println(author);
+		System.out.println(content);
+		System.out.println("--------------------------------------");
 	}
 }

@@ -5,7 +5,9 @@ import static java.lang.Math.log;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,19 +18,28 @@ import java.util.logging.Logger;
 public class Util {
 	public List<Vector> docs;
 	public List<Vector> queries;
+	public List<Integer> judgeNoQuery;
+	public List<Integer> judgeNoDoc;
 	
-	public String readFile(String Location){
+	public void clear(){
+		docs.clear();
+		queries.clear();
+		judgeNoQuery.clear();
+		judgeNoDoc.clear();
+	}
+	
+	public String readFile(String location){
 		String content = "";
 		try {
-			content = new String(Files.readAllBytes(Paths.get(Location)));
+			content = new String(Files.readAllBytes(Paths.get(location)));
 		} catch (IOException ex) {
 		}
 		return content;
 	}
 	
-	public List getVectors(String Location){
+	public List getVectors(String location){
 		List vectors = new ArrayList<>();    
-		String temp = readFile(Location);
+		String temp = readFile(location);
 		int no;
 		String title,author,content;		
 		String state;
@@ -75,25 +86,31 @@ public class Util {
 		return vectors;
 	}
 	
-	public void getDocuments(String Location){
+	public void getDocuments(String location){
 		docs = new ArrayList<>();
-		docs = getVectors(Location);
+		docs = getVectors(location);
 	}
 	
-	public void getQueries(String Location){
+	public void getQueries(String location){
 		queries = new ArrayList<>();
-		queries = getVectors(Location);
+		queries = getVectors(location);
 	}
 	
-	public String getRelevanceJudgement(String Location) throws IOException{
-            String content;
-            content = new String(Files.readAllBytes(Paths.get(Location)));
-            return content;	
+	public void getRelevanceJudgement(String location){
+        judgeNoQuery = new ArrayList<>();
+		judgeNoDoc = new ArrayList<>();
+		String temp = readFile(location);
+		String[] arr;
+		for(String line: temp.split("\n")){
+			arr = line.split("\\s+");
+			judgeNoQuery.add(Integer.parseInt(arr[0]));
+			judgeNoDoc.add(Integer.parseInt(arr[1]));
+		}
 	}
 	
-	public String getStopWords(String Location) throws IOException{
+	public String getStopWords(String location) throws IOException{
             String content;
-            content = new String(Files.readAllBytes(Paths.get(Location)));
+            content = new String(Files.readAllBytes(Paths.get(location)));
             return content;
 	}
 	
@@ -170,6 +187,15 @@ public class Util {
 		System.out.println("=========================");
 		for(Vector q: queries){
 			q.printVector();
+		}
+	}
+	
+	public void printJudgement(){
+		System.out.println("=========================");
+		System.out.println("==  J U D G E M E N T  ==");
+		System.out.println("=========================");
+		for(int i=0;i<judgeNoDoc.size();i++){
+			System.out.println(judgeNoQuery.get(i)+" "+judgeNoDoc.get(i));
 		}
 	}
 }
