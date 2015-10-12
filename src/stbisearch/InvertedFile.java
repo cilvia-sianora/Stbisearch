@@ -61,7 +61,11 @@ public class InvertedFile {
 
 			if(compareResult == 0){ // jika ketemu term yang sama
 				// iterasi lagi yang docs
-				while(docNo>docs.get(i) && i<terms.size()){
+				found = false;
+				while(!found && i<terms.size()){
+					if(docNo>docs.get(i)){
+						found = true;
+					}
 					i++;
 				}
 			}
