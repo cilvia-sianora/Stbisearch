@@ -16,11 +16,16 @@ public class DocumentProcess {
 		invFile = new InvertedFile();
 	}
 	
-	public void indexing(String location){
-//		util.getDocuments(location);
+	public void indexing(String locDocs, String locInvFile){
+		util.getDocuments(locDocs);
+		
 //		util.stemming();
 //		util.stopWordRemoval();
+		for(Vector doc: util.docs){
+			doc.countFreq();
+		}
 //		util.termWeighting("raw", true, true);
+		
 		
 		// put to inverted file
 		int index;
@@ -36,6 +41,6 @@ public class DocumentProcess {
 			}
 		}
 		
-		invFile.write(location);
+		invFile.write(locInvFile);
 	}
 }

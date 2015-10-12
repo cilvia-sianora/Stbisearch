@@ -47,7 +47,7 @@ public class Util {
 				author = "";
 				content = "";
 				state = "";
-
+				
 				no = Integer.parseInt(doc.substring(0,doc.indexOf("\n")));
 				doc = doc.substring(doc.indexOf("\n")+1);
 
