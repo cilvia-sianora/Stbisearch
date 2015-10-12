@@ -45,10 +45,20 @@ public class Vector {
 	}	
 	
 	// get frequency of term
-	// return -1 if term not found
 	public int getTF(String term){
-		boolean found = false;
-		int i = 0;
+		int i = findIndexTerm(term);
+                if(i > -1){
+			return terms.get(i).getFreq();
+		} else {
+			return 0;
+		}
+	}
+        
+        // get index of term
+        // return -1 if term not found
+        public int findIndexTerm(String term){
+                boolean found = false;
+                int i = 0;
 		while(!found && i<terms.size()){
 			if(terms.get(i).getContent().equals(term)){
 				found = true;
@@ -56,13 +66,13 @@ public class Vector {
 				i++;
 			}
 		}
-		
-		if(found){
-			return terms.get(i).getFreq();
+                
+                if(found){
+			return i;
 		} else {
 			return -1;
 		}
-	}
+        }
 	
 	// get maximun term frequency in document/query
 	public int getMaxTF(){

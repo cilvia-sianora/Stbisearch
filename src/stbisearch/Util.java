@@ -152,7 +152,7 @@ public class Util {
 	
 	// do term-weighting
 	// TODO: still incomplete (both parameter and body)
-	public void termWeighting(String methodTF, boolean bIdf, boolean bNormalize){
+	public void termWeighting(Vector vec,String methodTF, boolean bIdf, boolean bNormalize){
 		//TF
 		switch(methodTF){
 			case "raw":
