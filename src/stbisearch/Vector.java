@@ -31,11 +31,11 @@ public class Vector {
 		terms = new ArrayList<>();
 	}
 	
-	// get frequency of term from raw document/query
+	// count frequency of term from raw document/query
 	public void countFreq(){
 		int index;
 		for (String term: content.split(" ")){
-			index = terms.indexOf(term);
+			index = findIndexTerm(term);
 			if(index == -1){
 				terms.add(new Term(term,1,0));
 			} else {
@@ -54,11 +54,11 @@ public class Vector {
 		}
 	}
         
-        // get index of term
-        // return -1 if term not found
-        public int findIndexTerm(String term){
-                boolean found = false;
-                int i = 0;
+    // get index of term
+    // return -1 if term not found
+	public int findIndexTerm(String term){
+		boolean found = false;
+		int i = 0;
 		while(!found && i<terms.size()){
 			if(terms.get(i).getContent().equals(term)){
 				found = true;
@@ -67,12 +67,12 @@ public class Vector {
 			}
 		}
                 
-                if(found){
+		if(found){
 			return i;
 		} else {
 			return -1;
 		}
-        }
+	}
 	
 	// get maximun term frequency in document/query
 	public int getMaxTF(){

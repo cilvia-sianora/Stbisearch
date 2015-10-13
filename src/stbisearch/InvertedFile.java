@@ -24,12 +24,14 @@ public class InvertedFile {
 		weights = new ArrayList<>();
 	}
 	
+	// write inverted file
 	public void write(String location){
 		// membuat inverted file
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(location, "UTF-8");
 			for(int i =0;i<terms.size();i++){
+				System.out.println(terms.get(i)+" "+docs.get(i)+" "+weights.get(i));
 				writer.println(terms.get(i)+" "+docs.get(i)+" "+weights.get(i));
 			}
 			writer.close();
@@ -37,27 +39,55 @@ public class InvertedFile {
 		}
 	}
 	
+	// find the right index to put term for indexing
+	// or find the index of a term for searching
+	// NOTE: for searching, if return index is more than the size of list,
+	//			it means the term is not found
 	public int findIndex(String term, int docNo){
 		int i = 0;
+		boolean found = false;
 		
-		// mencari index yang cocok berdasarkan keterurutan term
-		int compareResult = term.compareToIgnoreCase(terms.get(i));
-		while(compareResult>0 && i<terms.size()){
-			i++;
-		}
-		
-		if(compareResult == 0){ // jika ketemu term yang sama
-			// iterasi lagi yang docs
-			while(docNo>docs.get(i) && i<terms.size()){
-				i++;
+		if(terms.size()>0){
+			// mencari index yang cocok berdasarkan keterurutan term
+			int compareResult = 1;
+			while(!found && i<terms.size()){
+				compareResult = term.compareToIgnoreCase(terms.get(i));
+				if(compareResult<=0){
+					found = true;
+				} else {
+					i++;
+				}
+			}
+
+			if(compareResult == 0){ // jika ketemu term yang sama
+				// iterasi lagi yang docs
+				found = false;
+				while(!found && i<terms.size()){
+					if(docNo>docs.get(i)){
+						found = true;
+					}
+					i++;
+				}
 			}
 		}
 		
-		// TODO: kalo buat getInvertedFile, term nya gak ada, harusnya return error
 		return i;
 	}
 	
+	// read inverted file
 	public void read(String location){
+		// clear the list
+		terms.clear();
+		docs.clear();
+		weights.clear();
 		
+		String[] arr;
+		String content = util.readFile(location);
+		for(String line: content.split("\n")){
+			arr = line.split(" ");
+			terms.add(arr[0]);
+			docs.add(Integer.parseInt(arr[1]));
+			weights.add(Double.parseDouble(arr[2]));
+		}
 	}
 }

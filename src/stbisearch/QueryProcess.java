@@ -14,7 +14,7 @@ public class QueryProcess {
 	}
 	
 	public void search(){
-	
+		
 	}
 	
 }
