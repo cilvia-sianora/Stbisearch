@@ -5,6 +5,12 @@
         <group>
             <file>file:/D:/Tgs/Sem7/Stbi/Stbisearch/src/stbisearch/Vector.java</file>
             <file>file:/D:/Tgs/Sem7/Stbi/Stbisearch/src/stbisearch/Util.java</file>
+            <file>file:/D:/Tgs/Sem7/Stbi/Stbisearch/src/gui/GUI.java</file>
+            <file>file:/D:/Tgs/Sem7/Stbi/Stbisearch/src/stbisearch/Term.java</file>
+            <file>file:/D:/Tgs/Sem7/Stbi/Stbisearch/src/stbisearch/InvertedFile.java</file>
+            <file>file:/D:/Tgs/Sem7/Stbi/Stbisearch/src/stbisearch/StbiSearch.java</file>
+            <file>file:/D:/Tgs/Sem7/Stbi/Stbisearch/src/stbisearch/DocumentProcess.java</file>
+            <file>file:/D:/Tgs/Sem7/Stbi/Stbisearch/src/stbisearch/QueryProcess.java</file>
         </group>
     </open-files>
 </project-private>

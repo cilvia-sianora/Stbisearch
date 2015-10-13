@@ -115,6 +115,8 @@ public class Util {
             return content;
 	}
 	
+        //tambahin if not -1
+        
 	// computing term-weighting method: rawTF
 	public int rawTF(Vector vec, String term){
             return vec.getTF(term);
@@ -154,21 +156,31 @@ public class Util {
 	// TODO: still incomplete (both parameter and body)
 	public void termWeighting(Vector vec,String methodTF, boolean bIdf, boolean bNormalize){
 		//TF
+            String term;
+            for(Term t : vec.terms){
+                term = t.getContent();
 		switch(methodTF){
 			case "raw":
+                            vec.terms.get(vec.findIndexTerm(term)).setWeight(rawTF(vec,term));
 				break;
 			case "log":
+                            vec.terms.get(vec.findIndexTerm(term)).setWeight(logTF(vec,term));
 				break;
 			case "binary":
+                            vec.terms.get(vec.findIndexTerm(term)).setWeight(binaryTF(vec,term));
 				break;
 			case "aug":
+                            vec.terms.get(vec.findIndexTerm(term)).setWeight(augTF(vec,term));
 				break;
+                        default:
+                            vec.terms.get(vec.findIndexTerm(term)).setWeight(1);
 		}
 		if(bIdf){
-			
+                    vec.terms.get(vec.findIndexTerm(term)).setWeight(vec.terms.get(vec.findIndexTerm(term)).getWeight()*idf(term));
 		}
+            }
 		if(bNormalize){
-		
+                    vec.normalization();
 		}
 	}
 	
