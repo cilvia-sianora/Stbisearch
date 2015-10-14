@@ -31,6 +31,7 @@ public class Util {
 			content = new String(Files.readAllBytes(Paths.get(location)));
 		} catch (IOException ex) {
 		}
+//		System.out.println(content);
 		return content;
 	}
 	
@@ -43,15 +44,19 @@ public class Util {
 		String temp = readFile(location);
 		for(String doc: temp.split(".I ")){
 			if(doc.length()>0){
+				System.out.println(doc);
 				title = "";
 				author = "";
 				content = "";
-				state = "";
+				state = "number";
+				no = 0;
 				
-				no = Integer.parseInt(doc.substring(0,doc.indexOf("\n")));
-				doc = doc.substring(doc.indexOf("\n")+1);
+//				System.out.println(doc.indexOf("\n"));
+//				no = Integer.parseInt(doc.substring(0,doc.indexOf("\n")));
+//				doc = doc.substring(doc.indexOf("\n")+1);
 
 				for(String line: doc.split("\n")){
+//					System.out.println(line);
 					switch(line){
 						case ".A":
 							state = "author";
@@ -72,6 +77,9 @@ public class Util {
 									break;
 								case "content":
 									content += line;
+									break;
+								case "number" :
+									no = Integer.parseInt(line);
 									break;
 							}
 					}
