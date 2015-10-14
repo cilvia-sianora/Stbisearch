@@ -198,7 +198,6 @@ public class Util {
 	
 		if (!(D.isEmpty() | D.length() < 1 )){
 		    stemmer.add(D.toCharArray(), D.length());
-		    System.out.println(stemmer.getResultBuffer());
 		    String temp = new String(stemmer.getResultBuffer());
 		    result += " " + temp;
 		}
