@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -19,26 +21,28 @@ import java.util.logging.Logger;
 public class Util {
 	public List<Vector> docs;
 	public List<Vector> queries;
-	public List<Integer> judgeNoQuery;
-	public List<Integer> judgeNoDoc;
+	public List<Integer> relevantNoQuery;
+	public List<Integer> relevantNoDoc;
 	
 	public void clear(){
 		docs.clear();
 		queries.clear();
-		judgeNoQuery.clear();
-		judgeNoDoc.clear();
+		relevantNoQuery.clear();
+		relevantNoDoc.clear();
 	}
 	
 	// return content of file
 	public String readFile(String location){
 		String content = "";
-            	try {
-			content = new String(Files.readAllBytes(Paths.get(location)));
-		} catch (IOException ex) {
-		}
-//                System.out.println(content);
-            return content;
-	}
+                try {                
+                    Scanner in = new Scanner(new File(location));
+                    while(in.hasNextLine()){
+                        content += in.nextLine() + "\n";
+                    }
+                } catch (FileNotFoundException ex) {
+                }
+        	return content;
+        }
 	
 	// read documents/queries from file
 	private List getVectors(String location){
@@ -49,18 +53,13 @@ public class Util {
 		String temp = readFile(location);
 		for(String doc: temp.split(".I ")){
 			if(doc.length()>0){
-                            System.out.println(doc);
 				title = "";
 				author = "";
 				content = "";
-				state = "";
+				state = "number";
+				no = 0;
 				
-                                System.out.println(doc.indexOf("\n"));
-				no = Integer.parseInt(doc.substring(0,doc.indexOf("\n")));
-				doc = doc.substring(doc.indexOf("\n")+1);
-
 				for(String line: doc.split("\n")){
-//                                    System.out.println(line);
 					switch(line){
 						case ".A":
 							state = "author";
@@ -81,6 +80,9 @@ public class Util {
 									break;
 								case "content":
 									content += line;
+									break;
+								case "number" :
+                                                                    no = Integer.parseInt(line);
 									break;
 							}
 					}
@@ -107,14 +109,14 @@ public class Util {
 	
 	// get relevance judgement from file
 	public void getRelevanceJudgement(String location){
-        judgeNoQuery = new ArrayList<>();
-		judgeNoDoc = new ArrayList<>();
+        relevantNoQuery = new ArrayList<>();
+		relevantNoDoc = new ArrayList<>();
 		String temp = readFile(location);
 		String[] arr;
 		for(String line: temp.split("\n")){
 			arr = line.split("\\s+");
-			judgeNoQuery.add(Integer.parseInt(arr[0]));
-			judgeNoDoc.add(Integer.parseInt(arr[1]));
+			relevantNoQuery.add(Integer.parseInt(arr[0]));
+			relevantNoDoc.add(Integer.parseInt(arr[1]));
 		}
 	}
 	
@@ -225,8 +227,8 @@ public class Util {
 		System.out.println("=========================");
 		System.out.println("==  J U D G E M E N T  ==");
 		System.out.println("=========================");
-		for(int i=0;i<judgeNoDoc.size();i++){
-			System.out.println(judgeNoQuery.get(i)+" "+judgeNoDoc.get(i));
+		for(int i=0;i<relevantNoDoc.size();i++){
+			System.out.println(relevantNoQuery.get(i)+" "+relevantNoDoc.get(i));
 		}
 	}
 }
