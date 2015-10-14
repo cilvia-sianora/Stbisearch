@@ -1,11 +1,18 @@
 package stbisearch;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import static java.lang.Math.log;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -27,13 +34,15 @@ public class Util {
 	// return content of file
 	public String readFile(String location){
 		String content = "";
-		try {
-			content = new String(Files.readAllBytes(Paths.get(location)));
-		} catch (IOException ex) {
-		}
-//		System.out.println(content);
-		return content;
-	}
+                try {                
+                    Scanner in = new Scanner(new File(location));
+                    while(in.hasNextLine()){
+                        content += in.nextLine() + "\n";
+                    }
+                } catch (FileNotFoundException ex) {
+                }
+        	return content;
+        }
 	
 	// read documents/queries from file
 	private List getVectors(String location){
@@ -44,20 +53,13 @@ public class Util {
 		String temp = readFile(location);
 		for(String doc: temp.split(".I ")){
 			if(doc.length()>0){
-//				System.out.println(doc);
 				title = "";
 				author = "";
 				content = "";
 				state = "number";
 				no = 0;
 				
-//				System.out.println(doc.indexOf("\n"));
-//				no = Integer.parseInt(doc.substring(0,doc.indexOf("\n")));
-//				doc = doc.substring(doc.indexOf("\n")+1);
-
 				for(String line: doc.split("\n")){
-//					System.out.println(line);
-					line = line.replace("\n","");
 					switch(line){
 						case ".A":
 							state = "author";
@@ -80,7 +82,6 @@ public class Util {
 									content += line;
 									break;
 								case "number" :
-									System.out.println(line);
 									no = Integer.parseInt(line);
 									break;
 							}

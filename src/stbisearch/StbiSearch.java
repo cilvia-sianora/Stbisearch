@@ -14,7 +14,7 @@ public class StbiSearch {
 	 */
 	public static void main(String[] args) {
 		Util util = new Util();
-		util.getDocuments("Test Collection\\ADI\\test.all");
+		util.getDocuments("Test Collection\\ADI\\adi.all");
 //		util.getQueries("Test Collection\\ADI\\query.text");
 //		util.printDocuments();
 //		util.printQueries();
