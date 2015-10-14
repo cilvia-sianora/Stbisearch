@@ -123,11 +123,13 @@
                   <Component id="noStem" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="rawTF" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="usingIDF" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="usingNorm" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="usingStem" alignment="1" min="-2" pref="23" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="rawTF" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="usingIDF" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="usingNorm" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="logaritmicTF" min="-2" max="-2" attributes="0"/>
@@ -154,7 +156,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="18" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Information Retrieval"/>
+        <Property name="text" type="java.lang.String" value="Indexing"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">

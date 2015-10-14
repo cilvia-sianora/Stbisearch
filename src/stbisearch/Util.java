@@ -1,11 +1,16 @@
 package stbisearch;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import static java.lang.Math.log;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,11 +32,12 @@ public class Util {
 	// return content of file
 	public String readFile(String location){
 		String content = "";
-		try {
+            	try {
 			content = new String(Files.readAllBytes(Paths.get(location)));
 		} catch (IOException ex) {
 		}
-		return content;
+//                System.out.println(content);
+            return content;
 	}
 	
 	// read documents/queries from file
@@ -43,15 +49,18 @@ public class Util {
 		String temp = readFile(location);
 		for(String doc: temp.split(".I ")){
 			if(doc.length()>0){
+                            System.out.println(doc);
 				title = "";
 				author = "";
 				content = "";
 				state = "";
 				
+                                System.out.println(doc.indexOf("\n"));
 				no = Integer.parseInt(doc.substring(0,doc.indexOf("\n")));
 				doc = doc.substring(doc.indexOf("\n")+1);
 
 				for(String line: doc.split("\n")){
+//                                    System.out.println(line);
 					switch(line){
 						case ".A":
 							state = "author";
