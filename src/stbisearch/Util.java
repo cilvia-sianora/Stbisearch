@@ -126,22 +126,35 @@ public class Util {
             return content;
 	}
 		
-		//TODO Rita
-        //tambahin if not -1
-        //if -1, return 0
 	// computing term-weighting method: rawTF
 	public int rawTF(Vector vec, String term){
-            return vec.getTF(term);
+            if(vec.getTF(term)!= -1){
+                return vec.getTF(term);
+            }
+            else{
+                return 0;
+            }
 	}
 	
 	// computing term-weighting method: logarithmTF
 	public double logTF(Vector vec, String term){
-         return 1+log(vec.getTF(term));
-    }
+            if(vec.getTF(term)!= -1){
+                return 1+log(vec.getTF(term));
+            }
+            else{
+                return 0;
+            }
+        }
 	
 	// computing term-weighting method: augmentedTF
 	public double augTF(Vector vec,String term){
-         return (0.5+(0.5*vec.getTF(term)/vec.getMaxTF()));
+            if(vec.getTF(term)!= -1){
+                 return (0.5+(0.5*vec.getTF(term)/vec.getMaxTF()));
+            }
+            else{
+                return 0;
+            }
+
 	}
 	
 	// computing term-weighting method: binaryTF
