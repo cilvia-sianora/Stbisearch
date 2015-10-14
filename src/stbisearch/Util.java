@@ -82,7 +82,7 @@ public class Util {
 									content += line;
 									break;
 								case "number" :
-                                                                    no = Integer.parseInt(line);
+									no = Integer.parseInt(line);
 									break;
 							}
 					}
