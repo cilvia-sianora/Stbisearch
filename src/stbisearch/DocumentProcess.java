@@ -19,8 +19,8 @@ public class DocumentProcess {
 	public void indexing(String locDocs){
 		util.getDocuments(locDocs);
 		
-		util.stemming();
-		util.stopWordRemoval();
+//		util.stemming();
+//		util.stopWordRemoval();
 		for(Vector doc: util.docs){
 			doc.countFreq();
 			util.termWeighting(doc,"raw", true, true);
