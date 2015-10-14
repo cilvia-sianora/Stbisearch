@@ -12,12 +12,12 @@ import java.util.logging.Logger;
  */
 public class StbiSearch {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-	  Util util = new Util();
-//		util.getDocuments("Test Collection\\ADI\\adi.all");
+	/**
+	 * @param args the command line arguments
+	 */
+	public static void main(String[] args) {
+		Util util = new Util();
+		util.getDocuments("Test Collection\\ADI\\adi.all");
 //		util.getQueries("Test Collection\\ADI\\query.text");
 //		util.printDocuments();
 //		util.printQueries();

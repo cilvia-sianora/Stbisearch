@@ -52,6 +52,7 @@ public class Query extends javax.swing.JPanel {
         noTF = new javax.swing.JRadioButton();
         jLabel3 = new javax.swing.JLabel();
         augmentedTF = new javax.swing.JRadioButton();
+        jButton1 = new javax.swing.JButton();
 
         filepathlabel2.setText("File : ");
 
@@ -108,7 +109,7 @@ public class Query extends javax.swing.JPanel {
         jLabel2.setText("TF");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setText("Information Retrieval");
+        jLabel1.setText("Setting Query");
 
         usingIDF.setText("using IDF");
         usingIDF.setToolTipText("");
@@ -176,6 +177,9 @@ public class Query extends javax.swing.JPanel {
             }
         });
 
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jButton1.setText("<");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -222,13 +226,15 @@ public class Query extends javax.swing.JPanel {
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel5)
                                         .addComponent(usingStem)
-                                        .addComponent(noStem)))))))
+                                        .addComponent(noStem))))))
+                    .addComponent(jButton1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addComponent(jButton1)
+                .addGap(5, 5, 5)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -344,6 +350,7 @@ public class Query extends javax.swing.JPanel {
     private javax.swing.JLabel filepathlabel;
     private javax.swing.JLabel filepathlabel2;
     private javax.swing.JButton indexing;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
