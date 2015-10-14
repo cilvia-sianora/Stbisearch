@@ -44,6 +44,19 @@ public class Vector {
 		}
 	}	
 	
+	// count similarity
+	public double similarity(Vector vec){
+		double sum = 0;
+		int index;
+		for(Term t: vec.terms){
+			index = findIndexTerm(t.getContent());
+			if(index != -1){
+				sum += t.getWeight() * terms.get(index).getWeight();
+			}
+		}
+		return sum;
+	}
+	
 	// get frequency of term
 	public int getTF(String term){
 		int i = findIndexTerm(term);

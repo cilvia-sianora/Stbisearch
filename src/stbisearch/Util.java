@@ -114,7 +114,10 @@ public class Util {
             content = new String(Files.readAllBytes(Paths.get(location)));
             return content;
 	}
-	
+		
+		//TODO Rita
+        //tambahin if not -1
+        //if -1, return 0
 	// computing term-weighting method: rawTF
 	public int rawTF(Vector vec, String term){
             return vec.getTF(term);
@@ -143,7 +146,7 @@ public class Util {
 	public double idf(String term){
 		int count = 0;
 		for(Vector doc: docs){
-			if(doc.terms.contains(term)){
+			if(doc.findIndexTerm(term) != -1){
 				count++;
 			}
 		}
@@ -151,24 +154,33 @@ public class Util {
 	}
 	
 	// do term-weighting
-	// TODO: still incomplete (both parameter and body)
-	public void termWeighting(Vector vec,String methodTF, boolean bIdf, boolean bNormalize){
+	public void termWeighting(Vector vec, String methodTF, boolean bIdf, boolean bNormalize){
 		//TF
-		switch(methodTF){
-			case "raw":
-				break;
-			case "log":
-				break;
-			case "binary":
-				break;
-			case "aug":
-				break;
-		}
-		if(bIdf){
-			
+		String term;
+		for(Term t : vec.terms){
+			term = t.getContent();
+			switch(methodTF){
+				case "raw":
+					vec.terms.get(vec.findIndexTerm(term)).setWeight(rawTF(vec,term));
+					break;
+				case "log":
+					vec.terms.get(vec.findIndexTerm(term)).setWeight(logTF(vec,term));
+					break;
+				case "binary":
+					vec.terms.get(vec.findIndexTerm(term)).setWeight(binaryTF(vec,term));
+					break;
+				case "aug":
+					vec.terms.get(vec.findIndexTerm(term)).setWeight(augTF(vec,term));
+					break;
+				default:
+					vec.terms.get(vec.findIndexTerm(term)).setWeight(1);
+			}
+			if(bIdf){
+				vec.terms.get(vec.findIndexTerm(term)).setWeight(vec.terms.get(vec.findIndexTerm(term)).getWeight()*idf(term));
+			}
 		}
 		if(bNormalize){
-		
+			vec.normalization();
 		}
 	}
 	

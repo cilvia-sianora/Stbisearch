@@ -21,7 +21,7 @@ public class StbiSearch {
 //		util.getRelevanceJudgement("Test Collection\\ADI\\qrels.text");
 //		util.printJudgement();
 		DocumentProcess dp = new DocumentProcess();
-		dp.indexing("Test Collection\\ADI\\test.all","Test Collection\\ADI\\invertedfile.txt");
+		dp.indexing("Test Collection\\ADI\\test.all");
 
 	}
 	

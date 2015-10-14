@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class InvertedFile {
 	private Util util;
+	private final String LOCATION = "Test Collection\\invertedfile.txt";
 	public List<String> terms;
 	public List<Integer> docs;
 	public List<Double> weights;
@@ -25,11 +26,11 @@ public class InvertedFile {
 	}
 	
 	// write inverted file
-	public void write(String location){
+	public void write(){
 		// membuat inverted file
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter(location, "UTF-8");
+			writer = new PrintWriter(LOCATION, "UTF-8");
 			for(int i =0;i<terms.size();i++){
 				System.out.println(terms.get(i)+" "+docs.get(i)+" "+weights.get(i));
 				writer.println(terms.get(i)+" "+docs.get(i)+" "+weights.get(i));
@@ -75,14 +76,14 @@ public class InvertedFile {
 	}
 	
 	// read inverted file
-	public void read(String location){
+	public void read(){
 		// clear the list
 		terms.clear();
 		docs.clear();
 		weights.clear();
 		
 		String[] arr;
-		String content = util.readFile(location);
+		String content = util.readFile(LOCATION);
 		for(String line: content.split("\n")){
 			arr = line.split(" ");
 			terms.add(arr[0]);
