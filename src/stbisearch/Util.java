@@ -44,7 +44,7 @@ public class Util {
 		String temp = readFile(location);
 		for(String doc: temp.split(".I ")){
 			if(doc.length()>0){
-				System.out.println(doc);
+//				System.out.println(doc);
 				title = "";
 				author = "";
 				content = "";
@@ -57,6 +57,7 @@ public class Util {
 
 				for(String line: doc.split("\n")){
 //					System.out.println(line);
+					line = line.replace("\n","");
 					switch(line){
 						case ".A":
 							state = "author";
@@ -79,6 +80,7 @@ public class Util {
 									content += line;
 									break;
 								case "number" :
+									System.out.println(line);
 									no = Integer.parseInt(line);
 									break;
 							}

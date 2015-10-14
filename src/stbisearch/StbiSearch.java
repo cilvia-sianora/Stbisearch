@@ -16,7 +16,7 @@ public class StbiSearch {
 		Util util = new Util();
 		util.getDocuments("Test Collection\\ADI\\test.all");
 //		util.getQueries("Test Collection\\ADI\\query.text");
-		util.printDocuments();
+//		util.printDocuments();
 //		util.printQueries();
 //		util.getRelevanceJudgement("Test Collection\\ADI\\qrels.text");
 //		util.printJudgement();
