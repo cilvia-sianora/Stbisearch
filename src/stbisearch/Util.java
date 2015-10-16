@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.tartarus.martin.Stemmer;
 
 /**
  *
@@ -208,15 +209,59 @@ public class Util {
 		}
 	}
 	
-	// do stemming
-	public void stemming(){
 	
-	}
+    /**
+     * @param @Document
+     * Stemming setiap kata dari masukan
+    **/
+    public String stemming(String Document) {
+	  String result = "";
+	  String[] DocArr = Document.split(" ");
+	  for (String D:DocArr){
+		Stemmer stemmer = new Stemmer();
 	
-	// do stop word removal
-	public void stopWordRemoval(){
-	
-	}
+		if (!(D.isEmpty() | D.length() < 1 )){
+		    stemmer.add(D.toCharArray(), D.length());
+		    String temp = new String(stemmer.getResultBuffer());
+		    result += " " + temp;
+		}
+	  }
+	  return result;
+    }
+
+    /**
+     * @param @Documents
+     * Hapus simbol-simbol dari dokumen masukan.
+    **/
+    public String delimiter(String Document) throws IOException{
+	  String delimited = " " + Document;
+	  String[] delimiters = {".", "/", "\\", "'t", "'d", "'s", "\"", "\'", ",", "!", "?", "(", ")", "-", "+", "=", "*", ":", ";", "\n"};
+	  
+	  for (String d: delimiters){
+		delimited = delimited.replace(d, " ");
+	  }
+	  return delimited;
+    }
+    
+    /**
+     * @param @Documents
+     * Hapus stopwords dari dokumen masukan.
+    **/
+    public String stopWordRemoval(String location, String Document) throws IOException {
+	  String stemmed = Document;
+
+	  // loads stopwordlist 
+	  String stopString = getStopWords(location);
+	  String[] stopList = stopString.split("\n");
+
+	  for (String stopword : stopList) {
+		if (Document.contains(stopword)) {
+		    stemmed = stemmed.replaceAll(" " + stopword + " ", " ");
+		}
+	  }
+	  return stemmed;
+    }
+
 
 	public void printDocuments(){
 		System.out.println("=========================");

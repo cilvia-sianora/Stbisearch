@@ -120,8 +120,8 @@ public class QueryProcess {
 		Vector query = new Vector();
 		query.content = queryInput;
 		
-		util.stemming();
-		util.stopWordRemoval();
+//		util.stemming();
+//		util.stopWordRemoval();
 		query.countFreq();
 		util.termWeighting(query,"raw", true, true);
 		result = search(query);
@@ -137,8 +137,8 @@ public class QueryProcess {
 		util.getRelevanceJudgement(locRlvJudge);
 		
 		String result = "";
-		util.stemming();
-		util.stopWordRemoval();
+//		util.stemming();
+//		util.stopWordRemoval();
 		for(Vector query: util.queries){
 			query.countFreq();
 			util.termWeighting(query,"raw", true, true);
