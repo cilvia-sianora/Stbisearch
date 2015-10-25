@@ -23,7 +23,7 @@ public class DocumentProcess {
 //		util.stopWordRemoval();
 		for(Vector doc: util.docs){
 			doc.countFreq();
-			util.termWeighting(doc,"raw", true, true);
+			util.termWeighting(doc,"raw", true, false);
 		}
 		
 		// put to inverted file

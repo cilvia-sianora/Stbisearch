@@ -26,38 +26,52 @@ public class QueryProcess {
 		precisionAtRlvDoc = new ArrayList<>();
 	}
 	
+	// count number of relevant documents retrieved
 	private int countRelevantDocs(int queryNo){
-		int i;
+		int i,j;
 		boolean stopSearch;
 		
 		int count = 0;
+		j = 0;
+		// for each document retrieved
 		for(Integer docNo: resultDocNo){
 			i=util.relevantNoQuery.indexOf(queryNo);
 			stopSearch = false;
 			while(!stopSearch && i<=util.relevantNoQuery.lastIndexOf(queryNo)){
 				if(docNo >= util.relevantNoDoc.get(i)){
-					if(docNo == util.relevantNoDoc.get(i)){
+					if(docNo == util.relevantNoDoc.get(i)){ // if relevant doc
 						count++;
+						precisionAtRlvDoc.add((double)(count/j+1));
 					}
 					stopSearch = true;
 				}
 				i++;
 			}
+			j++;
 		}
 		return count;
 	}
 	
-	private double getRecall(int queryNo){
-		return countRelevantDocs(queryNo)/util.relevantNoDoc.size();
+	private int countAllRelevantDocs(int queryNo){
+		return util.relevantNoQuery.indexOf(queryNo) - util.relevantNoQuery.lastIndexOf(queryNo) + 1;
 	}
 	
-	private double getPrecision(int queryNo){
-		return countRelevantDocs(queryNo)/resultDocNo.size();
+	private double getRecall(int numRlvAcq, int totalRlvDocs){
+		return numRlvAcq/totalRlvDocs;
+	}
+	
+	private double getPrecision(int numRlvAcq, int numDocsAcq){
+//		return countRelevantDocs(queryNo)/resultDocNo.size();
+		return numRlvAcq/numDocsAcq;
 	}
 	
 	// compute Non-Interpolated Average Precision
-	private double getNIAP(){
-		return 0;
+	private double getNIAP(int totalRlvDocs){
+		double sum = 0;
+		for(double p: precisionAtRlvDoc){
+			sum += p;
+		}
+		return sum/totalRlvDocs;
 	}
 	
 	// find the right index to rank document for the result
@@ -94,9 +108,12 @@ public class QueryProcess {
 	public String judgeRelevance(int queryNo){
 		String result = "";
 
-		result += "Precision = " + getPrecision(queryNo) + "\n";
-		result += "Recall = " + getRecall(queryNo) + "\n";
-		result += "Non-Interpolated Average Precision = " + getNIAP() + "\n";
+		int numRlvAcq = countRelevantDocs(queryNo);
+		int totalRlvDocs = countAllRelevantDocs(queryNo);
+		
+		result += "Precision = " + getPrecision(numRlvAcq,resultDocNo.size()) + "\n";
+		result += "Recall = " + getRecall(numRlvAcq,totalRlvDocs) + "\n";
+		result += "Non-Interpolated Average Precision = " + getNIAP(totalRlvDocs) + "\n";
 		
 		return result;
 	}
