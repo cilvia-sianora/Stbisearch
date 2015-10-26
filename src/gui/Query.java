@@ -33,8 +33,10 @@ public class Query extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        filepathlabel2 = new javax.swing.JLabel();
-        uploadDoc = new javax.swing.JButton();
+        tf = new javax.swing.ButtonGroup();
+        idf = new javax.swing.ButtonGroup();
+        normal = new javax.swing.ButtonGroup();
+        stem = new javax.swing.ButtonGroup();
         indexing = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         noStem = new javax.swing.JRadioButton();
@@ -46,35 +48,30 @@ public class Query extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         usingIDF = new javax.swing.JRadioButton();
-        filepathlabel = new javax.swing.JLabel();
         binaryTF = new javax.swing.JRadioButton();
         logaritmicTF = new javax.swing.JRadioButton();
-        Stopword = new javax.swing.JButton();
         rawTF = new javax.swing.JRadioButton();
         noTF = new javax.swing.JRadioButton();
         jLabel3 = new javax.swing.JLabel();
         augmentedTF = new javax.swing.JRadioButton();
         jButton1 = new javax.swing.JButton();
 
-        filepathlabel2.setText("File : ");
-
-        uploadDoc.setText("Query");
-        uploadDoc.setActionCommand("documentUpload");
-        uploadDoc.addActionListener(new java.awt.event.ActionListener() {
+        indexing.setText("Searching");
+        indexing.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                uploadDocActionPerformed(evt);
+                indexingActionPerformed(evt);
             }
         });
-
-        indexing.setText("Searching");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Stemming");
 
+        stem.add(noStem);
         noStem.setText("no Stemming");
         noStem.setToolTipText("");
         noStem.setActionCommand("");
 
+        normal.add(noNorm);
         noNorm.setText("no Normalization");
         noNorm.setToolTipText("");
         noNorm.setActionCommand("");
@@ -84,6 +81,7 @@ public class Query extends javax.swing.JPanel {
             }
         });
 
+        normal.add(usingNorm);
         usingNorm.setText("using Normalization");
         usingNorm.setToolTipText("");
         usingNorm.setActionCommand("");
@@ -93,8 +91,10 @@ public class Query extends javax.swing.JPanel {
             }
         });
 
+        stem.add(usingStem);
         usingStem.setText("using Stemming");
 
+        idf.add(noIDF);
         noIDF.setText("no IDF");
         noIDF.setToolTipText("");
         noIDF.setActionCommand("");
@@ -113,6 +113,7 @@ public class Query extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("Setting Query");
 
+        idf.add(usingIDF);
         usingIDF.setText("using IDF");
         usingIDF.setToolTipText("");
         usingIDF.setActionCommand("");
@@ -122,8 +123,7 @@ public class Query extends javax.swing.JPanel {
             }
         });
 
-        filepathlabel.setText("File : ");
-
+        tf.add(binaryTF);
         binaryTF.setText("binary TF");
         binaryTF.setToolTipText("");
         binaryTF.setActionCommand("");
@@ -133,6 +133,7 @@ public class Query extends javax.swing.JPanel {
             }
         });
 
+        tf.add(logaritmicTF);
         logaritmicTF.setText("logaritmic TF");
         logaritmicTF.setToolTipText("");
         logaritmicTF.setActionCommand("");
@@ -142,13 +143,7 @@ public class Query extends javax.swing.JPanel {
             }
         });
 
-        Stopword.setText("Relevance Judgment");
-        Stopword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                StopwordActionPerformed(evt);
-            }
-        });
-
+        tf.add(rawTF);
         rawTF.setText("raw TF");
         rawTF.setToolTipText("");
         rawTF.setActionCommand("");
@@ -158,6 +153,7 @@ public class Query extends javax.swing.JPanel {
             }
         });
 
+        tf.add(noTF);
         noTF.setText("no TF");
         noTF.setToolTipText("");
         noTF.setActionCommand("");
@@ -170,6 +166,7 @@ public class Query extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("IDF");
 
+        tf.add(augmentedTF);
         augmentedTF.setText("augmented TF");
         augmentedTF.setToolTipText("");
         augmentedTF.setActionCommand("");
@@ -181,6 +178,11 @@ public class Query extends javax.swing.JPanel {
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton1.setText("<");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -188,29 +190,17 @@ public class Query extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
+                        .addGap(22, 22, 22)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(rawTF)
                             .addComponent(logaritmicTF)
                             .addComponent(binaryTF)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(uploadDoc)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(filepathlabel))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(Stopword)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(filepathlabel2))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(augmentedTF)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(indexing))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(augmentedTF)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(indexing)
+                                .addGroup(layout.createSequentialGroup()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel2)
                                         .addComponent(noTF))
@@ -229,24 +219,18 @@ public class Query extends javax.swing.JPanel {
                                         .addComponent(jLabel5)
                                         .addComponent(usingStem)
                                         .addComponent(noStem))))))
-                    .addComponent(jButton1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel1)))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jButton1)
-                .addGap(5, 5, 5)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(uploadDoc)
-                    .addComponent(filepathlabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Stopword)
-                    .addComponent(filepathlabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
@@ -270,29 +254,12 @@ public class Query extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(binaryTF)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(augmentedTF)
-                        .addGap(35, 35, 35))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(indexing)
-                        .addGap(25, 25, 25))))
+                .addComponent(augmentedTF)
+                .addGap(28, 28, 28)
+                .addComponent(indexing)
+                .addContainerGap(116, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void uploadDocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadDocActionPerformed
-        JFileChooser fc = new JFileChooser();
-        String sb ="";
-        String fullPath = "";
-        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        int retval = fc.showOpenDialog(null);
-        if(retval == JFileChooser.APPROVE_OPTION){
-            File selectedFile = fc.getSelectedFile();
-            sb += selectedFile.getName();
-            fullPath += selectedFile.getAbsoluteFile();
-            this.filepathlabel.setText("File : "+ fullPath);
-        }
-    }//GEN-LAST:event_uploadDocActionPerformed
 
     private void noNormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noNormActionPerformed
         // TODO add your handling code here:
@@ -318,20 +285,6 @@ public class Query extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_logaritmicTFActionPerformed
 
-    private void StopwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StopwordActionPerformed
-        JFileChooser fc = new JFileChooser();
-        String sb ="";
-        String fullPath = "";
-        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        int retval = fc.showOpenDialog(null);
-        if(retval == JFileChooser.APPROVE_OPTION){
-            File selectedFile = fc.getSelectedFile();
-            sb += selectedFile.getName();
-            fullPath += selectedFile.getAbsoluteFile();
-            this.filepathlabel2.setText("File : "+ fullPath);
-        }
-    }//GEN-LAST:event_StopwordActionPerformed
-
     private void rawTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rawTFActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_rawTFActionPerformed
@@ -344,13 +297,57 @@ public class Query extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_augmentedTFActionPerformed
 
+    private void indexingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_indexingActionPerformed
+        String tf;
+        boolean idf,norm,stem;
+        
+        if(noTF.isSelected()){
+            tf="no";
+        }
+        else if (rawTF.isSelected()){
+            tf="raw";
+        }
+        else if (logaritmicTF.isSelected()){
+            tf="log";
+        }
+        else if (binaryTF.isSelected()){
+            tf="binary";
+        }
+        else if (augmentedTF.isSelected()){
+            tf="aug";
+        }
+        
+        if(noIDF.isSelected()){
+            idf=false;
+        }
+        else if (usingIDF.isSelected()){
+            idf=true;
+        }
+        
+        if(noNorm.isSelected()){
+            norm=false;
+        }
+        else if (usingNorm.isSelected()){
+            norm=true;
+        }
+        
+        if(noStem.isSelected()){
+            stem=false;
+        }
+        else if (usingStem.isSelected()){
+            stem=true;
+        }
+    }//GEN-LAST:event_indexingActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        mg.showSearchingPanel();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Stopword;
     private javax.swing.JRadioButton augmentedTF;
     private javax.swing.JRadioButton binaryTF;
-    private javax.swing.JLabel filepathlabel;
-    private javax.swing.JLabel filepathlabel2;
+    private javax.swing.ButtonGroup idf;
     private javax.swing.JButton indexing;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -363,8 +360,10 @@ public class Query extends javax.swing.JPanel {
     private javax.swing.JRadioButton noNorm;
     private javax.swing.JRadioButton noStem;
     private javax.swing.JRadioButton noTF;
+    private javax.swing.ButtonGroup normal;
     private javax.swing.JRadioButton rawTF;
-    private javax.swing.JButton uploadDoc;
+    private javax.swing.ButtonGroup stem;
+    private javax.swing.ButtonGroup tf;
     private javax.swing.JRadioButton usingIDF;
     private javax.swing.JRadioButton usingNorm;
     private javax.swing.JRadioButton usingStem;
