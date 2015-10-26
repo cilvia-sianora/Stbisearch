@@ -14,12 +14,14 @@ import javax.swing.JFileChooser;
  * @author ASUS
  */
 public class Indexing extends javax.swing.JPanel {
-
+	MainGUI mg;
+	
     /**
      * Creates new form Indexing
      */
     public Indexing() {
         initComponents();
+		mg = new MainGUI();
     }
 
     /**

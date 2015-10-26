@@ -1,6 +1,7 @@
 package stbisearch;
 
 import java.io.IOException;
+import static java.lang.Math.log;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -17,14 +18,30 @@ public class StbiSearch {
 	 */
 	public static void main(String[] args) {
 		Util util = new Util();
-		util.getDocuments("Test Collection\\soal\\document.txt");
-		util.getQueries("Test Collection\\soal\\query.txt");
-		util.printDocuments();
-		util.printQueries();
+		String locQueries = "Test Collection\\soal\\query.text";
+		String locDocuments = "Test Collection\\soal\\adi.all";
+		String locStopwords = "Test Collection\\stopwords-porter.txt";
+		String locRlvJudge = "Test Collection\\soal\\qrels.text";
+//		ArrayList<Integer> test = new ArrayList<>();
+//		test.add(0);
+//		test.add(1);
+//		test.add(2);
+//		test.add(0,99);
+//		for(Integer i: test){
+//			System.out.print(i);
+//		}
+//		util.getDocuments(locDocuments);
+//		util.getQueries(locQueries);
+//		util.printDocuments();
+//		util.printQueries();
 //		util.getRelevanceJudgement("Test Collection\\ADI\\qrels.text");
 //		util.printJudgement();
-		DocumentProcess dp = new DocumentProcess();
-		dp.indexing("Test Collection\\soal\\document.txt");
+//		DocumentProcess dp = new DocumentProcess();
+//		dp.indexing(locDocuments,locStopwords);
+		QueryProcess qp = new QueryProcess();
+		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
+		System.out.println("-RESULT-");
+		System.out.println(result);
 //	  String document = "the ibm data systems division technical\n"
 //		+ " information center (tic) provides an operating developmental\n"
 //		+ "system for integrated and compatible mechanized\n"

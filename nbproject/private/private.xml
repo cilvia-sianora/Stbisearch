@@ -5,10 +5,14 @@
         <group>
             <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/stbisearch/DocumentProcess.java</file>
             <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/stbisearch/Vector.java</file>
+            <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/gui/mainmenu.java</file>
+            <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/gui/Searching.java</file>
             <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/stbisearch/StbiSearch.java</file>
             <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/stbisearch/InvertedFile.java</file>
             <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/stbisearch/Util.java</file>
             <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/stbisearch/QueryProcess.java</file>
+            <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/stbisearch/Term.java</file>
+            <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/gui/Query.java</file>
         </group>
     </open-files>
 </project-private>

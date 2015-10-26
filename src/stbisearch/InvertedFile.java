@@ -27,6 +27,7 @@ public class InvertedFile {
 	
 	// write inverted file
 	public void write(){
+		System.out.println("-WRITE INVERTED FILE-");
 		// membuat inverted file
 		PrintWriter writer;
 		try {
@@ -44,7 +45,7 @@ public class InvertedFile {
 	// or find the index of a term for searching
 	// NOTE: for searching, if return index is more than the size of list,
 	//			it means the term is not found
-	public int findIndex(String term, int docNo){
+	public int findIndexToInsert(String term, int docNo){
 		int i = 0;
 		boolean found = false;
 		
@@ -64,10 +65,11 @@ public class InvertedFile {
 				// iterasi lagi yang docs
 				found = false;
 				while(!found && i<terms.size()){
-					if(docNo>docs.get(i)){
+					if(docNo<docs.get(i) || !term.equalsIgnoreCase(terms.get(i))){
 						found = true;
+					} else {
+						i++;
 					}
-					i++;
 				}
 			}
 		}
@@ -89,6 +91,35 @@ public class InvertedFile {
 			terms.add(arr[0]);
 			docs.add(Integer.parseInt(arr[1]));
 			weights.add(Double.parseDouble(arr[2]));
+		}
+	}
+	
+	public int findIndex(String term, int docNo){
+		int index = terms.indexOf(term);
+		boolean found = false;
+		if(index != -1){
+			while(!found && index<=terms.lastIndexOf(term)){
+				if(docNo == docs.get(index)){
+					found = true;
+				} else {
+					index++;
+				}
+			}
+			if(index>terms.lastIndexOf(term)){
+				index = -1;
+			}
+		}
+		return index;
+	}
+	
+	public double getWeight(String term, int docNo){
+		int index = findIndex(term,docNo);
+		System.out.println("index= "+index);
+		if(index != -1){
+			System.out.println(weights.get(index));
+			return weights.get(index);
+		} else {
+			return 0;
 		}
 	}
 }

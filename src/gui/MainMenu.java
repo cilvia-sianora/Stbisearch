@@ -10,13 +10,15 @@ package gui;
  *
  * @author ASUS
  */
-public class mainmenu extends javax.swing.JPanel {
-
+public class MainMenu extends javax.swing.JPanel {
+	MainGUI mg;
+	
     /**
      * Creates new form mainmenu
      */
-    public mainmenu() {
+    public MainMenu() {
         initComponents();
+		mg = new MainGUI();
     }
 
     /**

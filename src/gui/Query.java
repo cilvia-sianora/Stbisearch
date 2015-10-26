@@ -14,12 +14,14 @@ import javax.swing.JFileChooser;
  * @author ASUS
  */
 public class Query extends javax.swing.JPanel {
-
+	MainGUI mg;
+	
     /**
      * Creates new form Query
      */
     public Query() {
         initComponents();
+		mg = new MainGUI();
     }
 
     /**

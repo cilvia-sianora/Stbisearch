@@ -1,7 +1,10 @@
 package stbisearch;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,22 +19,20 @@ public class DocumentProcess {
 		invFile = new InvertedFile();
 	}
 	
-	public void indexing(String locDocs){
+	public void indexing(String locDocs, String locStopwords){
 		util.getDocuments(locDocs);
 		
-//		util.stemming();
-//		util.stopWordRemoval();
 		for(Vector doc: util.docs){
-			doc.countFreq();
-			util.termWeighting(doc,"raw", true, false);
+			doc.preProcessed(locStopwords);
 		}
 		
 		// put to inverted file
 		int index;
 		for(Vector doc: util.docs){
+			util.termWeighting(doc,"raw", true, false);
 			for(Term t: doc.terms){
 				// mencari index yang cocok
-				index = invFile.findIndex(t.getContent(), doc.no);
+				index = invFile.findIndexToInsert(t.getContent(), doc.no);
 				
 				// tambahkan di index setelah ditemukan index yang cocok
 				invFile.terms.add(index, t.getContent());

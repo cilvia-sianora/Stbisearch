@@ -11,13 +11,15 @@ package gui;
  * @author ASUS
  */
 public class Searching extends javax.swing.JPanel {
-
+	MainGUI mg;
+	
     /**
      * Creates new form Searching
      */
     public Searching() {
         initComponents();
         queryfield.setVisible(false);
+		mg = new MainGUI();
     }
 
     /**

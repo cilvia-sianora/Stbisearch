@@ -1,7 +1,10 @@
 package stbisearch;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,20 +31,31 @@ public class QueryProcess {
 	
 	// count number of relevant documents retrieved
 	private int countRelevantDocs(int queryNo){
+		System.out.println("-Count Relevant Docs Retrieved-");
 		int i,j;
 		boolean stopSearch;
+		
+		for(Integer x: util.relevantNoDoc){
+			System.out.print(x +" ");
+		}
+		System.out.println();
 		
 		int count = 0;
 		j = 0;
 		// for each document retrieved
 		for(Integer docNo: resultDocNo){
+			System.out.println(docNo);
 			i=util.relevantNoQuery.indexOf(queryNo);
+			System.out.println("index mulai= "+i);
+			System.out.println("index akhir= "+util.relevantNoQuery.lastIndexOf(queryNo));
 			stopSearch = false;
 			while(!stopSearch && i<=util.relevantNoQuery.lastIndexOf(queryNo)){
-				if(docNo >= util.relevantNoDoc.get(i)){
+				if(docNo <= util.relevantNoDoc.get(i)){
+					System.out.println("masuk if");
 					if(docNo == util.relevantNoDoc.get(i)){ // if relevant doc
+						System.out.println("doc no relevant retrieved");
 						count++;
-						precisionAtRlvDoc.add((double)(count/j+1));
+						precisionAtRlvDoc.add((double)count/(double)(j+1));
 					}
 					stopSearch = true;
 				}
@@ -53,16 +67,17 @@ public class QueryProcess {
 	}
 	
 	private int countAllRelevantDocs(int queryNo){
-		return util.relevantNoQuery.indexOf(queryNo) - util.relevantNoQuery.lastIndexOf(queryNo) + 1;
+		return util.relevantNoQuery.lastIndexOf(queryNo) - util.relevantNoQuery.indexOf(queryNo) + 1;
 	}
 	
 	private double getRecall(int numRlvAcq, int totalRlvDocs){
-		return numRlvAcq/totalRlvDocs;
+		System.out.println("recall= "+numRlvAcq+"/"+totalRlvDocs);
+		return (double)numRlvAcq/(double)totalRlvDocs;
 	}
 	
 	private double getPrecision(int numRlvAcq, int numDocsAcq){
-//		return countRelevantDocs(queryNo)/resultDocNo.size();
-		return numRlvAcq/numDocsAcq;
+		System.out.println("precision= "+numRlvAcq+"/"+numDocsAcq);
+		return (double)numRlvAcq/(double)numDocsAcq;
 	}
 	
 	// compute Non-Interpolated Average Precision
@@ -71,7 +86,7 @@ public class QueryProcess {
 		for(double p: precisionAtRlvDoc){
 			sum += p;
 		}
-		return sum/totalRlvDocs;
+		return sum/(double)totalRlvDocs;
 	}
 	
 	// find the right index to rank document for the result
@@ -105,7 +120,7 @@ public class QueryProcess {
 		return result;
 	}
 	
-	public String judgeRelevance(int queryNo){
+	private String judgeRelevance(int queryNo){
 		String result = "";
 
 		int numRlvAcq = countRelevantDocs(queryNo);
@@ -118,12 +133,25 @@ public class QueryProcess {
 		return result;
 	}
 	
+	private double similarity(Vector query, Vector doc){
+		double sum = 0;
+		for(Term t: query.terms){
+			System.out.println(t.getContent());
+			sum += t.getWeight() * invFile.getWeight(t.getContent(), doc.no);
+			System.out.println("sum= "+sum);
+		}
+		return sum;
+	}
+	
 	// do searching for 1 query
 	private String search(Vector query){
+		System.out.println("-SEARCH-");
 		double result;
 		int index;
 		for(Vector doc: util.docs){
-			result = query.similarity(doc);
+			System.out.println("docNo= "+doc.no);
+			result = similarity(query,doc);
+			System.out.println("result= "+result);
 			index = findIndex(result);
 			resultSim.add(index,result);
 			resultDocNo.add(index,doc.no);
@@ -132,14 +160,17 @@ public class QueryProcess {
 		return printDocResult(query.no)+judgeRelevance(query.no);
 	}
 	
-	public String searchInteractive(String queryInput){
+	public String searchInteractive(String queryInput, String locStopwords, String locDocuments){
 		String result;
+		
+		util.getDocuments(locDocuments);
+		for(Vector doc: util.docs){
+			doc.preProcessed(locStopwords);
+		}
+		
 		Vector query = new Vector();
 		query.content = queryInput;
-		
-//		util.stemming();
-//		util.stopWordRemoval();
-		query.countFreq();
+		query.preProcessed(locStopwords);
 		util.termWeighting(query,"raw", true, true);
 		result = search(query);
 		
@@ -149,16 +180,21 @@ public class QueryProcess {
 		return result;
 	}
 	
-	public String searchExperiment(String locRlvJudge, String locQueries){
+	public String searchExperiment(String locRlvJudge, String locQueries, String locStopwords, String locDocuments){
 		util.getQueries(locQueries);
 		util.getRelevanceJudgement(locRlvJudge);
+		util.getDocuments(locDocuments);
+		
+		for(Vector doc: util.docs){
+			doc.preProcessed(locStopwords);
+		}
+		for(Vector query: util.queries){
+			query.preProcessed(locStopwords);
+		}
 		
 		String result = "";
-//		util.stemming();
-//		util.stopWordRemoval();
 		for(Vector query: util.queries){
-			query.countFreq();
-			util.termWeighting(query,"raw", true, true);
+			util.termWeighting(query,"raw", true, false);
 			result += search(query);
 			resultSim.clear();
 			resultDocNo.clear();
