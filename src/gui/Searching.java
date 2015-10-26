@@ -16,6 +16,8 @@ import javax.swing.JOptionPane;
  */
 public class Searching extends javax.swing.JPanel {
 	MainGUI mg;
+	private String locRelevanceJudge;
+	private String locQueries;
 	
     /**
      * Creates new form Searching
@@ -26,6 +28,8 @@ public class Searching extends javax.swing.JPanel {
         uploadDoc.setEnabled(false);
         uploadRelevance.setEnabled(false);
 		mg = new MainGUI();
+		locQueries = "";
+		locRelevanceJudge = "";
     }
 
     /**
@@ -222,13 +226,10 @@ public class Searching extends javax.swing.JPanel {
         boolean experimentalValue;
         String query;
         
-		String locRlvJudge = "";
-		String locQueries = "";
-		
 		String result = "";
         if(experimental.isSelected()){
             experimentalValue=true;
-			result = mg.qp.searchExperiment(locRlvJudge, locQueries, mg.dp.locStopwords, mg.dp.locDocuments);
+			result = mg.qp.searchExperiment(locRelevanceJudge, locQueries, mg.dp.locStopwords, mg.dp.locDocuments);
         }
         else if (interactive.isSelected()){
             experimentalValue=false;
@@ -250,6 +251,7 @@ public class Searching extends javax.swing.JPanel {
             File selectedFile = fc.getSelectedFile();
             sb += selectedFile.getName();
             fullPath += selectedFile.getAbsoluteFile();
+			locQueries = fullPath;
             this.filepathlabel.setText("File : "+ fullPath);
         }
     }//GEN-LAST:event_uploadDocActionPerformed
@@ -264,6 +266,7 @@ public class Searching extends javax.swing.JPanel {
             File selectedFile = fc.getSelectedFile();
             sb += selectedFile.getName();
             fullPath += selectedFile.getAbsoluteFile();
+			locRelevanceJudge = fullPath;
             this.filepathlabel2.setText("File : "+ fullPath);
         }
     }//GEN-LAST:event_uploadRelevanceActionPerformed

@@ -16,8 +16,9 @@ import stbisearch.DocumentProcess;
  * @author ASUS
  */
 public class Indexing extends javax.swing.JPanel {
-	private MainGUI mg;
-	private DocumentProcess dp;
+	MainGUI mg;
+	private String locDocs;
+	private String locStopwords;
 	
     /**
      * Creates new form Indexing
@@ -25,7 +26,8 @@ public class Indexing extends javax.swing.JPanel {
     public Indexing() {
         initComponents();
 		mg = new MainGUI();
-		dp = new DocumentProcess();
+		locDocs = "";
+		locStopwords = "";
     }
 
     /**
@@ -314,6 +316,7 @@ public class Indexing extends javax.swing.JPanel {
             File selectedFile = fc.getSelectedFile();
             sb += selectedFile.getName();
             fullPath += selectedFile.getAbsoluteFile();
+			locDocs = fullPath;
             this.filepathlabel.setText("File : "+ fullPath);
         }
     }//GEN-LAST:event_uploadDocActionPerformed
@@ -356,6 +359,7 @@ public class Indexing extends javax.swing.JPanel {
             File selectedFile = fc.getSelectedFile();
             sb += selectedFile.getName();
             fullPath += selectedFile.getAbsoluteFile();
+			locStopwords = fullPath;
             this.filepathlabel2.setText("File : "+ fullPath);
         }
     }//GEN-LAST:event_StopwordActionPerformed
@@ -415,9 +419,7 @@ public class Indexing extends javax.swing.JPanel {
             stem=true;
         }
         
-		String locDocs = "";
-		String locStopwords = "";
-		dp.indexing(locDocs, locStopwords, tf, idf, norm, stem);
+		mg.dp.indexing(locDocs, locStopwords, tf, idf, norm, stem);
         JOptionPane.showMessageDialog(this, "Indexing finished");
     }//GEN-LAST:event_indexingActionPerformed
 
