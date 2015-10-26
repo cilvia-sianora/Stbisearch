@@ -298,8 +298,10 @@ public class Query extends javax.swing.JPanel {
     }//GEN-LAST:event_augmentedTFActionPerformed
 
     private void indexingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_indexingActionPerformed
-        String tf;
-        boolean idf,norm,stem;
+        String tf = "";
+        boolean idf = false;
+		boolean norm = false;
+		boolean stem = false;
         
         if(noTF.isSelected()){
             tf="no";
@@ -337,6 +339,8 @@ public class Query extends javax.swing.JPanel {
         else if (usingStem.isSelected()){
             stem=true;
         }
+		
+		mg.qp.setQuerySetting(tf, idf, norm, stem);
     }//GEN-LAST:event_indexingActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

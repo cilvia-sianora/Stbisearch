@@ -3,12 +3,15 @@ package gui;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.UIManager;
+import stbisearch.*;
 
 /**
  *
  * @author Cilvia
  */
 public class MainGUI {
+	public static DocumentProcess dp;
+	public static QueryProcess qp;
 	static Indexing guiIndexing;
 	static Query guiQuerySetting;
 	static Searching guiSearching;
@@ -20,6 +23,8 @@ public class MainGUI {
 	}
 	
 	public void init(){
+		dp = new DocumentProcess();
+		qp = new QueryProcess();
 		guiIndexing = new Indexing();
 		guiQuerySetting = new Query();
 		guiSearching = new Searching();

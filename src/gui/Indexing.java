@@ -9,13 +9,15 @@ package gui;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import stbisearch.DocumentProcess;
 
 /**
  *
  * @author ASUS
  */
 public class Indexing extends javax.swing.JPanel {
-	MainGUI mg;
+	private MainGUI mg;
+	private DocumentProcess dp;
 	
     /**
      * Creates new form Indexing
@@ -23,6 +25,7 @@ public class Indexing extends javax.swing.JPanel {
     public Indexing() {
         initComponents();
 		mg = new MainGUI();
+		dp = new DocumentProcess();
     }
 
     /**
@@ -370,8 +373,10 @@ public class Indexing extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void indexingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_indexingActionPerformed
-        String tf;
-        boolean idf,norm,stem;
+        String tf = "";
+        boolean idf = false;
+		boolean norm = false;
+		boolean stem = false;
         
         if(noTF.isSelected()){
             tf="no";
@@ -410,6 +415,9 @@ public class Indexing extends javax.swing.JPanel {
             stem=true;
         }
         
+		String locDocs = "";
+		String locStopwords = "";
+		dp.indexing(locDocs, locStopwords, tf, idf, norm, stem);
         JOptionPane.showMessageDialog(this, "Indexing finished");
     }//GEN-LAST:event_indexingActionPerformed
 

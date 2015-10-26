@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 public class DocumentProcess {
 	private Util util;
 	private InvertedFile invFile;
+	public String locDocuments;
+	public String locStopwords;
 	
 	public DocumentProcess(){
 		util = new Util();
@@ -21,6 +23,8 @@ public class DocumentProcess {
 	
 	public void indexing(String locDocs, String locStopwords, String tfMethod, 
 			boolean bIdf, boolean bNormalization, boolean bStemming){
+		locDocuments = locDocs;
+		this.locStopwords = locStopwords;
 		util.getDocuments(locDocs);
 		
 		for(Vector doc: util.docs){

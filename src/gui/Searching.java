@@ -222,15 +222,22 @@ public class Searching extends javax.swing.JPanel {
         boolean experimentalValue;
         String query;
         
+		String locRlvJudge = "";
+		String locQueries = "";
+		
+		String result = "";
         if(experimental.isSelected()){
             experimentalValue=true;
+			result = mg.qp.searchExperiment(locRlvJudge, locQueries, mg.dp.locStopwords, mg.dp.locDocuments);
         }
         else if (interactive.isSelected()){
             experimentalValue=false;
             query = queryfield.getText();
+			result = mg.qp.searchInteractive(query, mg.dp.locStopwords, mg.dp.locDocuments);
         }
         
         JOptionPane.showMessageDialog(this, "Searching... ");
+		jTextArea1.setText(result);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void uploadDocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadDocActionPerformed
