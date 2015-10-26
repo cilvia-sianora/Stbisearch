@@ -37,11 +37,11 @@ public class Vector {
 		terms = new ArrayList<>();
 	}
 	
-	public String getAllText(){
+	private String getAllText(){
 		return author + " " + title + " " + content;
 	}
 	
-	public void preProcessed(String locStopwords){
+	public void preProcessed(String locStopwords, boolean bStemming){
 		String text = getAllText();
 		try {
 			text = util.delimiter(text);
@@ -49,7 +49,9 @@ public class Vector {
 		} catch (IOException ex) {
 			Logger.getLogger(DocumentProcess.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		text = util.stemming(text);
+		if(bStemming){
+			text = util.stemming(text);
+		}
 		countFreq(text);
 	}
 	

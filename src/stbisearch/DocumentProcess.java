@@ -19,17 +19,18 @@ public class DocumentProcess {
 		invFile = new InvertedFile();
 	}
 	
-	public void indexing(String locDocs, String locStopwords){
+	public void indexing(String locDocs, String locStopwords, String tfMethod, 
+			boolean bIdf, boolean bNormalization, boolean bStemming){
 		util.getDocuments(locDocs);
 		
 		for(Vector doc: util.docs){
-			doc.preProcessed(locStopwords);
+			doc.preProcessed(locStopwords,bStemming);
 		}
 		
 		// put to inverted file
 		int index;
 		for(Vector doc: util.docs){
-			util.termWeighting(doc,"raw", true, false);
+			util.termWeighting(doc,tfMethod,bIdf,bNormalization);
 			for(Term t: doc.terms){
 				// mencari index yang cocok
 				index = invFile.findIndexToInsert(t.getContent(), doc.no);

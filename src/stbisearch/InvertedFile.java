@@ -114,9 +114,7 @@ public class InvertedFile {
 	
 	public double getWeight(String term, int docNo){
 		int index = findIndex(term,docNo);
-		System.out.println("index= "+index);
 		if(index != -1){
-			System.out.println(weights.get(index));
 			return weights.get(index);
 		} else {
 			return 0;

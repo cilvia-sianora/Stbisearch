@@ -112,7 +112,6 @@ public class Util {
 		String[] arr;
 		for(String line: temp.split("\n")){
 			if(line.length()>0){
-//				System.out.println(line);
 				arr = line.split("\\s+");
 				relevantNoQuery.add(Integer.parseInt(arr[0]));
 				relevantNoDoc.add(Integer.parseInt(arr[1]));
@@ -165,26 +164,20 @@ public class Util {
 	
 	// computing term-weighting method: idf
 	public double idf(String term){
-		System.out.println("IDF");
 		int count = 0;
 		for(Vector doc: docs){
 			if(doc.findIndexTerm(term) != -1){
 				count++;
 			}
 		}
-		System.out.println(docs.size()+"/"+count);
 		return log10((double)docs.size()/(double)count);
 	}
 	
 	// do term-weighting
 	public void termWeighting(Vector vec, String methodTF, boolean bIdf, boolean bNormalize){
-		System.out.println("-TERMWEIGHTING-");
 		String term;
-		System.out.println(vec.no+" ");
 		for(Term t : vec.terms){
 			term = t.getContent();
-			System.out.println("---");
-			System.out.println(term);
 			switch(methodTF){
 				case "raw":
 					vec.terms.get(vec.findIndexTerm(term)).setWeight(rawTF(vec,term));
@@ -201,14 +194,10 @@ public class Util {
 				default:
 					vec.terms.get(vec.findIndexTerm(term)).setWeight(1);
 			}
-			System.out.println("tf "+vec.terms.get(vec.findIndexTerm(term)).getWeight());
 			if(bIdf){
 				vec.terms.get(vec.findIndexTerm(term)).setWeight(vec.terms.get(vec.findIndexTerm(term)).getWeight()*idf(term));
-				System.out.println("idf "+idf(term));
 			}
-			System.out.println(" "+vec.terms.get(vec.findIndexTerm(term)).getWeight());
 		}
-		System.out.println("---");
 		if(bNormalize){
 			vec.normalization();
 		}

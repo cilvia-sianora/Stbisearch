@@ -18,10 +18,10 @@ public class StbiSearch {
 	 */
 	public static void main(String[] args) {
 		Util util = new Util();
-		String locQueries = "Test Collection\\soal\\query.text";
-		String locDocuments = "Test Collection\\soal\\adi.all";
+		String locQueries = "Test Collection\\ADI\\query.text";
+		String locDocuments = "Test Collection\\ADI\\adi.all";
 		String locStopwords = "Test Collection\\stopwords-porter.txt";
-		String locRlvJudge = "Test Collection\\soal\\qrels.text";
+		String locRlvJudge = "Test Collection\\ADI\\qrels.text";
 //		ArrayList<Integer> test = new ArrayList<>();
 //		test.add(0);
 //		test.add(1);
@@ -40,7 +40,7 @@ public class StbiSearch {
 //		dp.indexing(locDocuments,locStopwords);
 		QueryProcess qp = new QueryProcess();
 		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
-		System.out.println("-RESULT-");
+//		System.out.println("-RESULT-");
 		System.out.println(result);
 //	  String document = "the ibm data systems division technical\n"
 //		+ " information center (tic) provides an operating developmental\n"

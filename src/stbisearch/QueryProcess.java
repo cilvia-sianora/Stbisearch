@@ -16,44 +16,45 @@ public class QueryProcess {
 	private List<Integer> resultDocNo;
 	private List<Double> resultSim;
 	private List<Double> precisionAtRlvDoc;
-	public double precision;
-	public double recall;
-	public double niap;
+	private static double SIM_THRESHOLD = 0.05;
+	private double precision;
+	private double recall;
+	private double niap;
+	private String tfMethod;
+	private boolean bIdf, bNormalization, bStemming;
 	
 	public QueryProcess(){
 		util = new Util();
 		invFile = new InvertedFile();
-		invFile.read();
 		resultDocNo = new ArrayList<>();
 		resultSim = new ArrayList<>();
 		precisionAtRlvDoc = new ArrayList<>();
+		tfMethod = "no";
+		bIdf = false;
+		bNormalization = false;
+		bStemming = false;
+	}
+	
+	private void clear(){
+		resultDocNo.clear();
+		resultSim.clear();
+		precisionAtRlvDoc.clear();
 	}
 	
 	// count number of relevant documents retrieved
 	private int countRelevantDocs(int queryNo){
-		System.out.println("-Count Relevant Docs Retrieved-");
 		int i,j;
 		boolean stopSearch;
-		
-		for(Integer x: util.relevantNoDoc){
-			System.out.print(x +" ");
-		}
-		System.out.println();
 		
 		int count = 0;
 		j = 0;
 		// for each document retrieved
 		for(Integer docNo: resultDocNo){
-			System.out.println(docNo);
 			i=util.relevantNoQuery.indexOf(queryNo);
-			System.out.println("index mulai= "+i);
-			System.out.println("index akhir= "+util.relevantNoQuery.lastIndexOf(queryNo));
 			stopSearch = false;
 			while(!stopSearch && i<=util.relevantNoQuery.lastIndexOf(queryNo)){
 				if(docNo <= util.relevantNoDoc.get(i)){
-					System.out.println("masuk if");
 					if(docNo == util.relevantNoDoc.get(i)){ // if relevant doc
-						System.out.println("doc no relevant retrieved");
 						count++;
 						precisionAtRlvDoc.add((double)count/(double)(j+1));
 					}
@@ -71,12 +72,10 @@ public class QueryProcess {
 	}
 	
 	private double getRecall(int numRlvAcq, int totalRlvDocs){
-		System.out.println("recall= "+numRlvAcq+"/"+totalRlvDocs);
 		return (double)numRlvAcq/(double)totalRlvDocs;
 	}
 	
 	private double getPrecision(int numRlvAcq, int numDocsAcq){
-		System.out.println("precision= "+numRlvAcq+"/"+numDocsAcq);
 		return (double)numRlvAcq/(double)numDocsAcq;
 	}
 	
@@ -130,34 +129,40 @@ public class QueryProcess {
 		result += "Recall = " + getRecall(numRlvAcq,totalRlvDocs) + "\n";
 		result += "Non-Interpolated Average Precision = " + getNIAP(totalRlvDocs) + "\n";
 		
+		precision += getPrecision(numRlvAcq,resultDocNo.size());
+		recall += getRecall(numRlvAcq,totalRlvDocs);
+		niap += getNIAP(totalRlvDocs);
+		
 		return result;
 	}
 	
 	private double similarity(Vector query, Vector doc){
 		double sum = 0;
 		for(Term t: query.terms){
-			System.out.println(t.getContent());
 			sum += t.getWeight() * invFile.getWeight(t.getContent(), doc.no);
-			System.out.println("sum= "+sum);
 		}
 		return sum;
 	}
 	
 	// do searching for 1 query
 	private String search(Vector query){
-		System.out.println("-SEARCH-");
+		invFile.read();
+		precision = 0;
+		recall = 0;
+		niap = 0;
+		
 		double result;
 		int index;
 		for(Vector doc: util.docs){
-			System.out.println("docNo= "+doc.no);
 			result = similarity(query,doc);
-			System.out.println("result= "+result);
-			index = findIndex(result);
-			resultSim.add(index,result);
-			resultDocNo.add(index,doc.no);
+			if(result > SIM_THRESHOLD){
+				index = findIndex(result);
+				resultSim.add(index,result);
+				resultDocNo.add(index,doc.no);
+			}
 		}
 		
-		return printDocResult(query.no)+judgeRelevance(query.no);
+		return printDocResult(query.no);
 	}
 	
 	public String searchInteractive(String queryInput, String locStopwords, String locDocuments){
@@ -165,17 +170,17 @@ public class QueryProcess {
 		
 		util.getDocuments(locDocuments);
 		for(Vector doc: util.docs){
-			doc.preProcessed(locStopwords);
+			doc.preProcessed(locStopwords,bStemming);
 		}
 		
 		Vector query = new Vector();
 		query.content = queryInput;
-		query.preProcessed(locStopwords);
-		util.termWeighting(query,"raw", true, true);
-		result = search(query);
+		query.preProcessed(locStopwords,bStemming);
+		util.termWeighting(query,tfMethod,bIdf,bNormalization);
 		
-		resultSim.clear();
-		resultDocNo.clear();
+		result = search(query);
+		result = result.substring(result.indexOf("\n"));
+		clear();
 		
 		return result;
 	}
@@ -186,21 +191,34 @@ public class QueryProcess {
 		util.getDocuments(locDocuments);
 		
 		for(Vector doc: util.docs){
-			doc.preProcessed(locStopwords);
+			doc.preProcessed(locStopwords,bStemming);
 		}
 		for(Vector query: util.queries){
-			query.preProcessed(locStopwords);
+			query.preProcessed(locStopwords,bStemming);
 		}
 		
 		String result = "";
 		for(Vector query: util.queries){
-			util.termWeighting(query,"raw", true, false);
+			util.termWeighting(query,tfMethod,bIdf,bNormalization);
 			result += search(query);
-			resultSim.clear();
-			resultDocNo.clear();
+			result += judgeRelevance(query.no);
+			clear();
 		}
 		
+		result = "Precision = " + (precision/(double)util.queries.size()) + "\n" +
+				"Recall = " + (recall/(double)util.queries.size()) + "\n" +
+				"NIAP = " + (niap/(double)util.queries.size()) + "\n" +
+				"Searching Result:" + "\n" + result;
+		
 		return result;
+	}
+	
+	public void setQuerySetting(String tfMethod, boolean bIdf, 
+			boolean bNormalization, boolean bStemming){
+		this.tfMethod = tfMethod;
+		this.bIdf = bIdf;
+		this.bNormalization = bNormalization;
+		this.bStemming = bStemming;
 	}
 	
 }
