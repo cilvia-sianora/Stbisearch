@@ -237,7 +237,7 @@ public class Searching extends javax.swing.JPanel {
 			result = mg.qp.searchInteractive(query, mg.dp.locStopwords, mg.dp.locDocuments);
         }
         
-        JOptionPane.showMessageDialog(this, "Searching... ");
+        JOptionPane.showMessageDialog(this, "Searching finished");
 		jTextArea1.setText(result);
     }//GEN-LAST:event_jButton3ActionPerformed
 
