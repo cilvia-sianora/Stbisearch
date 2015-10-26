@@ -8,18 +8,21 @@ package gui;
 
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author ASUS
  */
 public class Indexing extends javax.swing.JPanel {
-
+	MainGUI mg;
+	
     /**
      * Creates new form Indexing
      */
     public Indexing() {
         initComponents();
+		mg = new MainGUI();
     }
 
     /**
@@ -31,6 +34,10 @@ public class Indexing extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        tf = new javax.swing.ButtonGroup();
+        idf = new javax.swing.ButtonGroup();
+        normal = new javax.swing.ButtonGroup();
+        stem = new javax.swing.ButtonGroup();
         jLabel5 = new javax.swing.JLabel();
         uploadDoc = new javax.swing.JButton();
         usingStem = new javax.swing.JRadioButton();
@@ -65,12 +72,15 @@ public class Indexing extends javax.swing.JPanel {
             }
         });
 
+        stem.add(usingStem);
         usingStem.setText("using Stemming");
 
+        stem.add(noStem);
         noStem.setText("no Stemming");
         noStem.setToolTipText("");
         noStem.setActionCommand("");
 
+        tf.add(augmentedTF);
         augmentedTF.setText("augmented TF");
         augmentedTF.setToolTipText("");
         augmentedTF.setActionCommand("");
@@ -80,6 +90,7 @@ public class Indexing extends javax.swing.JPanel {
             }
         });
 
+        tf.add(binaryTF);
         binaryTF.setText("binary TF");
         binaryTF.setToolTipText("");
         binaryTF.setActionCommand("");
@@ -89,6 +100,7 @@ public class Indexing extends javax.swing.JPanel {
             }
         });
 
+        tf.add(logaritmicTF);
         logaritmicTF.setText("logaritmic TF");
         logaritmicTF.setToolTipText("");
         logaritmicTF.setActionCommand("");
@@ -98,6 +110,7 @@ public class Indexing extends javax.swing.JPanel {
             }
         });
 
+        tf.add(rawTF);
         rawTF.setText("raw TF");
         rawTF.setToolTipText("");
         rawTF.setActionCommand("");
@@ -107,6 +120,7 @@ public class Indexing extends javax.swing.JPanel {
             }
         });
 
+        tf.add(noTF);
         noTF.setText("no TF");
         noTF.setToolTipText("");
         noTF.setActionCommand("");
@@ -116,6 +130,7 @@ public class Indexing extends javax.swing.JPanel {
             }
         });
 
+        normal.add(noNorm);
         noNorm.setText("no Normalization");
         noNorm.setToolTipText("");
         noNorm.setActionCommand("");
@@ -127,6 +142,7 @@ public class Indexing extends javax.swing.JPanel {
 
         filepathlabel.setText("File : ");
 
+        normal.add(usingNorm);
         usingNorm.setText("using Normalization");
         usingNorm.setToolTipText("");
         usingNorm.setActionCommand("");
@@ -146,6 +162,7 @@ public class Indexing extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("Indexing");
 
+        idf.add(noIDF);
         noIDF.setText("no IDF");
         noIDF.setToolTipText("");
         noIDF.setActionCommand("");
@@ -164,10 +181,16 @@ public class Indexing extends javax.swing.JPanel {
         jLabel4.setText("Normalization");
 
         indexing.setText("Indexing");
+        indexing.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                indexingActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("IDF");
 
+        idf.add(usingIDF);
         usingIDF.setText("using IDF");
         usingIDF.setToolTipText("");
         usingIDF.setActionCommand("");
@@ -179,6 +202,11 @@ public class Indexing extends javax.swing.JPanel {
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton1.setText("<");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -192,9 +220,6 @@ public class Indexing extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rawTF)
-                            .addComponent(logaritmicTF)
-                            .addComponent(binaryTF)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(uploadDoc)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -203,12 +228,13 @@ public class Indexing extends javax.swing.JPanel {
                                 .addComponent(Stopword)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(filepathlabel2))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(augmentedTF)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(indexing))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(rawTF)
+                            .addComponent(logaritmicTF)
+                            .addComponent(binaryTF)
+                            .addComponent(augmentedTF)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(indexing)
+                                .addGroup(layout.createSequentialGroup()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel2)
                                         .addComponent(noTF))
@@ -228,7 +254,7 @@ public class Indexing extends javax.swing.JPanel {
                                         .addComponent(usingStem)
                                         .addComponent(noStem))))))
                     .addComponent(jButton1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -236,7 +262,7 @@ public class Indexing extends javax.swing.JPanel {
                 .addComponent(jButton1)
                 .addGap(3, 3, 3)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(uploadDoc)
                     .addComponent(filepathlabel))
@@ -244,7 +270,7 @@ public class Indexing extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Stopword)
                     .addComponent(filepathlabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
@@ -268,13 +294,10 @@ public class Indexing extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(binaryTF)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(augmentedTF)
-                        .addGap(35, 35, 35))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(indexing)
-                        .addGap(25, 25, 25))))
+                .addComponent(augmentedTF)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addComponent(indexing)
+                .addGap(37, 37, 37))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -342,6 +365,54 @@ public class Indexing extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_usingIDFActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        mg.showMainMenuPanel();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void indexingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_indexingActionPerformed
+        String tf;
+        boolean idf,norm,stem;
+        
+        if(noTF.isSelected()){
+            tf="no";
+        }
+        else if (rawTF.isSelected()){
+            tf="raw";
+        }
+        else if (logaritmicTF.isSelected()){
+            tf="log";
+        }
+        else if (binaryTF.isSelected()){
+            tf="binary";
+        }
+        else if (augmentedTF.isSelected()){
+            tf="aug";
+        }
+        
+        if(noIDF.isSelected()){
+            idf=false;
+        }
+        else if (usingIDF.isSelected()){
+            idf=true;
+        }
+        
+        if(noNorm.isSelected()){
+            norm=false;
+        }
+        else if (usingNorm.isSelected()){
+            norm=true;
+        }
+        
+        if(noStem.isSelected()){
+            stem=false;
+        }
+        else if (usingStem.isSelected()){
+            stem=true;
+        }
+        
+        JOptionPane.showMessageDialog(this, "Indexing finished");
+    }//GEN-LAST:event_indexingActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Stopword;
@@ -349,6 +420,7 @@ public class Indexing extends javax.swing.JPanel {
     private javax.swing.JRadioButton binaryTF;
     private javax.swing.JLabel filepathlabel;
     private javax.swing.JLabel filepathlabel2;
+    private javax.swing.ButtonGroup idf;
     private javax.swing.JButton indexing;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -361,7 +433,10 @@ public class Indexing extends javax.swing.JPanel {
     private javax.swing.JRadioButton noNorm;
     private javax.swing.JRadioButton noStem;
     private javax.swing.JRadioButton noTF;
+    private javax.swing.ButtonGroup normal;
     private javax.swing.JRadioButton rawTF;
+    private javax.swing.ButtonGroup stem;
+    private javax.swing.ButtonGroup tf;
     private javax.swing.JButton uploadDoc;
     private javax.swing.JRadioButton usingIDF;
     private javax.swing.JRadioButton usingNorm;

@@ -6,18 +6,26 @@
 
 package gui;
 
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ASUS
  */
 public class Searching extends javax.swing.JPanel {
-
+	MainGUI mg;
+	
     /**
      * Creates new form Searching
      */
     public Searching() {
         initComponents();
-        queryfield.setVisible(false);
+        queryfield.setEnabled(false);
+        uploadDoc.setEnabled(false);
+        uploadRelevance.setEnabled(false);
+		mg = new MainGUI();
     }
 
     /**
@@ -29,24 +37,45 @@ public class Searching extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        searching = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        experimental = new javax.swing.JRadioButton();
+        interactive = new javax.swing.JRadioButton();
         queryfield = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jLabel2 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        uploadDoc = new javax.swing.JButton();
+        filepathlabel = new javax.swing.JLabel();
+        uploadRelevance = new javax.swing.JButton();
+        filepathlabel2 = new javax.swing.JLabel();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("Searching");
 
         jButton1.setText("Setting");
-
-        jRadioButton1.setText("Experimental");
-
-        jRadioButton2.setText("Interactive");
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        searching.add(experimental);
+        experimental.setText("Experimental");
+        experimental.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                experimentalActionPerformed(evt);
+            }
+        });
+
+        searching.add(interactive);
+        interactive.setText("Interactive");
+        interactive.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                interactiveActionPerformed(evt);
             }
         });
 
@@ -54,62 +83,207 @@ public class Searching extends javax.swing.JPanel {
 
         jButton2.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton2.setText("<");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setText("Search Result");
+
+        jButton3.setText("Search");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        uploadDoc.setText("Query");
+        uploadDoc.setActionCommand("documentUpload");
+        uploadDoc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uploadDocActionPerformed(evt);
+            }
+        });
+
+        filepathlabel.setText("File : ");
+
+        uploadRelevance.setText("Relevance Judgment");
+        uploadRelevance.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uploadRelevanceActionPerformed(evt);
+            }
+        });
+
+        filepathlabel2.setText("File : ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(22, 22, 22))
             .addGroup(layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jRadioButton1)
-                        .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton3)
+                            .addComponent(interactive))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(21, 21, 21)
-                                .addComponent(queryfield, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jRadioButton2))))
-                .addContainerGap(174, Short.MAX_VALUE))
+                                .addGap(4, 4, 4)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jScrollPane1)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(experimental)
+                                    .addComponent(jLabel1))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 283, Short.MAX_VALUE)
+                                .addComponent(jButton1)))
+                        .addGap(32, 32, 32))))
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jButton2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(uploadDoc)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(filepathlabel))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(uploadRelevance)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(filepathlabel2)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jButton2)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(46, 46, 46)
+                            .addComponent(queryfield, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jButton2)
-                .addGap(5, 5, 5)
-                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addGap(18, 18, 18)
-                .addComponent(jRadioButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(24, 24, 24))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(experimental)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(uploadDoc)
+                    .addComponent(filepathlabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jRadioButton2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(uploadRelevance)
+                    .addComponent(filepathlabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(interactive)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(queryfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(134, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-        queryfield.setVisible(true);
-    }//GEN-LAST:event_jRadioButton2ActionPerformed
+    private void interactiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interactiveActionPerformed
+        uploadDoc.setEnabled(false);
+        uploadRelevance.setEnabled(false);
+
+        queryfield.setEnabled(true);
+    }//GEN-LAST:event_interactiveActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        mg.showMainMenuPanel();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        mg.showQuerySettingPanel();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        boolean experimentalValue;
+        String query;
+        
+        if(experimental.isSelected()){
+            experimentalValue=true;
+        }
+        else if (interactive.isSelected()){
+            experimentalValue=false;
+            query = queryfield.getText();
+        }
+        
+        JOptionPane.showMessageDialog(this, "Searching... ");
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void uploadDocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadDocActionPerformed
+        JFileChooser fc = new JFileChooser();
+        String sb ="";
+        String fullPath = "";
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int retval = fc.showOpenDialog(null);
+        if(retval == JFileChooser.APPROVE_OPTION){
+            File selectedFile = fc.getSelectedFile();
+            sb += selectedFile.getName();
+            fullPath += selectedFile.getAbsoluteFile();
+            this.filepathlabel.setText("File : "+ fullPath);
+        }
+    }//GEN-LAST:event_uploadDocActionPerformed
+
+    private void uploadRelevanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadRelevanceActionPerformed
+        JFileChooser fc = new JFileChooser();
+        String sb ="";
+        String fullPath = "";
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int retval = fc.showOpenDialog(null);
+        if(retval == JFileChooser.APPROVE_OPTION){
+            File selectedFile = fc.getSelectedFile();
+            sb += selectedFile.getName();
+            fullPath += selectedFile.getAbsoluteFile();
+            this.filepathlabel2.setText("File : "+ fullPath);
+        }
+    }//GEN-LAST:event_uploadRelevanceActionPerformed
+
+    private void experimentalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_experimentalActionPerformed
+        uploadDoc.setEnabled(true);
+        uploadRelevance.setEnabled(true);
+        
+        queryfield.setEnabled(false);
+    }//GEN-LAST:event_experimentalActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton experimental;
+    private javax.swing.JLabel filepathlabel;
+    private javax.swing.JLabel filepathlabel2;
+    private javax.swing.JRadioButton interactive;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField queryfield;
+    private javax.swing.ButtonGroup searching;
+    private javax.swing.JButton uploadDoc;
+    private javax.swing.JButton uploadRelevance;
     // End of variables declaration//GEN-END:variables
 }

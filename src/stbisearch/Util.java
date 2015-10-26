@@ -3,16 +3,13 @@ package stbisearch;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import static java.lang.Math.log;
+import static java.lang.Math.log10;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.tartarus.martin.Stemmer;
 
 /**
  *
@@ -114,9 +111,12 @@ public class Util {
 		String temp = readFile(location);
 		String[] arr;
 		for(String line: temp.split("\n")){
-			arr = line.split("\\s+");
-			relevantNoQuery.add(Integer.parseInt(arr[0]));
-			relevantNoDoc.add(Integer.parseInt(arr[1]));
+			if(line.length()>0){
+//				System.out.println(line);
+				arr = line.split("\\s+");
+				relevantNoQuery.add(Integer.parseInt(arr[0]));
+				relevantNoDoc.add(Integer.parseInt(arr[1]));
+			}
 		}
 	}
 	
@@ -127,11 +127,10 @@ public class Util {
 	}
 		
 	// computing term-weighting method: rawTF
-	public int rawTF(Vector vec, String term){
+	public double rawTF(Vector vec, String term){
             if(vec.getTF(term)!= -1){
-                return vec.getTF(term);
-            }
-            else{
+                return (double)vec.getTF(term);
+            } else {
                 return 0;
             }
 	}
@@ -139,9 +138,8 @@ public class Util {
 	// computing term-weighting method: logarithmTF
 	public double logTF(Vector vec, String term){
             if(vec.getTF(term)!= -1){
-                return 1+log(vec.getTF(term));
-            }
-            else{
+                return 1+log10(vec.getTF(term));
+            } else {
                 return 0;
             }
         }
@@ -149,16 +147,15 @@ public class Util {
 	// computing term-weighting method: augmentedTF
 	public double augTF(Vector vec,String term){
             if(vec.getTF(term)!= -1){
-                 return (0.5+(0.5*vec.getTF(term)/vec.getMaxTF()));
-            }
-            else{
+                 return (0.5+(0.5*(double)vec.getTF(term)/(double)vec.getMaxTF()));
+            } else {
                 return 0;
             }
 
 	}
 	
 	// computing term-weighting method: binaryTF
-	public int binaryTF(Vector vec,String term){
+	public double binaryTF(Vector vec,String term){
 		if((vec.getTF(term))>0){
 			return 1;
 		}else{
@@ -168,21 +165,26 @@ public class Util {
 	
 	// computing term-weighting method: idf
 	public double idf(String term){
+		System.out.println("IDF");
 		int count = 0;
 		for(Vector doc: docs){
 			if(doc.findIndexTerm(term) != -1){
 				count++;
 			}
 		}
-		return log(docs.size()/count);
+		System.out.println(docs.size()+"/"+count);
+		return log10((double)docs.size()/(double)count);
 	}
 	
 	// do term-weighting
 	public void termWeighting(Vector vec, String methodTF, boolean bIdf, boolean bNormalize){
-		//TF
+		System.out.println("-TERMWEIGHTING-");
 		String term;
+		System.out.println(vec.no+" ");
 		for(Term t : vec.terms){
 			term = t.getContent();
+			System.out.println("---");
+			System.out.println(term);
 			switch(methodTF){
 				case "raw":
 					vec.terms.get(vec.findIndexTerm(term)).setWeight(rawTF(vec,term));
@@ -199,24 +201,72 @@ public class Util {
 				default:
 					vec.terms.get(vec.findIndexTerm(term)).setWeight(1);
 			}
+			System.out.println("tf "+vec.terms.get(vec.findIndexTerm(term)).getWeight());
 			if(bIdf){
 				vec.terms.get(vec.findIndexTerm(term)).setWeight(vec.terms.get(vec.findIndexTerm(term)).getWeight()*idf(term));
+				System.out.println("idf "+idf(term));
 			}
+			System.out.println(" "+vec.terms.get(vec.findIndexTerm(term)).getWeight());
 		}
+		System.out.println("---");
 		if(bNormalize){
 			vec.normalization();
 		}
 	}
 	
-	// do stemming
-	public void stemming(){
 	
-	}
+    /**
+     * @param @Document
+     * Stemming setiap kata dari masukan
+    **/
+    public String stemming(String Document) {
+	  String result = "";
+	  String[] DocArr = Document.split(" ");
+	  for (String D:DocArr){
+		Stemmer stemmer = new Stemmer();
 	
-	// do stop word removal
-	public void stopWordRemoval(){
-	
-	}
+		if (!(D.isEmpty() | D.length() < 1 )){
+		    stemmer.add(D.toCharArray(), D.length());
+		    String temp = new String(stemmer.getResultBuffer());
+		    result += " " + temp;
+		}
+	  }
+	  return result;
+    }
+
+    /**
+     * @param @Documents
+     * Hapus simbol-simbol dari dokumen masukan.
+    **/
+    public String delimiter(String Document) throws IOException{
+	  String delimited = " " + Document;
+	  String[] delimiters = {".", "/", "\\", "'t", "'d", "'s", "\"", "\'", ",", "!", "?", "(", ")", "-", "+", "=", "*", ":", ";", "\n"};
+	  
+	  for (String d: delimiters){
+		delimited = delimited.replace(d, " ");
+	  }
+	  return delimited;
+    }
+    
+    /**
+     * @param @Documents
+     * Hapus stopwords dari dokumen masukan.
+    **/
+    public String stopWordRemoval(String location, String Document) throws IOException {
+	  String stemmed = Document;
+
+	  // loads stopwordlist 
+	  String stopString = getStopWords(location);
+	  String[] stopList = stopString.split("\n");
+
+	  for (String stopword : stopList) {
+		if (Document.contains(stopword)) {
+		    stemmed = stemmed.replaceAll(" " + stopword + " ", " ");
+		}
+	  }
+	  return stemmed;
+    }
+
 
 	public void printDocuments(){
 		System.out.println("=========================");

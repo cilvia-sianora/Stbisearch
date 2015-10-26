@@ -1,13 +1,17 @@
 package stbisearch;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author 
  */
 public class Vector {
+	private Util util;
 	public int no;
 	public String title;
 	public String content;
@@ -16,6 +20,7 @@ public class Vector {
 	public List<Term> terms;
 	
 	public Vector(){
+		util = new Util();
 		terms = new ArrayList<>();
 		no = 0;
 		title = "";
@@ -24,6 +29,7 @@ public class Vector {
 	}
 	
 	public Vector(int no, String title, String author, String content){
+		util = new Util();
 		this.no = no;
 		this.content = content;
 		this.title = title;
@@ -31,15 +37,33 @@ public class Vector {
 		terms = new ArrayList<>();
 	}
 	
+	public String getAllText(){
+		return author + " " + title + " " + content;
+	}
+	
+	public void preProcessed(String locStopwords){
+		String text = getAllText();
+		try {
+			text = util.delimiter(text);
+			text = util.stopWordRemoval(locStopwords, text);
+		} catch (IOException ex) {
+			Logger.getLogger(DocumentProcess.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		text = util.stemming(text);
+		countFreq(text);
+	}
+	
 	// count frequency of term from raw document/query
-	public void countFreq(){
+	public void countFreq(String text){
 		int index;
-		for (String term: content.split(" ")){
-			index = findIndexTerm(term);
-			if(index == -1){
-				terms.add(new Term(term,1,0));
-			} else {
-				terms.get(index).incrementFreq();
+		for (String term: text.split("\\s+")){
+			if(term.length()>0){
+				index = findIndexTerm(term);
+				if(index == -1){
+					terms.add(new Term(term,1,0));
+				} else {
+					terms.get(index).incrementFreq();
+				}
 			}
 		}
 	}	
@@ -73,7 +97,7 @@ public class Vector {
 		boolean found = false;
 		int i = 0;
 		while(!found && i<terms.size()){
-			if(terms.get(i).getContent().equals(term)){
+			if(terms.get(i).getContent().equalsIgnoreCase(term)){
 				found = true;
 			} else {
 				i++;
