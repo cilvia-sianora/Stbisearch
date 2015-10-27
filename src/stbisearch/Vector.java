@@ -44,12 +44,8 @@ public class Vector {
 	public void preProcessed(String locStopwords, boolean bStemming){
 		String text = getAllText();
 		try {
-//			System.out.println("delimiter");
 			text = util.delimiter(text);
-//			System.out.println(text);
-//			System.out.println("stopwords");
 			text = util.stopWordRemoval(locStopwords, text);
-//			System.out.println(text);
 		} catch (IOException ex) {
 			Logger.getLogger(DocumentProcess.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -61,6 +57,7 @@ public class Vector {
 	
 	// count frequency of term from raw document/query
 	public void countFreq(String text){
+		terms.clear();
 		int index;
 		for (String term: text.split("\\s+")){
 			if(term.length()>0){

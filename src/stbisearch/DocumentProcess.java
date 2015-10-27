@@ -15,8 +15,10 @@ public class DocumentProcess {
 	private InvertedFile invFile;
 	public String locDocuments;
 	public String locStopwords;
+	StbiSearch ss;
 	
 	public DocumentProcess(){
+		ss = new StbiSearch();
 		util = new Util();
 		invFile = new InvertedFile();
 	}
@@ -25,6 +27,7 @@ public class DocumentProcess {
 			boolean bIdf, boolean bNormalization, boolean bStemming){
 		locDocuments = locDocs;
 		this.locStopwords = locStopwords;
+		System.out.println("getting documents..");
 		util.getDocuments(locDocs);
 		
 		for(Vector doc: util.docs){

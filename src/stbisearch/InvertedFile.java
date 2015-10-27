@@ -33,7 +33,7 @@ public class InvertedFile {
 		try {
 			writer = new PrintWriter(LOCATION, "UTF-8");
 			for(int i =0;i<terms.size();i++){
-				System.out.println(terms.get(i)+" "+docs.get(i)+" "+weights.get(i));
+//				System.out.println(terms.get(i)+" "+docs.get(i)+" "+weights.get(i));
 				writer.println(terms.get(i)+" "+docs.get(i)+" "+weights.get(i));
 			}
 			writer.close();

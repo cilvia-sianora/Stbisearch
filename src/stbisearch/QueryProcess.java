@@ -16,14 +16,14 @@ public class QueryProcess {
 	private List<Integer> resultDocNo;
 	private List<Double> resultSim;
 	private List<Double> precisionAtRlvDoc;
-	private static double SIM_THRESHOLD = 0.0;
-	private double precision;
-	private double recall;
-	private double niap;
+	private static double SIM_THRESHOLD = 0;;
 	private String tfMethod;
 	private boolean bIdf, bNormalization, bStemming;
 	
+//	StbiSearch ss;
+	
 	public QueryProcess(){
+//		ss = new StbiSearch();
 		util = new Util();
 		invFile = new InvertedFile();
 		resultDocNo = new ArrayList<>();
@@ -51,16 +51,18 @@ public class QueryProcess {
 		// for each document retrieved
 		for(Integer docNo: resultDocNo){
 			i=util.relevantNoQuery.indexOf(queryNo);
-			stopSearch = false;
-			while(!stopSearch && i<=util.relevantNoQuery.lastIndexOf(queryNo)){
-				if(docNo <= util.relevantNoDoc.get(i)){
-					if(docNo == util.relevantNoDoc.get(i)){ // if relevant doc
-						count++;
-						precisionAtRlvDoc.add((double)count/(double)(j+1));
+			if(i != -1){
+				stopSearch = false;
+				while(!stopSearch && i<=util.relevantNoQuery.lastIndexOf(queryNo)){
+					if(docNo <= util.relevantNoDoc.get(i)){
+						if(docNo == util.relevantNoDoc.get(i)){ // if relevant doc
+							count++;
+							precisionAtRlvDoc.add((double)count/(double)(j+1));
+						}
+						stopSearch = true;
 					}
-					stopSearch = true;
+					i++;
 				}
-				i++;
 			}
 			j++;
 		}
@@ -127,39 +129,25 @@ public class QueryProcess {
 		
 		result += "Precision = " + getPrecision(numRlvAcq,resultDocNo.size()) + "\n";
 		result += "Recall = " + getRecall(numRlvAcq,totalRlvDocs) + "\n";
-		result += "Non-Interpolated Average Precision = " + getNIAP(totalRlvDocs) + "\n";
-		
-		precision += getPrecision(numRlvAcq,resultDocNo.size());
-		recall += getRecall(numRlvAcq,totalRlvDocs);
-		niap += getNIAP(totalRlvDocs);
-		
+		result += "NIAP = " + getNIAP(totalRlvDocs) + "\n";
+				
 		return result;
 	}
 	
 	private double similarity(Vector query, Vector doc){
-//		System.out.println("-similarity-");
 		double sum = 0;
 		for(Term t: query.terms){
-//			System.out.println(t.getContent());
-//			System.out.println(t.getWeight()+"*"+invFile.getWeight(t.getContent(), doc.no));
 			sum += t.getWeight() * invFile.getWeight(t.getContent(), doc.no);
-//			System.out.println("sum= "+sum);
 		}
 		return sum;
 	}
 	
 	// do searching for 1 query
 	private String search(Vector query){
-		invFile.read();
-		precision = 0;
-		recall = 0;
-		niap = 0;
-		
 		double result;
 		int index;
 		for(Vector doc: util.docs){
 			result = similarity(query,doc);
-//			System.out.println("doc "+doc.no+" "+result);
 			if(result > SIM_THRESHOLD){
 				index = findIndex(result);
 				resultSim.add(index,result);
@@ -171,6 +159,7 @@ public class QueryProcess {
 	}
 	
 	public String searchInteractive(String queryInput, String locStopwords, String locDocuments){
+		invFile.read();
 		String result;
 		
 		util.getDocuments(locDocuments);
@@ -191,33 +180,34 @@ public class QueryProcess {
 	}
 	
 	public String searchExperiment(String locRlvJudge, String locQueries, String locStopwords, String locDocuments){
-		util.getQueries(locQueries);
-		util.getRelevanceJudgement(locRlvJudge);
-		util.getDocuments(locDocuments);
 		
+		System.out.println("getting queries..");
+		util.getQueries(locQueries);
+		System.out.println(util.queries.size());
+		System.out.println("getting relevance judgement..");
+		util.getRelevanceJudgement(locRlvJudge);
+		System.out.println("getting document..");
+		util.getDocuments(locDocuments);
+		System.out.println("preprocessing..");
 		for(Vector doc: util.docs){
 			doc.preProcessed(locStopwords,bStemming);
 		}
 		for(Vector query: util.queries){
-//			System.out.println(query.no);
 			query.preProcessed(locStopwords,bStemming);
-			for(Term t: query.terms){
-//				System.out.println(t.getContent());
-			}
 		}
+		
+		System.out.println("getting inverted file..");
+		invFile.read();
 		
 		String result = "";
 		for(Vector query: util.queries){
+			System.out.println("termweighting..");
 			util.termWeighting(query,tfMethod,bIdf,bNormalization);
+			System.out.println("searching..");
 			result += search(query);
 			result += judgeRelevance(query.no);
 			clear();
 		}
-		
-		result = "Precision = " + (precision/(double)util.queries.size()) + "\n" +
-				"Recall = " + (recall/(double)util.queries.size()) + "\n" +
-				"NIAP = " + (niap/(double)util.queries.size()) + "\n" +
-				"Searching Result:" + "\n" + result;
 		
 		return result;
 	}

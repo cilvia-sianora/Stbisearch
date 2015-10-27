@@ -31,10 +31,12 @@ public class Util {
 	// return content of file
 	public String readFile(String location){
 		String content = "";
+		String temp;
                 try {                
                     Scanner in = new Scanner(new File(location));
                     while(in.hasNextLine()){
-                        content += in.nextLine() + "\n";
+						temp = in.nextLine();
+                        content += temp + "\n";
                     }
                 } catch (FileNotFoundException ex) {
                 }
@@ -57,7 +59,6 @@ public class Util {
 				no = 0;
 				
 				for(String line: doc.split("\n")){
-//					System.out.println(line);
 					switch(line){
 						case ".A":
 							state = "author";
@@ -171,7 +172,6 @@ public class Util {
 				count++;
 			}
 		}
-//		System.out.println("idf= "+(double)docs.size()+"/"+(double)count);
 		if(count > 0){
 			return log10((double)docs.size()/(double)count);
 		} else {
@@ -181,11 +181,9 @@ public class Util {
 	
 	// do term-weighting
 	public void termWeighting(Vector vec, String methodTF, boolean bIdf, boolean bNormalize){
-//		System.out.println("-TERMWEIGHTING-");
 		String term;
 		for(Term t : vec.terms){
 			term = t.getContent();
-//			System.out.println(term);
 			switch(methodTF){
 				case "raw":
 					vec.terms.get(vec.findIndexTerm(term)).setWeight(rawTF(vec,term));
@@ -202,12 +200,9 @@ public class Util {
 				default:
 					vec.terms.get(vec.findIndexTerm(term)).setWeight(1);
 			}
-//			System.out.println("tf= "+vec.terms.get(vec.findIndexTerm(term)).getWeight());
 			if(bIdf){
 				vec.terms.get(vec.findIndexTerm(term)).setWeight(vec.terms.get(vec.findIndexTerm(term)).getWeight()*idf(term));
-//				System.out.println("idf= "+idf(term));
 			}
-//			System.out.println("tf-idf= "+vec.terms.get(vec.findIndexTerm(term)).getWeight());
 		}
 		if(bNormalize){
 			vec.normalization();

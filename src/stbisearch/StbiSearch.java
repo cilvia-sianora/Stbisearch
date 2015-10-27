@@ -12,33 +12,78 @@ import java.util.logging.Logger;
  * @author Cilvia
  */
 public class StbiSearch {
-
+//	public static Util util;
 	/**
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
-		Util util = new Util();
-		String locQueries = "Test Collection\\CISI\\query.text";
-		String locDocuments = "Test Collection\\CISI\\onedoc.all";
+		Util util;
+		util = new Util();
+		String locQueries = "Test Collection\\CISI\\shortquery.txt";
+		String locDocuments = "Test Collection\\CISI\\cisi.all";
 		String locStopwords = "Test Collection\\stopwords-porter.txt";
 		String locRlvJudge = "Test Collection\\CISI\\qrels.text";
-		String tfMethod = "raw";
+		String tfMethod = "no";
 		boolean idf = true;
 		boolean norm = false;
-		boolean stem = true;
-//		util.getDocuments(locDocuments);
-//		util.getQueries(locQueries);
+		boolean stem = false;
+		String result;
+		util.getDocuments(locDocuments);
+		util.getQueries(locQueries);
 //		util.printDocuments();
 //		util.printQueries();
-//		util.getRelevanceJudgement("Test Collection\\ADI\\qrels.text");
+		util.getRelevanceJudgement(locRlvJudge);
 //		util.printJudgement();
 		DocumentProcess dp = new DocumentProcess();
-		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
-//		QueryProcess qp = new QueryProcess();
+//		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
+		QueryProcess qp = new QueryProcess();
 //		qp.setQuerySetting(tfMethod,idf,norm,stem);
 //		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
 //		System.out.println("-RESULT-");
+//		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
 //		System.out.println(result);
+		
+//		List<Boolean> arrIdf = new ArrayList<>();
+//		List<Boolean> arrNorm = new ArrayList<>();
+//		List<Boolean> arrStem = new ArrayList<>();
+//		arrIdf.add(true); arrIdf.add(false);
+//		arrNorm.add(true); arrNorm.add(false);
+//		arrStem.add(true); arrStem.add(false);
+//		
+//		tfMethod = "no";
+//		idf = true;
+//		for(boolean aNorm: arrNorm){
+//			norm = aNorm;
+//			for(boolean aStem: arrStem){
+//				stem = aStem;
+//				if(norm || stem){
+//					dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
+//					qp.setQuerySetting(tfMethod,idf,norm,stem);
+//					result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
+//					System.out.println("-RESULT-");
+//					System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
+//					System.out.println(result);
+//				}
+//			}
+//		}
+//		
+//		tfMethod = "aug";
+//		for(boolean aIdf: arrIdf){
+//			idf = aIdf;
+//			for(boolean aNorm: arrNorm){
+//				norm = aNorm;
+//				for(boolean aStem: arrStem){
+//					stem = aStem;
+//					dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
+//					qp.setQuerySetting(tfMethod,idf,norm,stem);
+//					result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
+//					System.out.println("-RESULT-");
+//					System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
+//					System.out.println(result);
+//				}
+//			}
+//		}
+		
 //	  String document = "the ibm data systems division technical\n"
 //		+ " information center (tic) provides an operating developmental\n"
 //		+ "system for integrated and compatible mechanized\n"
