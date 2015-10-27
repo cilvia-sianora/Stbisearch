@@ -16,7 +16,7 @@ public class QueryProcess {
 	private List<Integer> resultDocNo;
 	private List<Double> resultSim;
 	private List<Double> precisionAtRlvDoc;
-	private static double SIM_THRESHOLD = 0.05;
+	private static double SIM_THRESHOLD = 0.0;
 	private double precision;
 	private double recall;
 	private double niap;
@@ -137,9 +137,13 @@ public class QueryProcess {
 	}
 	
 	private double similarity(Vector query, Vector doc){
+//		System.out.println("-similarity-");
 		double sum = 0;
 		for(Term t: query.terms){
+//			System.out.println(t.getContent());
+//			System.out.println(t.getWeight()+"*"+invFile.getWeight(t.getContent(), doc.no));
 			sum += t.getWeight() * invFile.getWeight(t.getContent(), doc.no);
+//			System.out.println("sum= "+sum);
 		}
 		return sum;
 	}
@@ -155,6 +159,7 @@ public class QueryProcess {
 		int index;
 		for(Vector doc: util.docs){
 			result = similarity(query,doc);
+//			System.out.println("doc "+doc.no+" "+result);
 			if(result > SIM_THRESHOLD){
 				index = findIndex(result);
 				resultSim.add(index,result);
@@ -194,7 +199,11 @@ public class QueryProcess {
 			doc.preProcessed(locStopwords,bStemming);
 		}
 		for(Vector query: util.queries){
+//			System.out.println(query.no);
 			query.preProcessed(locStopwords,bStemming);
+			for(Term t: query.terms){
+//				System.out.println(t.getContent());
+			}
 		}
 		
 		String result = "";

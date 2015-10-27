@@ -22,14 +22,6 @@ public class StbiSearch {
 		String locDocuments = "Test Collection\\ADI\\adi.all";
 		String locStopwords = "Test Collection\\stopwords-porter.txt";
 		String locRlvJudge = "Test Collection\\ADI\\qrels.text";
-//		ArrayList<Integer> test = new ArrayList<>();
-//		test.add(0);
-//		test.add(1);
-//		test.add(2);
-//		test.add(0,99);
-//		for(Integer i: test){
-//			System.out.print(i);
-//		}
 //		util.getDocuments(locDocuments);
 //		util.getQueries(locQueries);
 //		util.printDocuments();
@@ -37,10 +29,11 @@ public class StbiSearch {
 //		util.getRelevanceJudgement("Test Collection\\ADI\\qrels.text");
 //		util.printJudgement();
 //		DocumentProcess dp = new DocumentProcess();
-//		dp.indexing(locDocuments,locStopwords);
+//		dp.indexing(locDocuments,locStopwords,"raw",true,false,true);
 		QueryProcess qp = new QueryProcess();
+		qp.setQuerySetting("raw", true, false, true);
 		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
-//		System.out.println("-RESULT-");
+		System.out.println("-RESULT-");
 		System.out.println(result);
 //	  String document = "the ibm data systems division technical\n"
 //		+ " information center (tic) provides an operating developmental\n"

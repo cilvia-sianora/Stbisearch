@@ -118,12 +118,6 @@ public class Util {
 			}
 		}
 	}
-	
-	public String getStopWords(String location) throws IOException{
-            String content;
-            content = new String(Files.readAllBytes(Paths.get(location)));
-            return content;
-	}
 		
 	// computing term-weighting method: rawTF
 	public double rawTF(Vector vec, String term){
@@ -170,14 +164,21 @@ public class Util {
 				count++;
 			}
 		}
-		return log10((double)docs.size()/(double)count);
+//		System.out.println("idf= "+(double)docs.size()+"/"+(double)count);
+		if(count > 0){
+			return log10((double)docs.size()/(double)count);
+		} else {
+			return 0;
+		}
 	}
 	
 	// do term-weighting
 	public void termWeighting(Vector vec, String methodTF, boolean bIdf, boolean bNormalize){
+//		System.out.println("-TERMWEIGHTING-");
 		String term;
 		for(Term t : vec.terms){
 			term = t.getContent();
+//			System.out.println(term);
 			switch(methodTF){
 				case "raw":
 					vec.terms.get(vec.findIndexTerm(term)).setWeight(rawTF(vec,term));
@@ -194,9 +195,12 @@ public class Util {
 				default:
 					vec.terms.get(vec.findIndexTerm(term)).setWeight(1);
 			}
+//			System.out.println("tf= "+vec.terms.get(vec.findIndexTerm(term)).getWeight());
 			if(bIdf){
 				vec.terms.get(vec.findIndexTerm(term)).setWeight(vec.terms.get(vec.findIndexTerm(term)).getWeight()*idf(term));
+//				System.out.println("idf= "+idf(term));
 			}
+//			System.out.println("tf-idf= "+vec.terms.get(vec.findIndexTerm(term)).getWeight());
 		}
 		if(bNormalize){
 			vec.normalization();
@@ -215,9 +219,13 @@ public class Util {
 		Stemmer stemmer = new Stemmer();
 	
 		if (!(D.isEmpty() | D.length() < 1 )){
-		    stemmer.add(D.toCharArray(), D.length());
-		    String temp = new String(stemmer.getResultBuffer());
+			stemmer.add(D.toCharArray(), D.length());
+			stemmer.stem();
+			
+			String temp = new String(stemmer.toString());
+//		    String temp = new String(stemmer.getResultBuffer());
 		    result += " " + temp;
+//			result += " " + D;
 		}
 	  }
 	  return result;
@@ -245,7 +253,7 @@ public class Util {
 	  String stemmed = Document;
 
 	  // loads stopwordlist 
-	  String stopString = getStopWords(location);
+	  String stopString = readFile(location);
 	  String[] stopList = stopString.split("\n");
 
 	  for (String stopword : stopList) {
