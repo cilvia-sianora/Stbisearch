@@ -44,8 +44,12 @@ public class Vector {
 	public void preProcessed(String locStopwords, boolean bStemming){
 		String text = getAllText();
 		try {
+//			System.out.println("delimiter");
 			text = util.delimiter(text);
+//			System.out.println(text);
+//			System.out.println("stopwords");
 			text = util.stopWordRemoval(locStopwords, text);
+//			System.out.println(text);
 		} catch (IOException ex) {
 			Logger.getLogger(DocumentProcess.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -69,19 +73,6 @@ public class Vector {
 			}
 		}
 	}	
-	
-	// count similarity
-	public double similarity(Vector vec){
-		double sum = 0;
-		int index;
-		for(Term t: vec.terms){
-			index = findIndexTerm(t.getContent());
-			if(index != -1){
-				sum += t.getWeight() * terms.get(index).getWeight();
-			}
-		}
-		return sum;
-	}
 	
 	// get frequency of term
 	public int getTF(String term){

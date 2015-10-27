@@ -18,22 +18,14 @@ public class StbiSearch {
 	 */
 	public static void main(String[] args) {
 		Util util = new Util();
-		String locQueries = "Test Collection\\ADI\\query.text";
-		String locDocuments = "Test Collection\\ADI\\adi.all";
+		String locQueries = "Test Collection\\CISI\\query.text";
+		String locDocuments = "Test Collection\\CISI\\onedoc.all";
 		String locStopwords = "Test Collection\\stopwords-porter.txt";
-		String locRlvJudge = "Test Collection\\ADI\\qrels.text";
-		
-		String tfMethod = "";
-		boolean idf = true, norm = false, stem = true;
-		
-//		ArrayList<Integer> test = new ArrayList<>();
-//		test.add(0);
-//		test.add(1);
-//		test.add(2);
-//		test.add(0,99);
-//		for(Integer i: test){
-//			System.out.print(i);
-//		}
+		String locRlvJudge = "Test Collection\\CISI\\qrels.text";
+		String tfMethod = "raw";
+		boolean idf = true;
+		boolean norm = false;
+		boolean stem = true;
 //		util.getDocuments(locDocuments);
 //		util.getQueries(locQueries);
 //		util.printDocuments();
