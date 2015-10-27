@@ -83,7 +83,6 @@ public class StbiSearch {
 //				}
 //			}
 //		}
-		
 //	  String document = "the ibm data systems division technical\n"
 //		+ " information center (tic) provides an operating developmental\n"
 //		+ "system for integrated and compatible mechanized\n"
