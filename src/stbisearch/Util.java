@@ -48,7 +48,7 @@ public class Util {
 		String title,author,content,state;
 		
 		String temp = readFile(location);
-		for(String doc: temp.split(".I ")){
+		for(String doc: temp.split("\\.I ")){
 			if(doc.length()>0){
 				title = "";
 				author = "";
@@ -57,6 +57,7 @@ public class Util {
 				no = 0;
 				
 				for(String line: doc.split("\n")){
+//					System.out.println(line);
 					switch(line){
 						case ".A":
 							state = "author";
@@ -66,6 +67,12 @@ public class Util {
 							break;
 						case ".W":
 							state = "content";
+							break;
+						case ".X":
+							state = "";
+							break;
+						case ".B":
+							state = "";
 							break;
 						default:
 							switch (state) {

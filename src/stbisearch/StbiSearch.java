@@ -18,23 +18,27 @@ public class StbiSearch {
 	 */
 	public static void main(String[] args) {
 		Util util = new Util();
-		String locQueries = "Test Collection\\ADI\\query.text";
-		String locDocuments = "Test Collection\\ADI\\adi.all";
+		String locQueries = "Test Collection\\CISI\\query.text";
+		String locDocuments = "Test Collection\\CISI\\onedoc.all";
 		String locStopwords = "Test Collection\\stopwords-porter.txt";
-		String locRlvJudge = "Test Collection\\ADI\\qrels.text";
+		String locRlvJudge = "Test Collection\\CISI\\qrels.text";
+		String tfMethod = "raw";
+		boolean idf = true;
+		boolean norm = false;
+		boolean stem = true;
 //		util.getDocuments(locDocuments);
 //		util.getQueries(locQueries);
 //		util.printDocuments();
 //		util.printQueries();
 //		util.getRelevanceJudgement("Test Collection\\ADI\\qrels.text");
 //		util.printJudgement();
-//		DocumentProcess dp = new DocumentProcess();
-//		dp.indexing(locDocuments,locStopwords,"raw",true,false,true);
-		QueryProcess qp = new QueryProcess();
-		qp.setQuerySetting("raw", true, false, true);
-		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
-		System.out.println("-RESULT-");
-		System.out.println(result);
+		DocumentProcess dp = new DocumentProcess();
+		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
+//		QueryProcess qp = new QueryProcess();
+//		qp.setQuerySetting(tfMethod,idf,norm,stem);
+//		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
+//		System.out.println("-RESULT-");
+//		System.out.println(result);
 //	  String document = "the ibm data systems division technical\n"
 //		+ " information center (tic) provides an operating developmental\n"
 //		+ "system for integrated and compatible mechanized\n"
