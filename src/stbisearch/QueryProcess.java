@@ -1,10 +1,11 @@
 package stbisearch;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeMap;
 
 /**
  *
@@ -13,72 +14,64 @@ import java.util.logging.Logger;
 public class QueryProcess {
 	private Util util;
 	private InvertedFile invFile;
-	private List<Integer> resultDocNo;
-	private List<Double> resultSim;
+	private Map<Double,List<Integer>> resultSearch;
 	private List<Double> precisionAtRlvDoc;
 	private static double SIM_THRESHOLD = 0;;
 	private String tfMethod;
 	private boolean bIdf, bNormalization, bStemming;
-	
-//	StbiSearch ss;
+	private double precision, recall, niap;
+	private int numRlvDocsRetrieved,numDocsRetrieved;
 	
 	public QueryProcess(){
-//		ss = new StbiSearch();
 		util = new Util();
 		invFile = new InvertedFile();
-		resultDocNo = new ArrayList<>();
-		resultSim = new ArrayList<>();
+		resultSearch = new TreeMap<>();
 		precisionAtRlvDoc = new ArrayList<>();
 		tfMethod = "no";
 		bIdf = false;
 		bNormalization = false;
 		bStemming = false;
+		precision = 0;
+		recall = 0;
+		niap = 0;
 	}
 	
 	private void clear(){
-		resultDocNo.clear();
-		resultSim.clear();
+		resultSearch.clear();
 		precisionAtRlvDoc.clear();
 	}
 	
-	// count number of relevant documents retrieved
-	private int countRelevantDocs(int queryNo){
-		int i,j;
-		boolean stopSearch;
-		
-		int count = 0;
-		j = 0;
-		// for each document retrieved
-		for(Integer docNo: resultDocNo){
-			i=util.relevantNoQuery.indexOf(queryNo);
-			if(i != -1){
-				stopSearch = false;
-				while(!stopSearch && i<=util.relevantNoQuery.lastIndexOf(queryNo)){
-					if(docNo <= util.relevantNoDoc.get(i)){
-						if(docNo == util.relevantNoDoc.get(i)){ // if relevant doc
-							count++;
-							precisionAtRlvDoc.add((double)count/(double)(j+1));
-						}
-						stopSearch = true;
-					}
-					i++;
-				}
-			}
-			j++;
+	// return true if document docNo is relevant for query queryNo
+	private boolean isRelevantDoc(int queryNo, int docNo){
+		Set<Integer> temp = util.rlvJudgement.get(queryNo);
+		if(temp!=null){
+			return temp.contains(docNo);
+		} else { // if query queryNo has no relevant document
+			return false;
 		}
-		return count;
 	}
 	
+	// return number of relevant documents of a query
+	// return -1 if there is no relevant document
 	private int countAllRelevantDocs(int queryNo){
-		return util.relevantNoQuery.lastIndexOf(queryNo) - util.relevantNoQuery.indexOf(queryNo) + 1;
+		Set<Integer> temp = util.rlvJudgement.get(queryNo);
+		if(temp!=null){
+			return temp.size();
+		} else {
+			return -1;
+		}
 	}
 	
-	private double getRecall(int numRlvAcq, int totalRlvDocs){
-		return (double)numRlvAcq/(double)totalRlvDocs;
+	private boolean doesHaveRelevantDoc(int queryNo){
+		return (countAllRelevantDocs(queryNo) != -1);
 	}
 	
-	private double getPrecision(int numRlvAcq, int numDocsAcq){
-		return (double)numRlvAcq/(double)numDocsAcq;
+	private double getRecall(int totalRlvDocs){
+		return (double)numRlvDocsRetrieved/(double)totalRlvDocs;
+	}
+	
+	private double getPrecision(){
+		return (double)numRlvDocsRetrieved/(double)numDocsRetrieved;
 	}
 	
 	// compute Non-Interpolated Average Precision
@@ -90,33 +83,31 @@ public class QueryProcess {
 		return sum/(double)totalRlvDocs;
 	}
 	
-	// find the right index to rank document for the result
-	private int findIndex(Double sim){
-		int i = 0;
-		boolean found = false;
+	// print the rank of document
+	private String getDocResult(int queryNo){
+		numRlvDocsRetrieved = 0;
+		numDocsRetrieved = 0;
 		
-		if(resultSim.size()>0){
-			// mencari index yang cocok berdasarkan keterurutan term
-			while(!found && i<resultSim.size()){
-				if(sim >= resultSim.get(i)){
-					found = true;
-				} else {
-					i++;
+		String result = "";
+		result += "Query Number = " + queryNo + "\n";
+		result += "Result:\n";
+		
+		for(Entry<Double,List<Integer>> entry: resultSearch.entrySet()){
+			for(Integer docNo: entry.getValue()){
+				numDocsRetrieved++;
+				
+				// print document retrieved
+				result += numDocsRetrieved + ". " + docNo + 
+						" " + util.docs.get(docNo).title + "\n";
+				
+				// get precision if document retrieved is relevant
+				if(isRelevantDoc(queryNo,docNo)){
+					numRlvDocsRetrieved++;
+					precisionAtRlvDoc.add(getPrecision());
 				}
 			}
 		}
 		
-		return i;
-	}
-	
-	// print the rank of document
-	private String printDocResult(int queryNo){
-		String result = "";
-		result += "Query Number = " + queryNo + "\n";
-		result += "Result:\n";
-		for(int i=0;i<resultDocNo.size();i++){
-			result += (i+1) + ". " + resultDocNo.get(i) + "\n";
-		}
 		
 		return result;
 	}
@@ -124,20 +115,24 @@ public class QueryProcess {
 	private String judgeRelevance(int queryNo){
 		String result = "";
 
-		int numRlvAcq = countRelevantDocs(queryNo);
 		int totalRlvDocs = countAllRelevantDocs(queryNo);
 		
-		result += "Precision = " + getPrecision(numRlvAcq,resultDocNo.size()) + "\n";
-		result += "Recall = " + getRecall(numRlvAcq,totalRlvDocs) + "\n";
+		
+		result += "Precision = " + getPrecision() + "\n";
+		result += "Recall = " + getRecall(totalRlvDocs) + "\n";
 		result += "NIAP = " + getNIAP(totalRlvDocs) + "\n";
-				
+		
+		precision += getPrecision();
+		recall += getRecall(totalRlvDocs);
+		niap += getNIAP(totalRlvDocs);
+		
 		return result;
 	}
 	
 	private double similarity(Vector query, Vector doc){
 		double sum = 0;
-		for(Term t: query.terms){
-			sum += t.getWeight() * invFile.getWeight(t.getContent(), doc.no);
+		for(Entry<String,double[]> entry: query.terms.entrySet()){
+			sum += entry.getValue()[1] * invFile.getWeight(entry.getKey(), doc.no);
 		}
 		return sum;
 	}
@@ -145,17 +140,17 @@ public class QueryProcess {
 	// do searching for 1 query
 	private String search(Vector query){
 		double result;
-		int index;
-		for(Vector doc: util.docs){
-			result = similarity(query,doc);
+		for(Entry<Integer,Vector> doc: util.docs.entrySet()){
+			result = similarity(query,doc.getValue());
 			if(result > SIM_THRESHOLD){
-				index = findIndex(result);
-				resultSim.add(index,result);
-				resultDocNo.add(index,doc.no);
+				if(!resultSearch.containsKey(result)){
+					resultSearch.put(result, new ArrayList<>());
+				}
+				resultSearch.get(result).add(doc.getKey());
 			}
 		}
 		
-		return printDocResult(query.no);
+		return getDocResult(query.no);
 	}
 	
 	public String searchInteractive(String queryInput, String locStopwords, String locDocuments){
@@ -163,8 +158,8 @@ public class QueryProcess {
 		String result;
 		
 		util.getDocuments(locDocuments);
-		for(Vector doc: util.docs){
-			doc.preProcessed(locStopwords,bStemming);
+		for(Entry<Integer,Vector> doc: util.docs.entrySet()){
+			doc.getValue().preProcessed(locStopwords,bStemming);
 		}
 		
 		Vector query = new Vector();
@@ -180,34 +175,40 @@ public class QueryProcess {
 	}
 	
 	public String searchExperiment(String locRlvJudge, String locQueries, String locStopwords, String locDocuments){
+		precision = 0;
+		recall = 0;
+		niap = 0;
 		
-		System.out.println("getting queries..");
 		util.getQueries(locQueries);
-		System.out.println(util.queries.size());
-		System.out.println("getting relevance judgement..");
 		util.getRelevanceJudgement(locRlvJudge);
-		System.out.println("getting document..");
 		util.getDocuments(locDocuments);
+		
 		System.out.println("preprocessing..");
-		for(Vector doc: util.docs){
-			doc.preProcessed(locStopwords,bStemming);
+		for(Entry<Integer,Vector> doc: util.docs.entrySet()){
+			doc.getValue().preProcessed(locStopwords,bStemming);
 		}
-		for(Vector query: util.queries){
-			query.preProcessed(locStopwords,bStemming);
+		for(Entry<Integer,Vector> query: util.queries.entrySet()){
+			query.getValue().preProcessed(locStopwords,bStemming);
 		}
 		
 		System.out.println("getting inverted file..");
 		invFile.read();
 		
+		System.out.println("searching..");
 		String result = "";
-		for(Vector query: util.queries){
-			System.out.println("termweighting..");
-			util.termWeighting(query,tfMethod,bIdf,bNormalization);
-			System.out.println("searching..");
-			result += search(query);
-			result += judgeRelevance(query.no);
-			clear();
+		for(Entry<Integer,Vector> query: util.queries.entrySet()){
+			if(doesHaveRelevantDoc(query.getKey())){
+				util.termWeighting(query.getValue(),tfMethod,bIdf,bNormalization);
+				result += search(query.getValue());
+				result += judgeRelevance(query.getValue().no);
+				clear();
+			}
 		}
+		
+		result = "Precision = " + (precision/util.queries.size()) + "\n" +
+				"Recall = " + (recall/util.queries.size()) + "\n" +
+				"NIAP = " + (niap/util.queries.size()) + "\n" +
+				"The result of each query:" + "\n" + result;
 		
 		return result;
 	}

@@ -2,7 +2,10 @@ package stbisearch;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,10 +18,8 @@ public class DocumentProcess {
 	private InvertedFile invFile;
 	public String locDocuments;
 	public String locStopwords;
-	StbiSearch ss;
 	
 	public DocumentProcess(){
-		ss = new StbiSearch();
 		util = new Util();
 		invFile = new InvertedFile();
 	}
@@ -27,25 +28,17 @@ public class DocumentProcess {
 			boolean bIdf, boolean bNormalization, boolean bStemming){
 		locDocuments = locDocs;
 		this.locStopwords = locStopwords;
-		System.out.println("getting documents..");
 		util.getDocuments(locDocs);
 		
-		for(Vector doc: util.docs){
-			doc.preProcessed(locStopwords,bStemming);
+		for(Entry<Integer,Vector> entry: util.docs.entrySet()){
+			entry.getValue().preProcessed(locStopwords,bStemming);
 		}
 		
 		// put to inverted file
-		int index;
-		for(Vector doc: util.docs){
-			util.termWeighting(doc,tfMethod,bIdf,bNormalization);
-			for(Term t: doc.terms){
-				// mencari index yang cocok
-				index = invFile.findIndexToInsert(t.getContent(), doc.no);
-				
-				// tambahkan di index setelah ditemukan index yang cocok
-				invFile.terms.add(index, t.getContent());
-				invFile.docs.add(index, doc.no);
-				invFile.weights.add(index, t.getWeight());
+		for(Entry<Integer,Vector> doc: util.docs.entrySet()){
+			util.termWeighting(doc.getValue(),tfMethod,bIdf,bNormalization);
+			for(Entry<String,double[]> t: doc.getValue().terms.entrySet()){
+				invFile.put(t.getKey(), doc.getKey(), t.getValue()[1]);
 			}
 		}
 		

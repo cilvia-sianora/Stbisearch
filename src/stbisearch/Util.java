@@ -7,8 +7,13 @@ import static java.lang.Math.log10;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.Set;
 import org.tartarus.martin.Stemmer;
 
 /**
@@ -16,16 +21,14 @@ import org.tartarus.martin.Stemmer;
  * @author Cilvia
  */
 public class Util {
-	public List<Vector> docs;
-	public List<Vector> queries;
-	public List<Integer> relevantNoQuery;
-	public List<Integer> relevantNoDoc;
+	public Map<Integer,Vector> docs;
+	public Map<Integer,Vector> queries;
+	public Map<Integer,Set<Integer>> rlvJudgement;
 	
 	public void clear(){
 		docs.clear();
 		queries.clear();
-		relevantNoQuery.clear();
-		relevantNoDoc.clear();
+		rlvJudgement.clear();
 	}
 	
 	// return content of file
@@ -44,8 +47,8 @@ public class Util {
         }
 	
 	// read documents/queries from file
-	private List getVectors(String location){
-		List vectors = new ArrayList<>();    
+	private Map getVectors(String location){
+		Map vectors = new HashMap<>();    
 		int no;
 		String title,author,content,state;
 		
@@ -93,7 +96,7 @@ public class Util {
 					}
 				}
 				
-				vectors.add(new Vector(no,title,author,content));
+				vectors.put(no, new Vector(no,title,author,content));
 			}
 		}
 		
@@ -102,27 +105,35 @@ public class Util {
 	
 	// get documents from file
 	public void getDocuments(String location){
-		docs = new ArrayList<>();
+		System.out.println("getting documents..");
+		docs = new HashMap<>();
 		docs = getVectors(location);
 	}
 	
 	// get queries from file
 	public void getQueries(String location){
-		queries = new ArrayList<>();
+		System.out.println("getting queries..");
+		queries = new HashMap<>();
 		queries = getVectors(location);
 	}
 	
 	// get relevance judgement from file
 	public void getRelevanceJudgement(String location){
-        relevantNoQuery = new ArrayList<>();
-		relevantNoDoc = new ArrayList<>();
+		System.out.println("getting relevance judgement..");
+		rlvJudgement = new HashMap<>();
 		String temp = readFile(location);
+		
 		String[] arr;
+		int queryNo, docNo;
 		for(String line: temp.split("\n")){
 			if(line.length()>0){
 				arr = line.split("\\s+");
-				relevantNoQuery.add(Integer.parseInt(arr[0]));
-				relevantNoDoc.add(Integer.parseInt(arr[1]));
+				queryNo = Integer.parseInt(arr[0]);
+				docNo = Integer.parseInt(arr[1]);
+				if(!rlvJudgement.containsKey(queryNo)){
+					rlvJudgement.put(queryNo, new HashSet<>());
+				}
+				rlvJudgement.get(queryNo).add(docNo);
 			}
 		}
 	}
@@ -167,8 +178,8 @@ public class Util {
 	// computing term-weighting method: idf
 	public double idf(String term){
 		int count = 0;
-		for(Vector doc: docs){
-			if(doc.findIndexTerm(term) != -1){
+		for(Entry<Integer,Vector> entry : docs.entrySet()) {
+			if(entry.getValue().terms.containsKey(term)){
 				count++;
 			}
 		}
@@ -181,28 +192,28 @@ public class Util {
 	
 	// do term-weighting
 	public void termWeighting(Vector vec, String methodTF, boolean bIdf, boolean bNormalize){
-		String term;
-		for(Term t : vec.terms){
-			term = t.getContent();
+		double[] temp = new double[2];
+		for(Entry<String,double[]> entry: vec.terms.entrySet()){
+			temp[0] = entry.getValue()[0];
+			temp[1] = entry.getValue()[1];
 			switch(methodTF){
 				case "raw":
-					vec.terms.get(vec.findIndexTerm(term)).setWeight(rawTF(vec,term));
+					temp[1] *= rawTF(vec,entry.getKey());
 					break;
 				case "log":
-					vec.terms.get(vec.findIndexTerm(term)).setWeight(logTF(vec,term));
+					temp[1] *= logTF(vec,entry.getKey());
 					break;
 				case "binary":
-					vec.terms.get(vec.findIndexTerm(term)).setWeight(binaryTF(vec,term));
+					temp[1] *= binaryTF(vec,entry.getKey());
 					break;
 				case "aug":
-					vec.terms.get(vec.findIndexTerm(term)).setWeight(augTF(vec,term));
+					temp[1] *= augTF(vec,entry.getKey());
 					break;
-				default:
-					vec.terms.get(vec.findIndexTerm(term)).setWeight(1);
 			}
 			if(bIdf){
-				vec.terms.get(vec.findIndexTerm(term)).setWeight(vec.terms.get(vec.findIndexTerm(term)).getWeight()*idf(term));
+				temp[1] *= idf(entry.getKey());
 			}
+			vec.terms.put(entry.getKey(), temp);
 		}
 		if(bNormalize){
 			vec.normalization();
@@ -271,8 +282,8 @@ public class Util {
 		System.out.println("=========================");
 		System.out.println("==  D O C U M E N T S  ==");
 		System.out.println("=========================");
-		for(Vector d: docs){
-			d.printVector();
+		for(Entry<Integer,Vector> entry : docs.entrySet()) {
+			entry.getValue().printVector();
 		}
 	}
 	
@@ -280,8 +291,8 @@ public class Util {
 		System.out.println("=========================");
 		System.out.println("==    Q U E R I E S    ==");
 		System.out.println("=========================");
-		for(Vector q: queries){
-			q.printVector();
+		for(Entry<Integer,Vector> entry : queries.entrySet()) {
+			entry.getValue().printVector();
 		}
 	}
 	
@@ -289,8 +300,10 @@ public class Util {
 		System.out.println("=========================");
 		System.out.println("==  J U D G E M E N T  ==");
 		System.out.println("=========================");
-		for(int i=0;i<relevantNoDoc.size();i++){
-			System.out.println(relevantNoQuery.get(i)+" "+relevantNoDoc.get(i));
+		for(Entry<Integer,Set<Integer>> entry : rlvJudgement.entrySet()) {
+			for(Integer d: entry.getValue()){
+				System.out.println(entry.getKey()+" "+d);
+			}
 		}
 	}
 }
