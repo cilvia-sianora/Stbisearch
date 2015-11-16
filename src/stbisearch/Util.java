@@ -99,21 +99,30 @@ public class Util {
 		return vectors;
 	}
 	
-	// get documents from file
+	/**
+	 * Mengambil daftar dokumen dari file
+	 * @param location lokasi dokumen
+	 */
 	public void getDocuments(String location){
 		System.out.println("getting documents..");
 		docs = new HashMap<>();
 		docs = getVectors(location);
 	}
 	
-	// get queries from file
+	/**
+	 * Mengambil daftar query dari file
+	 * @param location lokasi query
+	 */
 	public void getQueries(String location){
 		System.out.println("getting queries..");
 		queries = new HashMap<>();
 		queries = getVectors(location);
 	}
 	
-	// get relevance judgement from file
+	/**
+	 * Mengambil relevance judgement dari file
+	 * @param location lokasi file
+	 */
 	public void getRelevanceJudgement(String location){
 		System.out.println("getting relevance judgement..");
 		rlvJudgement = new HashMap<>();
@@ -134,7 +143,12 @@ public class Util {
 		}
 	}
 		
-	// computing term-weighting method: rawTF
+	/**
+	 * Menghitung bobot suatu term menggunakan metode raw TF
+	 * @param vec query/dokumen
+	 * @param term term
+	 * @return besar bobot term
+	 */
 	public double rawTF(Vector vec, String term){
             if(vec.getTF(term)!= -1){
                 return (double)vec.getTF(term);
@@ -143,7 +157,12 @@ public class Util {
             }
 	}
 	
-	// computing term-weighting method: logarithmTF
+	/**
+	 * Menghitung bobot suatu term menggunakan metode logarithmic TF
+	 * @param vec query/dokumen
+	 * @param term term
+	 * @return besar bobot term
+	 */
 	public double logTF(Vector vec, String term){
             if(vec.getTF(term)!= -1){
                 return 1+log10(vec.getTF(term));
@@ -152,7 +171,12 @@ public class Util {
             }
         }
 	
-	// computing term-weighting method: augmentedTF
+	/**
+	 * Menghitung bobot suatu term menggunakan metode augmented TF
+	 * @param vec query/dokumen
+	 * @param term term
+	 * @return besar bobot term
+	 */
 	public double augTF(Vector vec,String term){
             if(vec.getTF(term)!= -1){
                  return (0.5+(0.5*(double)vec.getTF(term)/(double)vec.getMaxTF()));
@@ -162,7 +186,12 @@ public class Util {
 
 	}
 	
-	// computing term-weighting method: binaryTF
+	/**
+	 * Menghitung bobot suatu term menggunakan metode binary TF
+	 * @param vec query/dokumen
+	 * @param term term
+	 * @return besar bobot term
+	 */
 	public double binaryTF(Vector vec,String term){
 		if((vec.getTF(term))>0){
 			return 1;
@@ -186,7 +215,27 @@ public class Util {
 		}
 	}
 	
-	// do term-weighting
+	/**
+	 * Menghitung idf berdasarkan masukan
+	 * @param totalDoc jumlah total dokumen
+	 * @param numDoc jumlah dokumen yang mengandung suatu term
+	 * @return nilai idf dari masukan
+	 */
+	public double computeIdf(int totalDoc, int numDoc){
+		if(numDoc > 0){
+			return log10((double)totalDoc/(double)numDoc);
+		} else {
+			return 0;
+		}
+	}
+	
+	/**
+	 * Melakukan term-weighting terhadap query/document berdasarkan konfigurasi masukan
+	 * @param vec	query/dokumen
+	 * @param methodTF	metode term frequency yang digunakan
+	 * @param bIdf	idf or not
+	 * @param bNormalize normalization or not
+	 */
 	public void termWeighting(Vector vec, String methodTF, boolean bIdf, boolean bNormalize){
 		double[] temp = new double[2];
 		for(Entry<String,double[]> entry: vec.terms.entrySet()){
@@ -302,4 +351,6 @@ public class Util {
 			}
 		}
 	}
+	
+	
 }

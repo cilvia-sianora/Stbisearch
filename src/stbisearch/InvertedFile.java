@@ -13,7 +13,8 @@ import java.util.TreeMap;
  */
 public class InvertedFile {
 	private Util util;
-	private final String LOCATION = "Test Collection\\invertedfile.txt";	
+	private final String INV_LOCATION = "Test Collection\\invertedfile.txt";
+	private final String IDF_LOCATION = "Test Collection\\idf.txt";
 	public Map<String,Map<Integer,Double>> file;
 	
 	public InvertedFile(){
@@ -22,19 +23,26 @@ public class InvertedFile {
 	}
 	
 	// write inverted file
-	public void write(){
+	public void write(int totalDoc){
 		System.out.println("-WRITE INVERTED FILE-");
 		// membuat inverted file
-		PrintWriter writer;
+		PrintWriter invWriter, idfWriter;
+		int countDoc;
 		try {
-			writer = new PrintWriter(LOCATION, "UTF-8");
+			invWriter = new PrintWriter(INV_LOCATION, "UTF-8");
+			idfWriter = new PrintWriter(IDF_LOCATION, "UTF-8");
 			for(Entry<String,Map<Integer,Double>> entry1: file.entrySet()){
+				countDoc = 0;
 				for(Entry<Integer,Double> entry2: entry1.getValue().entrySet()){
 //					System.out.println(entry1.getKey()+" "+entry2.getKey()+" "+entry2.getValue());
-					writer.println(entry1.getKey()+" "+entry2.getKey()+" "+entry2.getValue());
+					invWriter.println(entry1.getKey()+" "+entry2.getKey()+" "+entry2.getValue());
+					countDoc++;
 				}
+				//compute idf
+				idfWriter.println(entry1.getKey()+" "+util.computeIdf(totalDoc, countDoc));
 			}
-			writer.close();
+			invWriter.close();
+			idfWriter.close();
 		} catch (FileNotFoundException|UnsupportedEncodingException ex) {
 		}
 		file.clear();
@@ -51,7 +59,7 @@ public class InvertedFile {
 		String[] arr;
 		
 		// get the inverted file
-		String content = util.readFile(LOCATION);
+		String content = util.readFile(INV_LOCATION);
 		
 		// parse the file into lines
 		for(String line: content.split("\n")){
@@ -90,6 +98,8 @@ public class InvertedFile {
 		}
 		file.get(term).put(docNo, weight);
 	}
+	
+	
 	
 	public void print(){
 		for(Entry<String,Map<Integer,Double>> entry1: file.entrySet()){

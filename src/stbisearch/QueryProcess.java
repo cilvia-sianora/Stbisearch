@@ -12,15 +12,22 @@ import java.util.TreeMap;
  * @author Cilvia
  */
 public class QueryProcess {
+	private static double SIM_THRESHOLD = 0;
 	private Util util;
 	private InvertedFile invFile;
+	private double precision, recall, niap; // to count the average final
+	private int numRlvDocsRetrieved,numDocsRetrieved;
+	
 	private Map<Double,List<Integer>> resultSearch;
 	private List<Double> precisionAtRlvDoc;
-	private static double SIM_THRESHOLD = 0;;
+	
+	// for relevance feedback
+	private List<Integer> relevantDocs;
+	private List<Integer> irrelevantDocs;
+	
+	// for configuration
 	private String tfMethod;
 	private boolean bIdf, bNormalization, bStemming;
-	private double precision, recall, niap;
-	private int numRlvDocsRetrieved,numDocsRetrieved;
 	
 	public QueryProcess(){
 		util = new Util();
@@ -39,6 +46,8 @@ public class QueryProcess {
 	private void clear(){
 		resultSearch.clear();
 		precisionAtRlvDoc.clear();
+		relevantDocs.clear();
+		irrelevantDocs.clear();
 	}
 	
 	// return true if document docNo is relevant for query queryNo
@@ -62,14 +71,17 @@ public class QueryProcess {
 		}
 	}
 	
+	// return true if query queryNo has relevant document
 	private boolean doesHaveRelevantDoc(int queryNo){
 		return (countAllRelevantDocs(queryNo) != -1);
 	}
 	
+	// compute recall
 	private double getRecall(int totalRlvDocs){
 		return (double)numRlvDocsRetrieved/(double)totalRlvDocs;
 	}
 	
+	//compute precision
 	private double getPrecision(){
 		return (double)numRlvDocsRetrieved/(double)numDocsRetrieved;
 	}
@@ -112,16 +124,19 @@ public class QueryProcess {
 		return result;
 	}
 	
+	//print the result of experiment judgement
 	private String judgeRelevance(int queryNo){
 		String result = "";
 
+		// count number of total relevant documents of query
 		int totalRlvDocs = countAllRelevantDocs(queryNo);
 		
-		
+		// print precision, recall, NIAP
 		result += "Precision = " + getPrecision() + "\n";
 		result += "Recall = " + getRecall(totalRlvDocs) + "\n";
 		result += "NIAP = " + getNIAP(totalRlvDocs) + "\n";
 		
+		// add to batch to count the average final
 		precision += getPrecision();
 		recall += getRecall(totalRlvDocs);
 		niap += getNIAP(totalRlvDocs);
@@ -129,6 +144,7 @@ public class QueryProcess {
 		return result;
 	}
 	
+	// count similarity between query and document
 	private double similarity(Vector query, Vector doc){
 		double sum = 0;
 		for(Entry<String,double[]> entry: query.terms.entrySet()){
@@ -154,21 +170,34 @@ public class QueryProcess {
 	}
 	
 	public String searchInteractive(String queryInput, String locStopwords, String locDocuments){
-		invFile.read();
 		String result;
+
+		// read inverted file
+		invFile.read();
 		
+		// load documents
 		util.getDocuments(locDocuments);
+		
+		// do preprocessing for documents
 		for(Entry<Integer,Vector> doc: util.docs.entrySet()){
 			doc.getValue().preProcessed(locStopwords,bStemming);
 		}
 		
+		// get query input
 		Vector query = new Vector();
 		query.content = queryInput;
+		
+		// do preprocessing for query
 		query.preProcessed(locStopwords,bStemming);
+		
+		// do term-weighting for query
 		util.termWeighting(query,tfMethod,bIdf,bNormalization);
 		
+		// do searching
 		result = search(query);
-		result = result.substring(result.indexOf("\n"));
+		result = result.substring(result.indexOf("\n")); // to delete query number line
+		
+		// clear the data
 		clear();
 		
 		return result;
@@ -178,11 +207,13 @@ public class QueryProcess {
 		precision = 0;
 		recall = 0;
 		niap = 0;
-		
+
+		// get files
 		util.getQueries(locQueries);
 		util.getRelevanceJudgement(locRlvJudge);
 		util.getDocuments(locDocuments);
 		
+		// do preprocessing
 		System.out.println("preprocessing..");
 		for(Entry<Integer,Vector> doc: util.docs.entrySet()){
 			doc.getValue().preProcessed(locStopwords,bStemming);
@@ -191,20 +222,30 @@ public class QueryProcess {
 			query.getValue().preProcessed(locStopwords,bStemming);
 		}
 		
+		// read inverted file
 		System.out.println("getting inverted file..");
 		invFile.read();
 		
+		// do searching for each query
 		System.out.println("searching..");
 		String result = "";
 		for(Entry<Integer,Vector> query: util.queries.entrySet()){
 			if(doesHaveRelevantDoc(query.getKey())){
+				// do term-weighting for query
 				util.termWeighting(query.getValue(),tfMethod,bIdf,bNormalization);
+				
+				// searching
 				result += search(query.getValue());
+				
+				// get relevance judgement result
 				result += judgeRelevance(query.getValue().no);
+				
+				// clear the data
 				clear();
 			}
 		}
 		
+		// count the average final
 		result = "Precision = " + (precision/util.queries.size()) + "\n" +
 				"Recall = " + (recall/util.queries.size()) + "\n" +
 				"NIAP = " + (niap/util.queries.size()) + "\n" +
@@ -213,6 +254,7 @@ public class QueryProcess {
 		return result;
 	}
 	
+	// set the configuration for query
 	public void setQuerySetting(String tfMethod, boolean bIdf, 
 			boolean bNormalization, boolean bStemming){
 		this.tfMethod = tfMethod;
@@ -221,4 +263,82 @@ public class QueryProcess {
 		this.bStemming = bStemming;
 	}
 	
+	/** BAGIAN FELI **/
+	
+	/**
+	 * Menghitung bobot term pada query menggunakan metode rocchio
+	 * @param query
+	 * @param term
+	 * @return bobot term yang baru
+	 */
+	double rocchio(Vector query, String term){
+		// ngitungnya ada pake:
+		// countWeightRelevantDoc(term)
+		// countWeightIrrelevantDoc(term)
+		return 0;
+	}
+	
+	/**
+	 * Menghitung bobot term pada query menggunakan metode ide reguler
+	 * @param query
+	 * @param term
+	 * @return bobot term yang baru
+	 */
+	double ideReguler(Vector query, String term){
+		// ngitungnya ada pake:
+		// countWeightRelevantDoc(term)
+		// countWeightIrrelevantDoc(term)
+		return 0;
+	}
+	
+	/**
+	 * Menghitung bobot term pada query menggunakan metode dec hi
+	 * @param query
+	 * @param term
+	 * @return bobot term yang baru
+	 */
+	double decHi(Vector query, String term){
+		// ngitungnya ada pake:
+		// countWeightRelevantDoc(term)
+		return 0;
+	}
+	
+	/**
+	 * Menghitung jumlah bobot term pada dokumen-dokumen relevan
+	 * @param term
+	 * @return total bobot term
+	 */
+	double countWeightRelevantDoc(String term){
+	
+		return 0;
+	}
+	
+	/**
+	 * Menghitung jumlah bobot term pada dokumen-dokumen irrelevant
+	 * @param term
+	 * @return total bobot term
+	 */
+	double countWeightIrrelevantDoc(String term){
+		
+		return 0;
+	}
+
+	/**
+	 * Menghapus dokumen yang pernah di-retrieve pada document collections
+	 * Jika user menginginkan tidak menggunakan document collections yang sama
+	 * Prereq: !bSameDocs
+	 */
+	void deleteDocs(){
+		// delete docs dari searchResult
+	}
+	
+	/**
+	 * Menentukan dokumen mana yang relevan dan tidak 
+	 * dari dokumen-dokumen yang sudah di-retrieve
+	 */
+	void determineRelevantDocs(){
+		// isi relevantDocs dan irrelevantDocs dari nentuin searchResult
+	}
+	
+	/** BAGIAN FELI - END **/
 }

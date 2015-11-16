@@ -35,6 +35,6 @@ public class DocumentProcess {
 			}
 		}
 		
-		invFile.write();
+		invFile.write(util.docs.size());
 	}
 }
