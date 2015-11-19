@@ -7,8 +7,15 @@ import static java.lang.Math.log10;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.tartarus.martin.Stemmer;
 
 /**
@@ -16,48 +23,72 @@ import org.tartarus.martin.Stemmer;
  * @author Cilvia
  */
 public class Util {
-	public List<Vector> docs;
-	public List<Vector> queries;
-	public List<Integer> relevantNoQuery;
-	public List<Integer> relevantNoDoc;
+//	private InvertedFile invFile;
+	private Map<String,Double> idfFile;
+	public Map<Integer,Vector> docs;
+	public Map<Integer,Vector> queries;
+	public Map<Integer,Set<Integer>> rlvJudgement;
+	
+	public Util(){
+//		invFile = new InvertedFile();
+		docs = new HashMap<>();
+		queries = new HashMap<>();
+		rlvJudgement = new HashMap<>();
+		idfFile = new HashMap<>();
+	}
 	
 	public void clear(){
 		docs.clear();
 		queries.clear();
-		relevantNoQuery.clear();
-		relevantNoDoc.clear();
+		rlvJudgement.clear();
 	}
 	
 	// return content of file
-	public String readFile(String location){
+	public String readFilePerLine(String location){
 		String content = "";
+		String temp;
                 try {                
                     Scanner in = new Scanner(new File(location));
                     while(in.hasNextLine()){
-                        content += in.nextLine() + "\n";
+						temp = in.nextLine();
+                        content += temp + "\n";
                     }
                 } catch (FileNotFoundException ex) {
                 }
         	return content;
         }
 	
+	public List<String> readFile(String location){
+		List<String> temp = new ArrayList<>();
+		try {
+			temp =  Files.readAllLines(Paths.get(location));
+		} catch (IOException ex) {
+			Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return temp;
+	}
+	
 	// read documents/queries from file
-	private List getVectors(String location){
-		List vectors = new ArrayList<>();    
-		int no;
-		String title,author,content,state;
+	private Map getVectors(String location){
+		Map vectors = new HashMap<>();    
+		int no = -1;
+		String title = "";
+		String author = "";
+		String content = "";
+		String state = "";
 		
-		String temp = readFile(location);
-		for(String doc: temp.split("\\.I ")){
-			if(doc.length()>0){
-				title = "";
-				author = "";
-				content = "";
-				state = "number";
-				no = 0;
-				
-				for(String line: doc.split("\n")){
-//					System.out.println(line);
+		List<String> temp = readFile(location);
+		
+//		for(String doc: temp.split("\\.I ")){
+//			if(doc.length()>0){
+//				title = "";
+//				author = "";
+//				content = "";
+//				state = "number";
+//				no = 0;
+//				
+//				for(String line: doc.split("\n")){
+				for(String line: temp){
 					switch(line){
 						case ".A":
 							state = "author";
@@ -73,6 +104,16 @@ public class Util {
 							break;
 						case ".B":
 							state = "";
+							break;
+						case ".I":
+							if(no != -1){
+								vectors.put(no, new Vector(no,title,author,content));
+							}
+							title = "";
+							author = "";
+							content = "";
+							state = "number";
+							no = 0;
 							break;
 						default:
 							switch (state) {
@@ -92,41 +133,87 @@ public class Util {
 					}
 				}
 				
-				vectors.add(new Vector(no,title,author,content));
-			}
-		}
+//			}
+//		}
+		
 		
 		return vectors;
 	}
 	
-	// get documents from file
+	public void getIdfFile(String idfLocation){
+		idfFile.clear();
+//		idfFile = invFile.readIdf();
+		
+		String term;
+		double idf;
+		String[] arr;
+		
+		// get the inverted file
+		List<String> content = readFile(idfLocation);
+		
+		// parse the file into lines
+//		for(String line: content.split("\n")){
+		for(String line: content){
+			arr = line.split(" ");
+			
+			term = arr[0];
+			idf = Double.parseDouble(arr[1]);
+			
+			idfFile.put(term,idf);
+		}
+	}
+	
+	/**
+	 * Mengambil daftar dokumen dari file
+	 * @param location lokasi dokumen
+	 */
 	public void getDocuments(String location){
-		docs = new ArrayList<>();
+		System.out.println("getting documents..");
+		docs.clear();
 		docs = getVectors(location);
 	}
 	
-	// get queries from file
+	/**
+	 * Mengambil daftar query dari file
+	 * @param location lokasi query
+	 */
 	public void getQueries(String location){
-		queries = new ArrayList<>();
+		System.out.println("getting queries..");
+		queries.clear();
 		queries = getVectors(location);
 	}
 	
-	// get relevance judgement from file
+	/**
+	 * Mengambil relevance judgement dari file
+	 * @param location lokasi file
+	 */
 	public void getRelevanceJudgement(String location){
-        relevantNoQuery = new ArrayList<>();
-		relevantNoDoc = new ArrayList<>();
-		String temp = readFile(location);
+		System.out.println("getting relevance judgement..");
+		rlvJudgement.clear();
+		List<String> temp = readFile(location);
+		
 		String[] arr;
-		for(String line: temp.split("\n")){
+		int queryNo, docNo;
+//		for(String line: temp.split("\n")){
+		for(String line: temp){
 			if(line.length()>0){
 				arr = line.split("\\s+");
-				relevantNoQuery.add(Integer.parseInt(arr[0]));
-				relevantNoDoc.add(Integer.parseInt(arr[1]));
+				queryNo = Integer.parseInt(arr[0]);
+				docNo = Integer.parseInt(arr[1]);
+				if(!rlvJudgement.containsKey(queryNo)){
+					rlvJudgement.put(queryNo, new HashSet<>());
+				}
+				rlvJudgement.get(queryNo).add(docNo);
 			}
 		}
 	}
 		
-	// computing term-weighting method: rawTF
+	/**
+	 * Menghitung bobot suatu term menggunakan metode raw TF
+	 * @param vec query/dokumen
+	 * @param term term
+	 * @return besar bobot term
+	 */
 	public double rawTF(Vector vec, String term){
             if(vec.getTF(term)!= -1){
                 return (double)vec.getTF(term);
@@ -135,7 +222,12 @@ public class Util {
             }
 	}
 	
-	// computing term-weighting method: logarithmTF
+	/**
+	 * Menghitung bobot suatu term menggunakan metode logarithmic TF
+	 * @param vec query/dokumen
+	 * @param term term
+	 * @return besar bobot term
+	 */
 	public double logTF(Vector vec, String term){
             if(vec.getTF(term)!= -1){
                 return 1+log10(vec.getTF(term));
@@ -144,7 +236,12 @@ public class Util {
             }
         }
 	
-	// computing term-weighting method: augmentedTF
+	/**
+	 * Menghitung bobot suatu term menggunakan metode augmented TF
+	 * @param vec query/dokumen
+	 * @param term term
+	 * @return besar bobot term
+	 */
 	public double augTF(Vector vec,String term){
             if(vec.getTF(term)!= -1){
                  return (0.5+(0.5*(double)vec.getTF(term)/(double)vec.getMaxTF()));
@@ -154,7 +251,12 @@ public class Util {
 
 	}
 	
-	// computing term-weighting method: binaryTF
+	/**
+	 * Menghitung bobot suatu term menggunakan metode binary TF
+	 * @param vec query/dokumen
+	 * @param term term
+	 * @return besar bobot term
+	 */
 	public double binaryTF(Vector vec,String term){
 		if((vec.getTF(term))>0){
 			return 1;
@@ -165,49 +267,64 @@ public class Util {
 	
 	// computing term-weighting method: idf
 	public double idf(String term){
-		int count = 0;
-		for(Vector doc: docs){
-			if(doc.findIndexTerm(term) != -1){
-				count++;
-			}
-		}
-//		System.out.println("idf= "+(double)docs.size()+"/"+(double)count);
-		if(count > 0){
-			return log10((double)docs.size()/(double)count);
+//		int count = 0;
+//		for(Entry<Integer,Vector> entry : docs.entrySet()) {
+//			if(entry.getValue().terms.containsKey(term)){
+//				count++;
+//			}
+//		}
+//		if(count > 0){
+//			return log10((double)docs.size()/(double)count);
+//		} else {
+//			return 0;
+//		}
+		return idfFile.get(term);
+	}
+	
+	/**
+	 * Menghitung idf berdasarkan masukan
+	 * @param totalDoc jumlah total dokumen
+	 * @param numDoc jumlah dokumen yang mengandung suatu term
+	 * @return nilai idf dari masukan
+	 */
+	public double computeIdf(int totalDoc, int numDoc){
+		if(numDoc > 0){
+			return log10((double)totalDoc/(double)numDoc);
 		} else {
 			return 0;
 		}
 	}
 	
-	// do term-weighting
+	/**
+	 * Melakukan term-weighting terhadap query/document berdasarkan konfigurasi masukan
+	 * @param vec	query/dokumen
+	 * @param methodTF	metode term frequency yang digunakan
+	 * @param bIdf	idf or not
+	 * @param bNormalize normalization or not
+	 */
 	public void termWeighting(Vector vec, String methodTF, boolean bIdf, boolean bNormalize){
-//		System.out.println("-TERMWEIGHTING-");
-		String term;
-		for(Term t : vec.terms){
-			term = t.getContent();
-//			System.out.println(term);
+		double[] temp = new double[2];
+		for(Entry<String,double[]> entry: vec.terms.entrySet()){
+			temp[0] = entry.getValue()[0];
+			temp[1] = entry.getValue()[1];
 			switch(methodTF){
 				case "raw":
-					vec.terms.get(vec.findIndexTerm(term)).setWeight(rawTF(vec,term));
+					temp[1] *= rawTF(vec,entry.getKey());
 					break;
 				case "log":
-					vec.terms.get(vec.findIndexTerm(term)).setWeight(logTF(vec,term));
+					temp[1] *= logTF(vec,entry.getKey());
 					break;
 				case "binary":
-					vec.terms.get(vec.findIndexTerm(term)).setWeight(binaryTF(vec,term));
+					temp[1] *= binaryTF(vec,entry.getKey());
 					break;
 				case "aug":
-					vec.terms.get(vec.findIndexTerm(term)).setWeight(augTF(vec,term));
+					temp[1] *= augTF(vec,entry.getKey());
 					break;
-				default:
-					vec.terms.get(vec.findIndexTerm(term)).setWeight(1);
 			}
-//			System.out.println("tf= "+vec.terms.get(vec.findIndexTerm(term)).getWeight());
 			if(bIdf){
-				vec.terms.get(vec.findIndexTerm(term)).setWeight(vec.terms.get(vec.findIndexTerm(term)).getWeight()*idf(term));
-//				System.out.println("idf= "+idf(term));
+				temp[1] *= idf(entry.getKey());
 			}
-//			System.out.println("tf-idf= "+vec.terms.get(vec.findIndexTerm(term)).getWeight());
+			vec.terms.put(entry.getKey(), temp);
 		}
 		if(bNormalize){
 			vec.normalization();
@@ -260,7 +377,7 @@ public class Util {
 	  String stemmed = Document;
 
 	  // loads stopwordlist 
-	  String stopString = readFile(location);
+	  String stopString = readFilePerLine(location);
 	  String[] stopList = stopString.split("\n");
 
 	  for (String stopword : stopList) {
@@ -276,8 +393,8 @@ public class Util {
 		System.out.println("=========================");
 		System.out.println("==  D O C U M E N T S  ==");
 		System.out.println("=========================");
-		for(Vector d: docs){
-			d.printVector();
+		for(Entry<Integer,Vector> entry : docs.entrySet()) {
+			entry.getValue().printVector();
 		}
 	}
 	
@@ -285,8 +402,8 @@ public class Util {
 		System.out.println("=========================");
 		System.out.println("==    Q U E R I E S    ==");
 		System.out.println("=========================");
-		for(Vector q: queries){
-			q.printVector();
+		for(Entry<Integer,Vector> entry : queries.entrySet()) {
+			entry.getValue().printVector();
 		}
 	}
 	
@@ -294,8 +411,16 @@ public class Util {
 		System.out.println("=========================");
 		System.out.println("==  J U D G E M E N T  ==");
 		System.out.println("=========================");
-		for(int i=0;i<relevantNoDoc.size();i++){
-			System.out.println(relevantNoQuery.get(i)+" "+relevantNoDoc.get(i));
+		for(Entry<Integer,Set<Integer>> entry : rlvJudgement.entrySet()) {
+			for(Integer d: entry.getValue()){
+				System.out.println(entry.getKey()+" "+d);
+			}
+		}
+	}
+	
+	public void printIdf(){
+		for(Entry<String,Double> entry1: idfFile.entrySet()){
+			System.out.println(entry1.getKey()+" "+entry1.getValue());
 		}
 	}
 }

@@ -1,10 +1,6 @@
 package stbisearch;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Map.Entry;
 
 /**
  *
@@ -27,25 +23,18 @@ public class DocumentProcess {
 		this.locStopwords = locStopwords;
 		util.getDocuments(locDocs);
 		
-		for(Vector doc: util.docs){
-			doc.preProcessed(locStopwords,bStemming);
+		for(Entry<Integer,Vector> entry: util.docs.entrySet()){
+			entry.getValue().preProcessed(locStopwords,bStemming);
 		}
 		
 		// put to inverted file
-		int index;
-		for(Vector doc: util.docs){
-			util.termWeighting(doc,tfMethod,bIdf,bNormalization);
-			for(Term t: doc.terms){
-				// mencari index yang cocok
-				index = invFile.findIndexToInsert(t.getContent(), doc.no);
-				
-				// tambahkan di index setelah ditemukan index yang cocok
-				invFile.terms.add(index, t.getContent());
-				invFile.docs.add(index, doc.no);
-				invFile.weights.add(index, t.getWeight());
+		for(Entry<Integer,Vector> doc: util.docs.entrySet()){
+			util.termWeighting(doc.getValue(),tfMethod,bIdf,bNormalization);
+			for(Entry<String,double[]> t: doc.getValue().terms.entrySet()){
+				invFile.put(t.getKey(), doc.getKey(), t.getValue()[1]);
 			}
 		}
 		
-		invFile.write();
+		invFile.write(util.docs.size());
 	}
 }

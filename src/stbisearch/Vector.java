@@ -1,8 +1,9 @@
 package stbisearch;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,16 +17,21 @@ public class Vector {
 	public String title;
 	public String content;
 	public String author;
+	private int maxTf;
 	
-	public List<Term> terms;
+	// key = term
+	// value[0] = frequency
+	// value[1] = weight
+	public Map<String,double[]> terms; 
 	
 	public Vector(){
+		terms = new HashMap<>();
 		util = new Util();
-		terms = new ArrayList<>();
 		no = 0;
 		title = "";
 		content = "";
 		author = "";
+		maxTf = 0;
 	}
 	
 	public Vector(int no, String title, String author, String content){
@@ -34,22 +40,20 @@ public class Vector {
 		this.content = content;
 		this.title = title;
 		this.author = author;
-		terms = new ArrayList<>();
+		terms = new HashMap<>();
+		maxTf = 0;
 	}
 	
 	private String getAllText(){
 		return author + " " + title + " " + content;
 	}
 	
+	// preprocessing: delimiter->stopwordremoval->stemming
 	public void preProcessed(String locStopwords, boolean bStemming){
 		String text = getAllText();
 		try {
-//			System.out.println("delimiter");
 			text = util.delimiter(text);
-//			System.out.println(text);
-//			System.out.println("stopwords");
 			text = util.stopWordRemoval(locStopwords, text);
-//			System.out.println(text);
 		} catch (IOException ex) {
 			Logger.getLogger(DocumentProcess.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -61,14 +65,21 @@ public class Vector {
 	
 	// count frequency of term from raw document/query
 	public void countFreq(String text){
-		int index;
+		terms.clear();
+		double[] temp = new double[2];
+		temp[1] = 1;
 		for (String term: text.split("\\s+")){
 			if(term.length()>0){
-				index = findIndexTerm(term);
-				if(index == -1){
-					terms.add(new Term(term,1,0));
+				if(terms.containsKey(term)){
+					temp[0] = terms.get(term)[0]+1;
 				} else {
-					terms.get(index).incrementFreq();
+					temp[0] = 1;
+				}
+				terms.put(term, temp);
+				
+				//get max tf
+				if(maxTf < temp[0]){
+					maxTf = (int)temp[0];
 				}
 			}
 		}
@@ -76,29 +87,8 @@ public class Vector {
 	
 	// get frequency of term
 	public int getTF(String term){
-		int i = findIndexTerm(term);
-                if(i > -1){
-			return terms.get(i).getFreq();
-		} else {
-			return 0;
-		}
-	}
-        
-    // get index of term
-    // return -1 if term not found
-	public int findIndexTerm(String term){
-		boolean found = false;
-		int i = 0;
-		while(!found && i<terms.size()){
-			if(terms.get(i).getContent().equalsIgnoreCase(term)){
-				found = true;
-			} else {
-				i++;
-			}
-		}
-                
-		if(found){
-			return i;
+		if(terms.containsKey(term)){
+			return (int)terms.get(term)[0];
 		} else {
 			return -1;
 		}
@@ -106,20 +96,14 @@ public class Vector {
 	
 	// get maximun term frequency in document/query
 	public int getMaxTF(){
-		int max=0;
-		for(int i=0;i<terms.size();i++){
-			if(terms.get(i).getFreq()>max){
-				max = terms.get(i).getFreq();
-			}
-		}
-		return max;
+		return maxTf;
 	}
 	
 	// get length of document/query
 	public double getLength(){
 		double sum = 0;
-		for(Term t: terms){
-			sum += Math.pow(t.getWeight(),2);
+		for(Map.Entry<String,double[]> entry : terms.entrySet()) {
+			sum += Math.pow(entry.getValue()[1],2);
 		}
 		return Math.sqrt(sum);
 	}
@@ -127,8 +111,12 @@ public class Vector {
 	// do normalization to document/query
 	public void normalization(){
 		double length = getLength();
-		for(int i=0;i<terms.size();i++){
-			terms.get(i).setWeight(terms.get(i).getWeight()/length);
+		double[] temp = new double[2];
+		for(Map.Entry<String,double[]> entry : terms.entrySet()) {
+			temp[0] = entry.getValue()[0];
+			temp[1] = entry.getValue()[1];
+			temp[1] = temp[1]/length;
+			terms.put(entry.getKey(), temp);
 		}
 	}
 	
@@ -138,5 +126,11 @@ public class Vector {
 		System.out.println(author);
 		System.out.println(content);
 		System.out.println("--------------------------------------");
+	}
+	
+	public void printTerms(){
+		for(Entry<String,double[]> entry: terms.entrySet()){
+			System.out.println(entry.getKey()+" "+entry.getValue()[0]+" "+entry.getValue()[1]);
+		}
 	}
 }
