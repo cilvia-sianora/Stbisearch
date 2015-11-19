@@ -16,12 +16,12 @@ import java.util.logging.Logger;
  * @author Cilvia
  */
 public class StbiSearch {
-	public static Util util;
+//	public static Util util;
 	/**
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
-//		Util util;
+		Util util;
 		util = new Util();
 		String locQueries = "Test Collection\\CISI\\query.text";
 		String locDocuments = "Test Collection\\CISI\\cisi.all";
@@ -38,8 +38,8 @@ public class StbiSearch {
 //		util.printQueries();
 //		util.getRelevanceJudgement(locRlvJudge);
 //		util.printJudgement();
-		DocumentProcess dp = new DocumentProcess();
-		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
+//		DocumentProcess dp = new DocumentProcess();
+//		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
 //		QueryProcess qp = new QueryProcess();
 //		qp.setQuerySetting(tfMethod,idf,norm,stem);
 //		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
@@ -48,8 +48,7 @@ public class StbiSearch {
 //		System.out.println(result);
 		
 //		InvertedFile file = new InvertedFile();
-//		file.read();
-//		file.print();
+//		file.readIdf();
 		
 //		Map<String,Double> map = new HashMap<>();
 //		
@@ -146,7 +145,7 @@ public class StbiSearch {
 //		Logger.getLogger(StbiSearch.class.getName()).log(Level.SEVERE, null, ex);
 //	  }
 		
-//		long start;
+		long start;
 //		HashSet<String> hashSet = new HashSet<>();
 //		Map<String,String> hashMap = new HashMap<>();
 //		ArrayList<String> arrayList = new ArrayList<String>();
@@ -212,6 +211,14 @@ public class StbiSearch {
 //			hashMap.containsKey(s.getValue());
 //		}
 //		System.out.println("Contain Value HashMap Time: " + (System.currentTimeMillis() - start));
+		
+		start = System.currentTimeMillis();
+		util.readFilePerLine(locDocuments);
+		System.out.println("read file per line Time: " + (System.currentTimeMillis() - start));
+		
+		start = System.currentTimeMillis();
+			util.readFile(locDocuments);
+		System.out.println("read file all lines Time: " + (System.currentTimeMillis() - start));
 	}
 
 }

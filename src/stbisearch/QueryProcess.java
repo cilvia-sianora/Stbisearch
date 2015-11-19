@@ -34,6 +34,8 @@ public class QueryProcess {
 		invFile = new InvertedFile();
 		resultSearch = new TreeMap<>();
 		precisionAtRlvDoc = new ArrayList<>();
+		relevantDocs = new ArrayList<>();
+		irrelevantDocs = new ArrayList<>();
 		tfMethod = "no";
 		bIdf = false;
 		bNormalization = false;
@@ -120,7 +122,6 @@ public class QueryProcess {
 			}
 		}
 		
-		
 		return result;
 	}
 	
@@ -175,6 +176,9 @@ public class QueryProcess {
 		// read inverted file
 		invFile.read();
 		
+		// read idf file
+		util.getIdfFile(invFile.getIdfLocation());
+		
 		// load documents
 		util.getDocuments(locDocuments);
 		
@@ -225,6 +229,9 @@ public class QueryProcess {
 		// read inverted file
 		System.out.println("getting inverted file..");
 		invFile.read();
+		
+		// read idf file
+		util.getIdfFile(invFile.getIdfLocation());
 		
 		// do searching for each query
 		System.out.println("searching..");

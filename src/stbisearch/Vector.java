@@ -48,6 +48,7 @@ public class Vector {
 		return author + " " + title + " " + content;
 	}
 	
+	// preprocessing: delimiter->stopwordremoval->stemming
 	public void preProcessed(String locStopwords, boolean bStemming){
 		String text = getAllText();
 		try {
