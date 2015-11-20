@@ -1,6 +1,7 @@
 package stbisearch;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,7 +33,7 @@ public class QueryProcess {
 	public QueryProcess(){
 		util = new Util();
 		invFile = new InvertedFile();
-		resultSearch = new TreeMap<>();
+		resultSearch = new TreeMap<>(Collections.reverseOrder());
 		precisionAtRlvDoc = new ArrayList<>();
 		relevantDocs = new ArrayList<>();
 		irrelevantDocs = new ArrayList<>();
@@ -111,8 +112,8 @@ public class QueryProcess {
 				numDocsRetrieved++;
 				
 				// print document retrieved
-				result += numDocsRetrieved + ". " + docNo + 
-						" " + util.docs.get(docNo).title + "\n";
+				result += numDocsRetrieved + ". " + entry.getKey() + " - " +
+						docNo + " " + util.docs.get(docNo).title + "\n";
 				
 				// get precision if document retrieved is relevant
 				if(isRelevantDoc(queryNo,docNo)){

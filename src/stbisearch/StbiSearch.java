@@ -28,7 +28,7 @@ public class StbiSearch {
 		String locStopwords = "Test Collection\\stopwords-porter.txt";
 		String locRlvJudge = "Test Collection\\CISI\\qrels.text";
 		String tfMethod = "raw";
-		boolean idf = false;
+		boolean idf = true;
 		boolean norm = false;
 		boolean stem = true;
 //		String result;
@@ -40,12 +40,12 @@ public class StbiSearch {
 //		util.printJudgement();
 //		DocumentProcess dp = new DocumentProcess();
 //		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
-//		QueryProcess qp = new QueryProcess();
-//		qp.setQuerySetting(tfMethod,idf,norm,stem);
-//		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
-//		System.out.println("-RESULT-");
-//		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
-//		System.out.println(result);
+		QueryProcess qp = new QueryProcess();
+		qp.setQuerySetting(tfMethod,idf,norm,stem);
+		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
+		System.out.println("-RESULT-");
+		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
+		System.out.println(result);
 		
 //		InvertedFile file = new InvertedFile();
 //		file.readIdf();
@@ -212,13 +212,13 @@ public class StbiSearch {
 //		}
 //		System.out.println("Contain Value HashMap Time: " + (System.currentTimeMillis() - start));
 		
-		start = System.currentTimeMillis();
-		util.readFilePerLine(locDocuments);
-		System.out.println("read file per line Time: " + (System.currentTimeMillis() - start));
-		
-		start = System.currentTimeMillis();
-			util.readFile(locDocuments);
-		System.out.println("read file all lines Time: " + (System.currentTimeMillis() - start));
+//		start = System.currentTimeMillis();
+//		util.readFilePerLine(locDocuments);
+//		System.out.println("read file per line Time: " + (System.currentTimeMillis() - start));
+//		
+//		start = System.currentTimeMillis();
+//			util.readFile(locDocuments);
+//		System.out.println("read file all lines Time: " + (System.currentTimeMillis() - start));
 	}
 
 }
