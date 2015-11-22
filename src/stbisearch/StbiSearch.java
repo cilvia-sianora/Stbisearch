@@ -38,8 +38,8 @@ public class StbiSearch {
 //		util.printQueries();
 //		util.getRelevanceJudgement(locRlvJudge);
 //		util.printJudgement();
-//		DocumentProcess dp = new DocumentProcess();
-//		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
+		DocumentProcess dp = new DocumentProcess();
+		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
 		QueryProcess qp = new QueryProcess();
 		qp.setQuerySetting(tfMethod,idf,norm,stem);
 		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
