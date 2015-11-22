@@ -114,9 +114,9 @@ public class QueryProcess {
 				numDocsRetrieved++;
 
 				// print document retrieved
-				result += numDocsRetrieved + ". " + entry.getKey() + " - " +
-						docNo + " " + util.docs.get(docNo).title + "\n";
-				
+				result += numDocsRetrieved + ". " + entry.getKey() + " - "
+				    + docNo + " " + util.docs.get(docNo).title + "\n";
+
 				// get precision if document retrieved is relevant
 				if (isRelevantDoc(queryNo, docNo)) {
 					numRlvDocsRetrieved++;
@@ -287,7 +287,8 @@ public class QueryProcess {
 		// ngitungnya ada pake:
 		// countWeightRelevantDoc(term)
 		// countWeightIrrelevantDoc(term)
-		return 0;
+
+		return query.terms.get(term)[1] + (this.countWeightRelevantDoc(term)/relevantDocs.size()) - (this.countWeightIrrelevantDoc(term, irrelevantDocs.size())/irrelevantDocs.size());
 	}
 
 	/**
@@ -301,7 +302,7 @@ public class QueryProcess {
 		// ngitungnya ada pake:
 		// countWeightRelevantDoc(term)
 		// countWeightIrrelevantDoc(term)
-		return 0;
+		return query.terms.get(term)[1] + this.countWeightRelevantDoc(term) - this.countWeightIrrelevantDoc(term, irrelevantDocs.size());
 	}
 
 	/**
@@ -314,7 +315,7 @@ public class QueryProcess {
 	double decHi(Vector query, String term) {
 		// ngitungnya ada pake:
 		// countWeightRelevantDoc(term)
-		return 0;
+		return query.terms.get(term)[1] + this.countWeightRelevantDoc(term) - this.countWeightIrrelevantDoc(term, 1);
 	}
 
 	/**
@@ -324,31 +325,12 @@ public class QueryProcess {
 	 * @return total bobot term
 	 */
 	double countWeightRelevantDoc(String term) {
-		int freq = 0;
-		switch (tfMethod) {
-			case "raw":
-				for (int i : relevantDocs) {
-					freq += util.rawTF(util.docs.get(i), term);
-				}
-				break;
-			case "log":
-				for (int i : relevantDocs) {
-					freq += util.logTF(util.docs.get(i), term);
-				}
-				break;
-			case "binary":
-				for (int i : relevantDocs) {
-					freq += util.binaryTF(util.docs.get(i), term);
-				}
-				break;
-			case "aug":
-				for (int i : relevantDocs) {
-					freq += util.augTF(util.docs.get(i), term);
-				}
-				break;
-			default:
+		double freq = 0;
+		for (int i : relevantDocs) {
+			freq += util.docs.get(i).terms.get(term)[1];
 		}
-		return (double) freq / relevantDocs.size();
+
+		return freq;
 	}
 
 	/**
@@ -356,34 +338,15 @@ public class QueryProcess {
 	 *
 	 * @param term
 	 * @return total bobot term
-	 */ 
-	double countWeightIrrelevantDoc(String term) {
-		int freq = 0;
-		switch (tfMethod) {
-			case "raw":
-				for (int i : irrelevantDocs) {
-					freq += util.rawTF(util.docs.get(i), term);
-				}
-				break;
-			case "log":
-				for (int i : irrelevantDocs) {
-					freq += util.logTF(util.docs.get(i), term);
-				}
-				break;
-			case "binary":
-				for (int i : irrelevantDocs) {
-					freq += util.binaryTF(util.docs.get(i), term);
-				}
-				break;
-			case "aug":
-				for (int i : irrelevantDocs) {
-					freq += util.augTF(util.docs.get(i), term);
-				}
-				break;
-			default:
+	 */
+	double countWeightIrrelevantDoc(String term, int topN) {
+		double freq = 0;
+		
+		for (int i = 0; i < topN; i++) {
+			freq += util.docs.get(irrelevantDocs.get(i)).terms.get(term)[1];
 		}
 
-		return (double) freq / irrelevantDocs.size();
+		return freq;
 	}
 
 	/**
@@ -394,8 +357,8 @@ public class QueryProcess {
 	void deleteDocs() {
 		// delete docs dari resultSearch
 		Collection<List<Integer>> values = resultSearch.values();
-		for (List<Integer> list: values){
-			for (int i: list){
+		for (List<Integer> list : values) {
+			for (int i : list) {
 				util.docs.remove(i);
 			}
 		}
@@ -403,8 +366,7 @@ public class QueryProcess {
 
 	/**
 	 * Menentukan dokumen mana yang relevan dan tidak dari dokumen-dokumen
-	 * yang sudah di-retrieve.
-	 * Untuk experimental query!
+	 * yang sudah di-retrieve. Untuk experimental query!
 	 */
 	void determineRelevantDocs(int noQuery) {
 		// isi relevantDocs dan irrelevantDocs dari nentuin resultSearch
@@ -415,36 +377,37 @@ public class QueryProcess {
 		util.getDocuments("Test Collection\\ADI\\adi.all");
 		util.getQueries("Test Collection\\ADI\\query.text");
 		System.out.println(util.docs.size());
-		
-		resultSearch.put( 0.5, new ArrayList<>());
-		for (int i = 1; i < 11; i++)
+
+		resultSearch.put(0.5, new ArrayList<>());
+		for (int i = 1; i < 11; i++) {
 			resultSearch.get(0.5).add(i);
-		
+		}
+
 		//isi
 		Collection<List<Integer>> values = resultSearch.values();
-		for (List<Integer> list: values){
-			for (int i: list){
-				if (this.isRelevantDoc(noQuery, i)){
-					if (!relevantDocs.contains(i)){
+		for (List<Integer> list : values) {
+			for (int i : list) {
+				if (this.isRelevantDoc(noQuery, i)) {
+					if (!relevantDocs.contains(i)) {
 						relevantDocs.add(i);
 					}
 				} else {
-					if (!irrelevantDocs.contains(i)){
+					if (!irrelevantDocs.contains(i)) {
 						irrelevantDocs.add(i);
 					}
 				}
-			
+
 			}
 		}
 		System.out.println("rel: ");
-		for (int i: relevantDocs){
+		for (int i : relevantDocs) {
 			System.out.print(i + " ");
 		}
 		System.out.print("\nirrel: ");
-		for (int i: irrelevantDocs){
+		for (int i : irrelevantDocs) {
 			System.out.print(i + " ");
 		}
-		
+
 	}
 
 	/**
