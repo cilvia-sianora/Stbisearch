@@ -62,7 +62,6 @@ $8 391 1.0
 000 1286 1.0
 000 1408 1.0
 000 1419 2.0
-000document 1460 2.0
 000item 1114 1.0
 000scientist 311 1.0
 000simultan 400 1.0
@@ -236,7 +235,6 @@ $8 391 1.0
 100 865 1.0
 100 897 1.0
 100 949 1.0
-100 1460 2.0
 100% 503 1.0
 100% 650 1.0
 100a 1451 1.0
@@ -333,9 +331,7 @@ $8 391 1.0
 15 1071 1.0
 15 1396 1.0
 15 1415 1.0
-15% 1460 2.0
 150 1090 3.0
-150 1460 2.0
 1500 850 1.0
 150year 747 2.0
 151 1018 1.0
@@ -987,7 +983,6 @@ $8 391 1.0
 250 400 1.0
 250 657 2.0
 250 886 2.0
-250 1460 2.0
 254 597 1.0
 256 1097 1.0
 26 878 3.0
@@ -1593,7 +1588,6 @@ $8 391 1.0
 9 1097 1.0
 9 1369 4.0
 9% 253 2.0
-9% 1460 2.0
 90 373 1.0
 90 415 2.0
 90 522 1.0
@@ -2278,7 +2272,6 @@ A 1453 1.0
 A 1454 1.0
 A 1458 1.0
 A 1459 1.0
-A 1460 2.0
 AACR 920 5.0
 AACR 995 1.0
 AACR 1000 1.0
@@ -3564,7 +3557,6 @@ At 1387 1.0
 At 1394 1.0
 At 1447 1.0
 At 1454 1.0
-At 1460 2.0
 Athenaeum 1265 2.0
 Atheneum 1034 3.0
 Atherton 55 3.0
@@ -5340,7 +5332,6 @@ Chemic 1092 4.0
 Chemic 1275 1.0
 Chemic 1296 1.0
 Chemic 1452 1.0
-Chemic 1460 2.0
 ChemicalAbstract 243 1.0
 ChemicalAbstract 727 5.0
 ChemicalInform 692 1.0
@@ -5360,7 +5351,6 @@ Chemistri 691 3.0
 Chemistri 705 3.0
 Chemistri 735 4.0
 Chemistri 1072 1.0
-Chemistri 1460 2.0
 Chemistryar 735 4.0
 Chemistsand 952 2.0
 Chen 614 2.0
@@ -5375,7 +5365,6 @@ Chernyi 1118 2.0
 Chernyi 1175 1.0
 Chernyi 1222 1.0
 Chernyi 1223 1.0
-Chernyi 1460 2.0
 Chicago 181 1.0
 Chicago 387 2.0
 Chicago 859 2.0
@@ -7583,7 +7572,6 @@ Each 1415 1.0
 Each 1418 3.0
 Each 1427 1.0
 Each 1436 1.0
-Each 1460 2.0
 Eachcategori 1351 1.0
 Eale 749 1.0
 Earl 155 3.0
@@ -9898,7 +9886,6 @@ I 1432 5.0
 I 1442 1.0
 I 1454 1.0
 I 1455 1.0
-I 1460 2.0
 IBM 197 1.0
 IBM 309 2.0
 IBM 420 2.0
@@ -10429,7 +10416,6 @@ In 1444 1.0
 In 1454 1.0
 In 1455 1.0
 In 1458 1.0
-In 1460 2.0
 InOhio 92 1.0
 InRanganathan 477 1.0
 Ina 1331 2.0
@@ -10979,7 +10965,6 @@ Informat 1430 4.0
 Informat 1442 1.0
 Informat 1447 1.0
 Informat 1448 2.0
-Informat 1460 2.0
 Informatiki 803 1.0
 InformationBank 1364 1.0
 InformationCent 136 1.0
@@ -11091,7 +11076,6 @@ Instruction 1246 1.0
 Instrument 1260 2.0
 Insuffici 1160 1.0
 Integral 689 4.0
-Integral 1460 2.0
 Integrat 481 1.0
 Integrat 702 1.0
 Integrat 993 1.0
@@ -14528,7 +14512,6 @@ Modern 1066 1.0
 Modern 1067 2.0
 Modern 1348 1.0
 Modern 1380 1.0
-Modern 1460 2.0
 Modest 13 1.0
 Modest 645 1.0
 Modest 927 1.0
@@ -20115,7 +20098,6 @@ System 1402 2.0
 System 1416 4.0
 System 1419 2.0
 System 1436 1.0
-System 1460 2.0
 SystemDevelop 741 1.0
 Systemar 700 1.0
 Systemat 563 1.0
@@ -20369,7 +20351,6 @@ Technolog 1395 1.0
 Technolog 1406 1.0
 Technolog 1407 1.0
 Technolog 1408 1.0
-Technolog 1460 2.0
 TechnologicalLibrari 371 1.0
 Technologist 760 4.0
 Tefko 505 1.0
@@ -29573,7 +29554,6 @@ author 1433 1.0
 author 1440 1.0
 author 1450 1.0
 author 1458 1.0
-author 1460 2.0
 authord 64 4.0
 authorhold 1111 1.0
 authorhypothes 290 1.0
@@ -29895,7 +29875,6 @@ averag 1347 1.0
 averag 1366 1.0
 averag 1403 1.0
 averag 1417 3.0
-averag 1460 2.0
 averageb 784 1.0
 averagepatron 655 1.0
 avoc 121 1.0
@@ -33156,7 +33135,6 @@ certainti 575 1.0
 certaintradit 798 1.0
 certaintyp 427 1.0
 certif 339 1.0
-certif 1460 2.0
 cessat 1330 2.0
 chain 593 2.0
 chain 667 4.0
@@ -33581,7 +33559,6 @@ chemic 1092 4.0
 chemic 1120 2.0
 chemic 1292 1.0
 chemic 1452 1.0
-chemic 1460 2.0
 chemicalcompound 592 2.0
 chemicalinform 1092 4.0
 chemicallin 673 2.0
@@ -33592,7 +33569,6 @@ chemicalstructur 668 1.0
 chemicalstructur 669 1.0
 chemicalstructur 670 2.0
 chemicalstructur 708 1.0
-chemicaltechnolog 1460 2.0
 chemist 32 2.0
 chemist 107 1.0
 chemist 252 1.0
@@ -33634,7 +33610,6 @@ chemistri 1164 1.0
 chemistri 1275 1.0
 chemistri 1347 1.0
 chemistri 1452 1.0
-chemistri 1460 2.0
 chemistryar 722 1.0
 chess 417 1.0
 chief 187 6.0
@@ -35505,7 +35480,6 @@ compound 1286 1.0
 compound 1414 1.0
 compound 1425 1.0
 compound 1452 1.0
-compound 1460 2.0
 compoundsand 674 1.0
 compoundscould 668 1.0
 compoundsof 1261 1.0
@@ -42401,7 +42375,6 @@ document 1419 2.0
 document 1430 4.0
 document 1431 2.0
 document 1448 2.0
-document 1460 2.0
 documentalist 121 1.0
 documentalist 535 2.0
 documentalist 726 1.0
@@ -42429,7 +42402,6 @@ documentsbi 1054 1.0
 documentscan 778 3.0
 documentsin 61 1.0
 documentsin 319 2.0
-documentsinform 1460 2.0
 documentsof 643 3.0
 documentspecialist 1391 3.0
 documentsrath 1115 1.0
@@ -44623,7 +44595,6 @@ etc 1361 2.0
 etc 1396 1.0
 etc 1411 1.0
 etc 1459 1.0
-etc 1460 2.0
 ethnic 1029 1.0
 ethno 1389 2.0
 ethyl 688 2.0
@@ -50317,7 +50288,6 @@ hasgradu 399 1.0
 hasgrown 137 1.0
 hash 508 2.0
 hash 875 1.0
-hasincreas 1460 2.0
 hasintensifi 228 1.0
 haskept 1242 1.0
 hasleast 1067 2.0
@@ -55385,7 +55355,6 @@ journal 1373 1.0
 journal 1396 1.0
 journal 1418 3.0
 journal 1432 5.0
-journal 1460 2.0
 journalarticl 722 1.0
 journaldemand 767 1.0
 journalh 721 2.0
@@ -56244,7 +56213,6 @@ last 1431 2.0
 last 1443 1.0
 last 1447 1.0
 last 1456 1.0
-last 1460 2.0
 lastquart 1067 2.0
 lastthre 951 2.0
 late 101 1.0
@@ -57937,7 +57905,6 @@ literatur 1428 1.0
 literatur 1431 2.0
 literatur 1432 5.0
 literatur 1453 1.0
-literatur 1460 2.0
 literatureand 583 1.0
 literatureavail 619 2.0
 literatureb 354 1.0
@@ -60752,7 +60719,6 @@ monograph 1382 1.0
 monograph 1388 1.0
 monograph 1396 1.0
 monograph 1415 1.0
-monograph 1460 2.0
 monographon 1061 1.0
 monolith 90 1.0
 monoton 1182 2.0
@@ -62369,7 +62335,6 @@ number 1431 2.0
 number 1432 5.0
 number 1451 1.0
 number 1457 2.0
-number 1460 2.0
 numberof 65 2.0
 numberof 131 3.0
 numberof 161 2.0
@@ -65106,7 +65071,6 @@ paper 1422 2.0
 paper 1427 1.0
 paper 1429 1.0
 paper 1441 1.0
-paper 1460 2.0
 paperdiscuss 593 2.0
 paperi 644 3.0
 paperpres 1360 1.0
@@ -65597,7 +65561,6 @@ patent 1108 1.0
 patent 1170 1.0
 patent 1396 1.0
 patent 1458 1.0
-patent 1460 2.0
 patente 1458 1.0
 patentliteratur 683 1.0
 path 679 1.0
@@ -68075,7 +68038,6 @@ present 1423 1.0
 present 1427 1.0
 present 1429 1.0
 present 1457 2.0
-present 1460 2.0
 presenta 1051 1.0
 presentarticl 98 1.0
 presentationfor 476 1.0
@@ -70580,7 +70542,6 @@ public 1418 3.0
 public 1432 5.0
 public 1434 1.0
 public 1449 1.0
-public 1460 2.0
 publicationfrom 64 4.0
 publicationi 47 5.0
 publicationoper 44 1.0
@@ -70700,7 +70661,6 @@ publish 1421 2.0
 publish 1422 2.0
 publish 1427 1.0
 publish 1438 1.0
-publish 1460 2.0
 publishedarticl 1335 3.0
 publishedbefor 1340 2.0
 publishedin 1 1.0
@@ -73050,7 +73010,6 @@ relat 1417 3.0
 relat 1421 2.0
 relat 1451 1.0
 relat 1459 1.0
-relat 1460 2.0
 related 42 1.0
 related 50 1.0
 related 412 1.0
@@ -73588,7 +73547,6 @@ report 1423 1.0
 report 1444 1.0
 report 1445 2.0
 report 1450 1.0
-report 1460 2.0
 reportdid 437 1.0
 reportedact 120 1.0
 reportedher 155 3.0
@@ -76296,7 +76254,6 @@ scientif 1432 5.0
 scientif 1444 1.0
 scientif 1447 1.0
 scientif 1455 1.0
-scientif 1460 2.0
 scientificallyfruit 1342 5.0
 scientificallyreward 144 1.0
 scientificand 327 2.0
@@ -79656,7 +79613,6 @@ specif 1407 1.0
 specif 1413 1.0
 specif 1445 2.0
 specif 1454 1.0
-specif 1460 2.0
 specifi 58 1.0
 specifi 678 1.0
 specifi 695 2.0
@@ -83141,7 +83097,6 @@ technic 1408 1.0
 technic 1411 1.0
 technic 1418 3.0
 technic 1431 2.0
-technic 1460 2.0
 technicalbibliographi 1176 1.0
 technicalinform 74 2.0
 technicalinform 658 1.0
@@ -85445,7 +85400,6 @@ thousand 563 1.0
 thousand 905 2.0
 thousand 1070 1.0
 thousand 1363 1.0
-thousand 1460 2.0
 thousandf 243 1.0
 thousandsubject 563 1.0
 thread 19 1.0
@@ -85495,7 +85449,6 @@ throughout 986 2.0
 throughout 1044 1.0
 throughout 1147 1.0
 throughout 1252 4.0
-throughout 1460 2.0
 throughoutmost 121 1.0
 throughoutth 1187 1.0
 throughput 607 1.0
@@ -85745,7 +85698,6 @@ time 1433 1.0
 time 1449 1.0
 time 1454 1.0
 time 1457 2.0
-time 1460 2.0
 timeand 433 1.0
 timeand 474 1.0
 timebetween 561 1.0
@@ -86917,7 +86869,6 @@ twenti 918 1.0
 twenti 967 1.0
 twenti 1040 3.0
 twenti 1207 1.0
-twenti 1460 2.0
 twentieth 94 1.0
 twentieth 1192 1.0
 twentieth 1425 1.0
@@ -90815,7 +90766,6 @@ world 1433 1.0
 world 1436 1.0
 world 1456 1.0
 world 1457 2.0
-world 1460 2.0
 worldha 1187 1.0
 worldof 351 2.0
 worldsbi 1097 1.0
@@ -91161,7 +91111,6 @@ year 1441 1.0
 year 1442 1.0
 year 1444 1.0
 year 1452 1.0
-year 1460 2.0
 yearin 973 1.0
 yearinquiri 907 1.0
 yearon 255 1.0

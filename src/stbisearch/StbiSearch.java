@@ -28,14 +28,13 @@ public class StbiSearch {
 		String locStopwords = "Test Collection\\stopwords-porter.txt";
 		String locRlvJudge = "Test Collection\\CISI\\qrels.text";
 		String tfMethod = "raw";
-		boolean idf = false;
+		boolean idf = true;
 		boolean norm = false;
 		boolean stem = true;
 		
 		QueryProcess QP = new QueryProcess();
 		QP.determineRelevantDocs(7);
 		
-		System.out.println(QP.countWeightIrrelevantDoc("systems"));
 	}
 
 }

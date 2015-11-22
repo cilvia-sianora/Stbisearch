@@ -89,33 +89,27 @@ public class Util {
 //				
 //				for(String line: doc.split("\n")){
 				for(String line: temp){
-					switch(line){
-						case ".A":
+						if(line.equals(".A"))
 							state = "author";
-							break;
-						case ".T":
+						else if(line.equals(".T"))
 							state = "title"; 
-							break;
-						case ".W":
+						else if(line.equals(".W"))
 							state = "content";
-							break;
-						case ".X":
+						else if(line.equals(".X"))
 							state = "";
-							break;
-						case ".B":
+						else if(line.equals(".B"))
 							state = "";
-							break;
-						case ".I":
+						else if(line.startsWith(".I")){
 							if(no != -1){
 								vectors.put(no, new Vector(no,title,author,content));
 							}
 							title = "";
 							author = "";
 							content = "";
-							state = "number";
-							no = 0;
-							break;
-						default:
+							state = "";
+							line = line.substring(line.indexOf(" ")+1);
+							no = Integer.parseInt(line);
+						} else {
 							switch (state) {
 								case "author":
 									author += line;
@@ -126,11 +120,8 @@ public class Util {
 								case "content":
 									content += line;
 									break;
-								case "number" :
-									no = Integer.parseInt(line);
-									break;
 							}
-					}
+						}
 				}
 				
 //			}
