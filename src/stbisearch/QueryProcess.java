@@ -212,15 +212,24 @@ public class QueryProcess {
 					switch (algo) {
 						case "rocchio":
 							for (String theTerm : keySet) {
-								query.terms.get(theTerm)[1] = rocchio(theTerm);
+								if (rocchio(theTerm) > 0)
+									query.terms.get(theTerm)[1] = rocchio(theTerm);
+								else 
+									query.terms.remove(theTerm);
 							}
 						case "ide":
 							for (String theTerm : keySet) {
-								query.terms.get(theTerm)[1] = ideReguler(theTerm);
+								if (ideReguler(theTerm) > 0)
+									query.terms.get(theTerm)[1] = ideReguler(theTerm);
+								else 
+									query.terms.remove(theTerm);
 							}
 						case "dechi":
 							for (String theTerm : keySet) {
-								query.terms.get(theTerm)[1] = decHi(theTerm);
+								if (decHi(theTerm) > 0)
+									query.terms.get(theTerm)[1] = decHi(theTerm);
+								else 
+									query.terms.remove(theTerm);
 							}
 					}
 				}
