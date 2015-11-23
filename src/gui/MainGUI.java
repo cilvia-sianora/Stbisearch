@@ -37,7 +37,7 @@ public class MainGUI {
 		mainFrame.setTitle("DoquSearch");
 		
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        mainFrame.setLocation(dim.width/2-mainFrame.getSize().width/2, dim.height/2-mainFrame.getSize().height/2);
+                mainFrame.setLocation(dim.width/2-mainFrame.getSize().width/2, dim.height/2-mainFrame.getSize().height/2);
 	}
 	
 	public void showIndexingPanel(){
