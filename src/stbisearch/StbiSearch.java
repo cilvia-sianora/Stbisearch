@@ -40,12 +40,12 @@ public class StbiSearch {
 //		util.printJudgement();
 //		DocumentProcess dp = new DocumentProcess();
 //		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
-		Queries qp = new Queries();
-		qp.setQuerySetting(tfMethod,idf,norm,stem);
-		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
-		System.out.println("-RESULT-");
-		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
-		System.out.println(result);
+//		Queries qp = new Queries();
+//		qp.setQuerySetting(tfMethod,idf,norm,stem);
+//		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
+//		System.out.println("-RESULT-");
+//		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
+//		System.out.println(result);
 		
 //		List<Vector> vecs = new ArrayList<>();
 //		for(int i=0;i<6;i++){
@@ -70,8 +70,12 @@ public class StbiSearch {
 //		InvertedFile file = new InvertedFile();
 //		file.readIdf();
 		
-//		QueryProcess QP = new QueryProcess();
-//		QP.determineRelevantDocs(7);
+		QueryProcess QP = new QueryProcess();
+		QP.determineRelevantDocs(10);
+		double countWeightRelevantDoc = QP.countWeightRelevantDoc("system");
+		System.out.println(countWeightRelevantDoc);
+		double countWeightIRRelevantDoc = QP.countWeightIrrelevantDoc("system", 3);
+		System.out.println(countWeightIRRelevantDoc);
 		
 	}
 
