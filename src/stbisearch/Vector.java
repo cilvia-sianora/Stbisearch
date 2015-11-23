@@ -44,6 +44,15 @@ public class Vector {
 		maxTf = 0;
 	}
 	
+	public void copy(Vector v){
+		no = v.no;
+		title = v.title;
+		content = v.content;
+		author = v.author;
+		maxTf = v.maxTf;
+		terms = new HashMap<>(v.terms); 
+	}
+	
 	private String getAllText(){
 		return author + " " + title + " " + content;
 	}

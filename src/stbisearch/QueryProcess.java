@@ -14,10 +14,11 @@ import java.util.TreeMap;
  */
 public class QueryProcess {
 	private static double SIM_THRESHOLD = 0;
-	private Util util;
-	private InvertedFile invFile;
-	private double precision, recall, niap; // to count the average final
+	public Util util;
+	public InvertedFile invFile;
+	public double precision, recall, niap; // to count the average final
 	private int numRlvDocsRetrieved,numDocsRetrieved;
+	public Vector query;
 	
 	private Map<Double,List<Integer>> resultSearch;
 	private List<Double> precisionAtRlvDoc;
@@ -27,8 +28,8 @@ public class QueryProcess {
 	private List<Integer> irrelevantDocs;
 	
 	// for configuration
-	private String tfMethod;
-	private boolean bIdf, bNormalization, bStemming;
+//	private String tfMethod;
+//	private boolean bIdf, bNormalization, bStemming;
 	
 	public QueryProcess(){
 		util = new Util();
@@ -37,10 +38,11 @@ public class QueryProcess {
 		precisionAtRlvDoc = new ArrayList<>();
 		relevantDocs = new ArrayList<>();
 		irrelevantDocs = new ArrayList<>();
-		tfMethod = "no";
-		bIdf = false;
-		bNormalization = false;
-		bStemming = false;
+		query = new Vector();
+//		tfMethod = "no";
+//		bIdf = false;
+//		bNormalization = false;
+//		bStemming = false;
 		precision = 0;
 		recall = 0;
 		niap = 0;
@@ -75,7 +77,7 @@ public class QueryProcess {
 	}
 	
 	// return true if query queryNo has relevant document
-	private boolean doesHaveRelevantDoc(int queryNo){
+	public boolean doesHaveRelevantDoc(int queryNo){
 		return (countAllRelevantDocs(queryNo) != -1);
 	}
 	
@@ -86,7 +88,11 @@ public class QueryProcess {
 	
 	//compute precision
 	private double getPrecision(){
-		return (double)numRlvDocsRetrieved/(double)numDocsRetrieved;
+		if(numDocsRetrieved > 0){
+			return (double)numRlvDocsRetrieved/(double)numDocsRetrieved;
+		} else {
+			return 0;
+		}
 	}
 	
 	// compute Non-Interpolated Average Precision
@@ -127,11 +133,11 @@ public class QueryProcess {
 	}
 	
 	//print the result of experiment judgement
-	private String judgeRelevance(int queryNo){
+	public String judgeRelevance(){
 		String result = "";
 
 		// count number of total relevant documents of query
-		int totalRlvDocs = countAllRelevantDocs(queryNo);
+		int totalRlvDocs = countAllRelevantDocs(query.no);
 		
 		// print precision, recall, NIAP
 		result += "Precision = " + getPrecision() + "\n";
@@ -156,7 +162,7 @@ public class QueryProcess {
 	}
 	
 	// do searching for 1 query
-	private String search(Vector query){
+	public String search(){
 		double result;
 		for(Entry<Integer,Vector> doc: util.docs.entrySet()){
 			result = similarity(query,doc.getValue());
@@ -171,107 +177,20 @@ public class QueryProcess {
 		return getDocResult(query.no);
 	}
 	
-	public String searchInteractive(String queryInput, String locStopwords, String locDocuments){
-		String result;
-
-		// read inverted file
-		invFile.read();
-		
-		// read idf file
-		util.getIdfFile(invFile.getIdfLocation());
-		
-		// load documents
-		util.getDocuments(locDocuments);
-		
-		// do preprocessing for documents
-		for(Entry<Integer,Vector> doc: util.docs.entrySet()){
-			doc.getValue().preProcessed(locStopwords,bStemming);
-		}
-		
-		// get query input
-		Vector query = new Vector();
-		query.content = queryInput;
-		
-		// do preprocessing for query
-		query.preProcessed(locStopwords,bStemming);
-		
-		// do term-weighting for query
-		util.termWeighting(query,tfMethod,bIdf,bNormalization);
-		
-		// do searching
-		result = search(query);
-		result = result.substring(result.indexOf("\n")); // to delete query number line
-		
-		// clear the data
-		clear();
-		
-		return result;
-	}
-	
-	public String searchExperiment(String locRlvJudge, String locQueries, String locStopwords, String locDocuments){
-		precision = 0;
-		recall = 0;
-		niap = 0;
-
-		// get files
-		util.getQueries(locQueries);
-		util.getRelevanceJudgement(locRlvJudge);
-		util.getDocuments(locDocuments);
-		
-		// do preprocessing
-		System.out.println("preprocessing..");
-		for(Entry<Integer,Vector> doc: util.docs.entrySet()){
-			doc.getValue().preProcessed(locStopwords,bStemming);
-		}
-		for(Entry<Integer,Vector> query: util.queries.entrySet()){
-			query.getValue().preProcessed(locStopwords,bStemming);
-		}
-		
-		// read inverted file
-		System.out.println("getting inverted file..");
-		invFile.read();
-		
-		// read idf file
-		util.getIdfFile(invFile.getIdfLocation());
-		
-		// do searching for each query
-		System.out.println("searching..");
-		String result = "";
-		for(Entry<Integer,Vector> query: util.queries.entrySet()){
-			if(doesHaveRelevantDoc(query.getKey())){
-				// do term-weighting for query
-				util.termWeighting(query.getValue(),tfMethod,bIdf,bNormalization);
-				
-				// searching
-				result += search(query.getValue());
-				
-				// get relevance judgement result
-				result += judgeRelevance(query.getValue().no);
-				
-				// clear the data
-				clear();
-			}
-		}
-		
-		// count the average final
-		result = "Precision = " + (precision/util.queries.size()) + "\n" +
-				"Recall = " + (recall/util.queries.size()) + "\n" +
-				"NIAP = " + (niap/util.queries.size()) + "\n" +
-				"The result of each query:" + "\n" + result;
-		
-		return result;
-	}
-	
-	// set the configuration for query
-	public void setQuerySetting(String tfMethod, boolean bIdf, 
-			boolean bNormalization, boolean bStemming){
-		this.tfMethod = tfMethod;
-		this.bIdf = bIdf;
-		this.bNormalization = bNormalization;
-		this.bStemming = bStemming;
-	}
-	
 	/** BAGIAN FELI **/
+	
+	void reweighting(boolean bQueryExpansion, String algo){
+		
+		// itung ulang weight berdasarkan algo
+		
+		if(bQueryExpansion){ // if using query expansion
+			// iterasi seluruh term dari inverted file
+			// update weight tiap term dari vector query
+		} else {
+			// iterasi seluruh term dari term yang ada di vector query
+			// update weight tiap term dari vector query
+		}
+	}
 	
 	/**
 	 * Menghitung bobot term pada query menggunakan metode rocchio

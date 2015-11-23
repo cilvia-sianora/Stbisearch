@@ -24,7 +24,7 @@ import org.tartarus.martin.Stemmer;
  */
 public class Util {
 //	private InvertedFile invFile;
-	private Map<String,Double> idfFile;
+	public Map<String,Double> idfFile;
 	public Map<Integer,Vector> docs;
 	public Map<Integer,Vector> queries;
 	public Map<Integer,Set<Integer>> rlvJudgement;
@@ -257,19 +257,26 @@ public class Util {
 	}
 	
 	// computing term-weighting method: idf
-	public double idf(String term){
-//		int count = 0;
-//		for(Entry<Integer,Vector> entry : docs.entrySet()) {
-//			if(entry.getValue().terms.containsKey(term)){
-//				count++;
-//			}
-//		}
-//		if(count > 0){
-//			return log10((double)docs.size()/(double)count);
-//		} else {
-//			return 0;
-//		}
-		return idfFile.get(term);
+	public double idf(String term, boolean searchProcess){
+		if(!searchProcess){
+			int count = 0;
+			for(Entry<Integer,Vector> entry : docs.entrySet()) {
+				if(entry.getValue().terms.containsKey(term)){
+					count++;
+				}
+			}
+			if(count > 0){
+				return log10((double)docs.size()/(double)count);
+			} else {
+				return 0;
+			}
+		} else {
+			if(idfFile.containsKey(term)){
+				return idfFile.get(term);
+			} else {
+				return 0;
+			}
+		}
 	}
 	
 	/**
@@ -293,7 +300,7 @@ public class Util {
 	 * @param bIdf	idf or not
 	 * @param bNormalize normalization or not
 	 */
-	public void termWeighting(Vector vec, String methodTF, boolean bIdf, boolean bNormalize){
+	public void termWeighting(Vector vec, String methodTF, boolean bIdf, boolean bNormalize, boolean searchProcess){
 		double[] temp = new double[2];
 		for(Entry<String,double[]> entry: vec.terms.entrySet()){
 			temp[0] = entry.getValue()[0];
@@ -313,7 +320,7 @@ public class Util {
 					break;
 			}
 			if(bIdf){
-				temp[1] *= idf(entry.getKey());
+				temp[1] *= idf(entry.getKey(),searchProcess);
 			}
 			vec.terms.put(entry.getKey(), temp);
 		}

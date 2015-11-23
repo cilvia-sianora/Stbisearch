@@ -38,15 +38,35 @@ public class StbiSearch {
 //		util.printQueries();
 //		util.getRelevanceJudgement(locRlvJudge);
 //		util.printJudgement();
-		DocumentProcess dp = new DocumentProcess();
-		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
-		QueryProcess qp = new QueryProcess();
+//		DocumentProcess dp = new DocumentProcess();
+//		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
+		Queries qp = new Queries();
 		qp.setQuerySetting(tfMethod,idf,norm,stem);
 		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
 		System.out.println("-RESULT-");
 		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
 		System.out.println(result);
 		
+//		List<Vector> vecs = new ArrayList<>();
+//		for(int i=0;i<6;i++){
+//			Vector vec = new Vector();
+//			vec.no = i;
+//			vecs.add(vec);
+//		}
+//		for(Vector vec: vecs){
+//			System.out.println(vec.no);
+//		}
+//		List<Vector> vecs2 = new ArrayList<>(vecs);
+//		for(Vector vec: vecs2){
+//			System.out.println(vec.no);
+//		}
+//		vecs.remove(3);
+//		for(Vector vec: vecs){
+//			System.out.println(vec.no);
+//		}
+//		for(Vector vec: vecs2){
+//			System.out.println(vec.no);
+//		}
 //		InvertedFile file = new InvertedFile();
 //		file.readIdf();
 		
