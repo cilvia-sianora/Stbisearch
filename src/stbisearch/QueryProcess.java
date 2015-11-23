@@ -26,8 +26,8 @@ public class QueryProcess {
 	private List<Double> precisionAtRlvDoc;
 
 	// for relevance feedback
-	private List<Integer> relevantDocs;
-	private List<Integer> irrelevantDocs;
+	public List<Integer> relevantDocs;
+	public List<Integer> irrelevantDocs;
 
 	// for configuration
 //	private String tfMethod;
@@ -164,16 +164,33 @@ public class QueryProcess {
 	}
 
 	// do searching for 1 query
-	public String search(){
+	public String search(int numRetrieved){
 		double result;
+		Map<Double,List<Integer>> temp = new TreeMap<>(Collections.reverseOrder());
 		for (Entry<Integer, Vector> doc : util.docs.entrySet()) {
 			result = similarity(query, doc.getValue());
 			if (result > SIM_THRESHOLD) {
-				if (!resultSearch.containsKey(result)) {
-					resultSearch.put(result, new ArrayList<>());
+				if (!temp.containsKey(result)) {
+					temp.put(result, new ArrayList<>());
 				}
-				resultSearch.get(result).add(doc.getKey());
+				temp.get(result).add(doc.getKey());
 			}
+		}
+		
+		// ambil top numRetrieved dokumen
+		if(numRetrieved != -1){
+			int i = 0;
+			for(Entry<Double,List<Integer>> entry: temp.entrySet()){
+				if( i+entry.getValue().size() < numRetrieved){
+					resultSearch.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+					i += entry.getValue().size();
+				} else {
+					resultSearch.put(entry.getKey(), new ArrayList<>(entry.getValue().subList(0,numRetrieved-i-1)));
+					break;
+				}
+			}
+		} else {
+			resultSearch.putAll(temp);
 		}
 
 		return getDocResult(query.no);

@@ -57,6 +57,14 @@ public class Vector {
 		return author + " " + title + " " + content;
 	}
 	
+	public Double getAllWeight(){
+		double sum = 0;
+		for(Entry<String,double[]> entry: terms.entrySet()){
+			sum += entry.getValue()[1];
+		}
+		return sum;
+	}
+	
 	// preprocessing: delimiter->stopwordremoval->stemming
 	public void preProcessed(String locStopwords, boolean bStemming){
 		String text = getAllText();

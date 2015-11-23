@@ -32,6 +32,15 @@ public class Queries {
 		niap = 0;
 	}
 	
+	// set the configuration for query
+	public void setQuerySetting(String tfMethod, boolean bIdf, 
+			boolean bNormalization, boolean bStemming){
+		this.tfMethod = tfMethod;
+		this.bIdf = bIdf;
+		this.bNormalization = bNormalization;
+		this.bStemming = bStemming;
+	}
+	
 	public String searchInteractive(String queryInput, String locStopwords, String locDocuments){
 		String result;
 		queries.clear();
@@ -64,7 +73,7 @@ public class Queries {
 		qp.util.termWeighting(qp.query,tfMethod,bIdf,bNormalization,true);
 		
 		// do searching
-		result = qp.search();
+		result = qp.search(-1);
 		result = result.substring(result.indexOf("\n")); // to delete query number line
 		
 		queries.add(qp);
@@ -72,7 +81,8 @@ public class Queries {
 		return result;
 	}
 	
-	public String searchExperiment(String locRlvJudge, String locQueries, String locStopwords, String locDocuments){
+	public String searchExperiment(String locRlvJudge, String locQueries, String locStopwords, 
+			String locDocuments, int numDocsRetrieved){
 		queries.clear();
 
 		// get files
@@ -115,7 +125,7 @@ public class Queries {
 				qp.util.termWeighting(qp.query,tfMethod,bIdf,bNormalization,true);
 				
 				// searching
-				result += qp.search();
+				result += qp.search(numDocsRetrieved);
 				
 				// get relevance judgement result
 				result += qp.judgeRelevance();
@@ -139,25 +149,95 @@ public class Queries {
 		return result;
 	}
 	
-	// set the configuration for query
-	public void setQuerySetting(String tfMethod, boolean bIdf, 
-			boolean bNormalization, boolean bStemming){
-		this.tfMethod = tfMethod;
-		this.bIdf = bIdf;
-		this.bNormalization = bNormalization;
-		this.bStemming = bStemming;
-	}
-	
-	public void relevanceFeedback(String algo, boolean bSameDocs, boolean bQueryExpansion){
+	public String relevanceFeedbackExperiment(String algo, boolean bSameDocs, boolean bQueryExpansion, 
+			int numDocsRetrieved, int numTopDocsRlv){
+		String result = "";
+		
 		for(QueryProcess qp: queries){
-			// TODO: tentuin doc relevant & irrelevant
+			// tentuin doc relevant & irrelevant
+			if(numTopDocsRlv == -1){
+				qp.determineRelevantDocs(qp.query.no);
+			} else { // pseudo
+				// put numTopDocsRlv docs to relevantDocs 
+			}
 			
 			if(bSameDocs){
 				qp.deleteDocs();
 			}
 			
+			// print query lama
+			result += "Query lama = \n" + qp.query.content + "\n";
+			result += "Bobot query lama = " + qp.query.getAllWeight() + "\n";
+			
 			qp.reweighting(bQueryExpansion, algo);
 			
+			// print query baru
+			result += "Query baru = \n" + qp.query.content + "\n";
+			result += "Bobot query baru = " + qp.query.getAllWeight() + "\n";
+			
+			// print result
+			result += qp.search(numDocsRetrieved);
+			result = result.substring(result.indexOf("\n")); // to delete query number line
 		}
+		
+		return result;
+	}
+	
+	// if numTopDocsRlv is -1, it is pseudo relevance feedback
+	public String relevanceFeedbackInteractive(String algo, boolean bSameDocs, boolean bQueryExpansion,
+			List<Integer> rlvDocs, List<Integer> irrlvDocs, int numTopDocsRlv){
+		String result = "";
+		
+		for(QueryProcess qp: queries){
+			// tentuin doc relevant & irrelevant
+			if(numTopDocsRlv == -1){
+				qp.relevantDocs = new ArrayList<>(rlvDocs);
+				qp.irrelevantDocs = new ArrayList<>(irrlvDocs);
+			} else { // pseudo
+				// put numTopDocsRlv docs to relevantDocs 
+			}
+			
+			if(bSameDocs){
+				qp.deleteDocs();
+			}
+			
+			// print query lama
+			result += "Query lama = \n" + qp.query.content + "\n";
+			result += "Bobot query lama = " + qp.query.getAllWeight() + "\n";
+			
+			qp.reweighting(bQueryExpansion, algo);
+			
+			// print query baru
+			result += "Query baru = \n" + qp.query.content + "\n";
+			result += "Bobot query baru = " + qp.query.getAllWeight() + "\n";
+			
+			// print result
+			result += qp.search(-1);
+			result = result.substring(result.indexOf("\n")); // to delete query number line
+		}
+		
+		return result;
+	}
+	
+	public String pseudoRlvFeedbackInteractive(String queryInput, String locStopwords, String locDocuments,
+			boolean bSameDocs, boolean bQueryExpansion, int numTopDocsRlv){
+		String result = "";
+		
+		searchInteractive(queryInput,locStopwords,locDocuments);
+		result += relevanceFeedbackInteractive("rocchio", bSameDocs, bQueryExpansion,
+			null, null, numTopDocsRlv);
+		
+		return result;
+	}
+	
+	public String pseudoRlvFeedbackExperiment(String locRlvJudge, String locQueries, String locStopwords, String locDocuments,
+			boolean bSameDocs, boolean bQueryExpansion, int numTopDocsRlv, int numDocsRetrieved){
+		String result = "";
+		
+		searchExperiment(locRlvJudge,locQueries,locStopwords,locDocuments,numDocsRetrieved);
+		result += relevanceFeedbackExperiment("rocchio", bSameDocs, bQueryExpansion,
+			numDocsRetrieved, numTopDocsRlv);
+		
+		return result;
 	}
 }

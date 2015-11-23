@@ -40,35 +40,37 @@ public class StbiSearch {
 //		util.printJudgement();
 //		DocumentProcess dp = new DocumentProcess();
 //		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
-		Queries qp = new Queries();
-		qp.setQuerySetting(tfMethod,idf,norm,stem);
-		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
-		System.out.println("-RESULT-");
-		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
-		System.out.println(result);
+//		Queries qp = new Queries();
+//		qp.setQuerySetting(tfMethod,idf,norm,stem);
+//		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
+//		System.out.println("-RESULT-");
+//		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
+//		System.out.println(result);
 		
-//		List<Vector> vecs = new ArrayList<>();
-//		for(int i=0;i<6;i++){
-//			Vector vec = new Vector();
-//			vec.no = i;
-//			vecs.add(vec);
+//		Map<Integer,List<Integer>> temp = new HashMap<>();
+//		
+//		temp.put(1, new ArrayList<>());
+//		temp.get(1).add(11);
+//		temp.get(1).add(12);
+//		temp.get(1).add(13);
+//		temp.put(2, new ArrayList<>());
+//		temp.get(2).add(21);
+//		
+//		for(Entry<Integer,List<Integer>> entry: temp.entrySet()){
+//			System.out.println(entry.getKey());
+//			for(Integer i: entry.getValue()){
+//				System.out.println(i);
+//			}
 //		}
-//		for(Vector vec: vecs){
-//			System.out.println(vec.no);
+//		
+//		Map<Integer,List<Integer>> temp2 = new HashMap<>(temp);
+//		
+//		for(Entry<Integer,List<Integer>> entry: temp2.entrySet()){
+//			System.out.println(entry.getKey());
+//			for(Integer i: entry.getValue()){
+//				System.out.println(i);
+//			}
 //		}
-//		List<Vector> vecs2 = new ArrayList<>(vecs);
-//		for(Vector vec: vecs2){
-//			System.out.println(vec.no);
-//		}
-//		vecs.remove(3);
-//		for(Vector vec: vecs){
-//			System.out.println(vec.no);
-//		}
-//		for(Vector vec: vecs2){
-//			System.out.println(vec.no);
-//		}
-//		InvertedFile file = new InvertedFile();
-//		file.readIdf();
 		
 //		QueryProcess QP = new QueryProcess();
 //		QP.determineRelevantDocs(7);

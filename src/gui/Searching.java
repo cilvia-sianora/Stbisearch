@@ -229,7 +229,8 @@ public class Searching extends javax.swing.JPanel {
 		String result = "";
         if(experimental.isSelected()){
             experimentalValue=true;
-			result = mg.qp.searchExperiment(locRelevanceJudge, locQueries, mg.dp.locStopwords, mg.dp.locDocuments);
+			//TODO
+//			result = mg.qp.searchExperiment(locRelevanceJudge, locQueries, mg.dp.locStopwords, mg.dp.locDocuments);
         }
         else if (interactive.isSelected()){
             experimentalValue=false;
