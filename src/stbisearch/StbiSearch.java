@@ -72,8 +72,12 @@ public class StbiSearch {
 //			}
 //		}
 		
-//		QueryProcess QP = new QueryProcess();
-//		QP.determineRelevantDocs(7);
+		QueryProcess QP = new QueryProcess();
+		QP.determineRelevantDocs(10);
+		double countWeightRelevantDoc = QP.countWeightRelevantDoc("system");
+		System.out.println(countWeightRelevantDoc);
+		double countWeightIRRelevantDoc = QP.countWeightIrrelevantDoc("system", 3);
+		System.out.println(countWeightIRRelevantDoc);
 		
 	}
 

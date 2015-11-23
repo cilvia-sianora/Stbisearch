@@ -19,10 +19,10 @@ public class QueryProcess {
 	public Util util;
 	public InvertedFile invFile;
 	public double precision, recall, niap; // to count the average final
-	private int numRlvDocsRetrieved,numDocsRetrieved;
+	private int numRlvDocsRetrieved, numDocsRetrieved;
 	public Vector query;
-	
-	private Map<Double,List<Integer>> resultSearch;
+
+	private Map<Double, List<Integer>> resultSearch;
 	private List<Double> precisionAtRlvDoc;
 
 	// for relevance feedback
@@ -32,8 +32,7 @@ public class QueryProcess {
 	// for configuration
 //	private String tfMethod;
 //	private boolean bIdf, bNormalization, bStemming;
-	
-	public QueryProcess(){
+	public QueryProcess() {
 		util = new Util();
 		invFile = new InvertedFile();
 		resultSearch = new TreeMap<>(Collections.reverseOrder());
@@ -79,7 +78,7 @@ public class QueryProcess {
 	}
 
 	// return true if query queryNo has relevant document
-	public boolean doesHaveRelevantDoc(int queryNo){
+	public boolean doesHaveRelevantDoc(int queryNo) {
 		return (countAllRelevantDocs(queryNo) != -1);
 	}
 
@@ -89,9 +88,9 @@ public class QueryProcess {
 	}
 
 	//compute precision
-	private double getPrecision(){
-		if(numDocsRetrieved > 0){
-			return (double)numRlvDocsRetrieved/(double)numDocsRetrieved;
+	private double getPrecision() {
+		if (numDocsRetrieved > 0) {
+			return (double) numRlvDocsRetrieved / (double) numDocsRetrieved;
 		} else {
 			return 0;
 		}
@@ -135,7 +134,7 @@ public class QueryProcess {
 	}
 
 	//print the result of experiment judgement
-	public String judgeRelevance(){
+	public String judgeRelevance() {
 		String result = "";
 
 		// count number of total relevant documents of query
@@ -195,22 +194,85 @@ public class QueryProcess {
 
 		return getDocResult(query.no);
 	}
-	
-	/** BAGIAN FELI **/
-	
-	void reweighting(boolean bQueryExpansion, String algo){
-		
+
+	/**
+	 * BAGIAN FELI *
+	 */
+	void reweighting(boolean bQueryExpansion, String algo) {
+
 		// itung ulang weight berdasarkan algo
-		
-		if(bQueryExpansion){ // if using query expansion
+		if (bQueryExpansion) { // if using query expansion
 			// iterasi seluruh term dari inverted file
 			// update weight tiap term dari vector query
+			Set<String> keySet = query.terms.keySet();
+			Set<String> allTerms = this.invFile.file.keySet();
+			for (String aTerm : allTerms) {
+				if (!keySet.contains(aTerm)) {
+					//hitung w baru
+					double res = 0;
+					switch (algo) {
+						case "rocchio":
+							res = this.rocchio(aTerm);
+						case "ide":
+							res = this.ideReguler(aTerm);
+						case "dechi":
+							res = this.decHi(aTerm);
+					}
+					
+					if (res > 0){
+						double[] resArr;
+						resArr = new double[2];
+						resArr[0] = 0; resArr[1] = res;
+						query.terms.put(aTerm, resArr);
+					}
+				} else {
+					switch (algo) {
+						case "rocchio":
+							for (String theTerm : keySet) {
+								if (rocchio(theTerm) > 0)
+									query.terms.get(theTerm)[1] = rocchio(theTerm);
+								else 
+									query.terms.remove(theTerm);
+							}
+						case "ide":
+							for (String theTerm : keySet) {
+								if (ideReguler(theTerm) > 0)
+									query.terms.get(theTerm)[1] = ideReguler(theTerm);
+								else 
+									query.terms.remove(theTerm);
+							}
+						case "dechi":
+							for (String theTerm : keySet) {
+								if (decHi(theTerm) > 0)
+									query.terms.get(theTerm)[1] = decHi(theTerm);
+								else 
+									query.terms.remove(theTerm);
+							}
+					}
+				}
+			}
+
 		} else {
 			// iterasi seluruh term dari term yang ada di vector query
 			// update weight tiap term dari vector query
+			Set<String> keySet = query.terms.keySet();
+			switch (algo) {
+				case "rocchio":
+					for (String theTerm : keySet) {
+						query.terms.get(theTerm)[1] = rocchio(theTerm);
+					}
+				case "ide":
+					for (String theTerm : keySet) {
+						query.terms.get(theTerm)[1] = ideReguler(theTerm);
+					}
+				case "dechi":
+					for (String theTerm : keySet) {
+						query.terms.get(theTerm)[1] = decHi(theTerm);
+					}
+			}
 		}
 	}
-	
+
 	/**
 	 * Menghitung bobot term pada query menggunakan metode rocchio
 	 *
@@ -218,12 +280,8 @@ public class QueryProcess {
 	 * @param term
 	 * @return bobot term yang baru
 	 */
-	double rocchio(Vector query, String term) {
-		// ngitungnya ada pake:
-		// countWeightRelevantDoc(term)
-		// countWeightIrrelevantDoc(term)
-
-		return query.terms.get(term)[1] + (this.countWeightRelevantDoc(term)/relevantDocs.size()) - (this.countWeightIrrelevantDoc(term, irrelevantDocs.size())/irrelevantDocs.size());
+	double rocchio(String term) {
+		return query.terms.get(term)[1] + (this.countWeightRelevantDoc(term) / relevantDocs.size()) - (this.countWeightIrrelevantDoc(term, irrelevantDocs.size()) / irrelevantDocs.size());
 	}
 
 	/**
@@ -233,10 +291,7 @@ public class QueryProcess {
 	 * @param term
 	 * @return bobot term yang baru
 	 */
-	double ideReguler(Vector query, String term) {
-		// ngitungnya ada pake:
-		// countWeightRelevantDoc(term)
-		// countWeightIrrelevantDoc(term)
+	double ideReguler(String term) {
 		return query.terms.get(term)[1] + this.countWeightRelevantDoc(term) - this.countWeightIrrelevantDoc(term, irrelevantDocs.size());
 	}
 
@@ -247,9 +302,7 @@ public class QueryProcess {
 	 * @param term
 	 * @return bobot term yang baru
 	 */
-	double decHi(Vector query, String term) {
-		// ngitungnya ada pake:
-		// countWeightRelevantDoc(term)
+	double decHi(String term) {
 		return query.terms.get(term)[1] + this.countWeightRelevantDoc(term) - this.countWeightIrrelevantDoc(term, 1);
 	}
 
@@ -262,7 +315,9 @@ public class QueryProcess {
 	double countWeightRelevantDoc(String term) {
 		double freq = 0;
 		for (int i : relevantDocs) {
-			freq += util.docs.get(i).terms.get(term)[1];
+			if (util.docs.get(i).terms.containsKey(term)) {
+				freq += util.docs.get(i).terms.get(term)[1];
+			}
 		}
 
 		return freq;
@@ -276,9 +331,15 @@ public class QueryProcess {
 	 */
 	double countWeightIrrelevantDoc(String term, int topN) {
 		double freq = 0;
-		
-		for (int i = 0; i < topN; i++) {
-			freq += util.docs.get(irrelevantDocs.get(i)).terms.get(term)[1];
+		int count = topN;
+		if (irrelevantDocs.size() < topN) {
+			count = irrelevantDocs.size();
+		}
+
+		for (int i = 0; i < count; i++) {
+			if (util.docs.get(irrelevantDocs.get(i)).terms.containsKey(term)) {
+				freq += util.docs.get(irrelevantDocs.get(i)).terms.get(term)[1];
+			}
 		}
 
 		return freq;
@@ -307,16 +368,21 @@ public class QueryProcess {
 		// isi relevantDocs dan irrelevantDocs dari nentuin resultSearch
 		//testing
 //		this.tfMethod = "raw";
-		util.getRelevanceJudgement("Test Collection\\ADI\\qrels.text");
-		System.out.println(util.docs.size());
-		util.getDocuments("Test Collection\\ADI\\adi.all");
-		util.getQueries("Test Collection\\ADI\\query.text");
-		System.out.println(util.docs.size());
-
-		resultSearch.put(0.5, new ArrayList<>());
-		for (int i = 1; i < 11; i++) {
-			resultSearch.get(0.5).add(i);
-		}
+//		System.out.println(util.docs.size());
+//		util.getRelevanceJudgement("Test Collection\\ADI\\qrels.text");
+//		util.getDocuments("Test Collection\\ADI\\adi.all");
+//		util.getQueries("Test Collection\\ADI\\query.text");
+//		System.out.println(util.docs.size());
+//
+//		query = util.queries.get(noQuery);
+//		util.termWeighting(query, "raw", true, false, false);
+//
+//		this.search();
+//		
+//		resultSearch.put(0.5, new ArrayList<>());
+//		for (int i = 1; i < 20; i++) {
+//			resultSearch.get(0.5).add(i);
+//		}
 
 		//isi
 		Collection<List<Integer>> values = resultSearch.values();
