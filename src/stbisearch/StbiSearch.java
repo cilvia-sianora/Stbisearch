@@ -23,18 +23,18 @@ public class StbiSearch {
 	public static void main(String[] args) {
 		Util util;
 		util = new Util();
-		String locQueries = "Test Collection\\ADI\\query.text";
-		String locDocuments = "Test Collection\\ADI\\adi.all";
+		String locQueries = "Test Collection\\CISI\\query.text";
+		String locDocuments = "Test Collection\\CISI\\cisi.all";
 		String locStopwords = "Test Collection\\stopwords-porter.txt";
-		String locRlvJudge = "Test Collection\\ADI\\qrels.text";
+		String locRlvJudge = "Test Collection\\CISI\\qrels.text";
 		String tfMethod = "raw";
 		boolean idf = false;
 		boolean norm = false;
 		boolean stem = true;
 		int numDocsRetrieved = 10;
 		int numTopDocsRlv = -1;
-		String algo = "rocchio";
-		boolean bSameDocs = false;
+		String algo = "dechi";
+		boolean bSameDocs = true;
 		boolean bQueryExpansion = false;
 //		String result;
 //		util.getDocuments(locDocuments);

@@ -125,7 +125,7 @@ public class Queries {
 				qp.util.termWeighting(qp.query,tfMethod,bIdf,bNormalization,true);
 				
 				// searching
-				result.add("Query number = "+qp.query.no);
+				result.add("Query number = "+qp.query.no+"\n");
 				result.addAll(qp.search(numDocsRetrieved));
 				
 				// get relevance judgement result
@@ -162,7 +162,7 @@ public class Queries {
 			qp.determineRelevantDocs(numTopDocsRlv);
 			
 			// print query lama
-			result.add("Query number = "+qp.query.no);
+			result.add("Query number = "+qp.query.no+"\n");
 			result.add("Query lama: \n" + qp.query.getTerms());
 			
 			System.out.println("Reweighting...");
