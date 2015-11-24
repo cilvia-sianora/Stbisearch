@@ -41,8 +41,8 @@ public class Queries {
 		this.bStemming = bStemming;
 	}
 	
-	public String searchInteractive(String queryInput, String locStopwords, String locDocuments){
-		String result;
+	public List<String> searchInteractive(String queryInput, String locStopwords, String locDocuments){
+//		String result;
 		queries.clear();
 		
 		// get query input
@@ -73,15 +73,14 @@ public class Queries {
 		qp.util.termWeighting(qp.query,tfMethod,bIdf,bNormalization,true);
 		
 		// do searching
-		result = qp.search(-1);
-		result = result.substring(result.indexOf("\n")); // to delete query number line
+		List<String> result = new ArrayList<>(qp.search(-1));
 		
 		queries.add(qp);
 		
 		return result;
 	}
 	
-	public String searchExperiment(String locRlvJudge, String locQueries, String locStopwords, 
+	public List<String> searchExperiment(String locRlvJudge, String locQueries, String locStopwords, 
 			String locDocuments, int numDocsRetrieved){
 		queries.clear();
 
@@ -110,7 +109,7 @@ public class Queries {
 		
 		// do searching for each query
 		System.out.println("searching..");
-		String result = "";
+		List<String> result = new ArrayList<>();
 		for(Map.Entry<Integer,Vector> query: util.queries.entrySet()){
 			QueryProcess qp = new QueryProcess();
 			qp.util.rlvJudgement = new HashMap<>(util.rlvJudgement);
@@ -126,10 +125,11 @@ public class Queries {
 				qp.util.termWeighting(qp.query,tfMethod,bIdf,bNormalization,true);
 				
 				// searching
-				result += qp.search(numDocsRetrieved);
+				result.add("Query number = "+qp.query.no);
+				result.addAll(qp.search(numDocsRetrieved));
 				
 				// get relevance judgement result
-				result += qp.judgeRelevance();
+				result.add(qp.judgeRelevance());
 				
 				// add to batch to count the average final
 				precision += qp.precision;
@@ -142,17 +142,17 @@ public class Queries {
 		}
 		
 		// count the average final
-		result = "Precision = " + (precision/util.queries.size()) + "\n" +
+		result.add("Precision = " + (precision/util.queries.size()) + "\n" +
 				"Recall = " + (recall/util.queries.size()) + "\n" +
 				"NIAP = " + (niap/util.queries.size()) + "\n" +
-				"The result of each query:" + "\n" + result;
+				"The result of each query:" + "\n" + result);
 		
 		return result;
 	}
 	
-	public String relevanceFeedbackExperiment(String algo, boolean bSameDocs, boolean bQueryExpansion, 
+	public List<String> relevanceFeedbackExperiment(String algo, boolean bSameDocs, boolean bQueryExpansion, 
 			int numDocsRetrieved, int numTopDocsRlv){
-		String result = "";
+		List<String> result = new ArrayList<>();
 		
 		for(QueryProcess qp: queries){
 			// tentuin doc relevant & irrelevant
@@ -160,16 +160,10 @@ public class Queries {
 			// if numTopDocsRlv is -1, pseudo
 			System.out.println("Determine relevant docs...");
 			qp.determineRelevantDocs(numTopDocsRlv);
-			System.out.println(qp.util.docs.size());
-			if(!bSameDocs){
-				System.out.println("Delete docs...");
-				qp.deleteDocs();
-			}
-			System.out.println(qp.util.docs.size());
 			
 			// print query lama
-			result += "Query lama: \n" + qp.query.getTerms() + "\n";
-			result += "Bobot query lama = " + qp.query.getAllWeight() + "\n";
+			result.add("Query number = "+qp.query.no);
+			result.add("Query lama: \n" + qp.query.getTerms());
 			
 			System.out.println("Reweighting...");
 			qp.reweighting(bQueryExpansion, algo);
@@ -179,71 +173,90 @@ public class Queries {
 //			qp.query.printTerms();
 			
 			// print query baru
-			result += "Query baru: \n" + qp.query.getTerms() + "\n";
-			result += "Bobot query baru = " + qp.query.getAllWeight() + "\n";
+			result.add("Query baru: \n" + qp.query.getTerms());
+			
+			if(!bSameDocs){
+				System.out.println("Delete docs...");
+				System.out.println(qp.util.docs.size());
+				qp.deleteDocs();
+				System.out.println(qp.util.docs.size());
+			}
 			
 			// print result
-			result += qp.search(numDocsRetrieved);
-			result = result.substring(result.indexOf("\n")); // to delete query number line
+			result.addAll(qp.search(numDocsRetrieved));
+			
+			// get relevance judgement result
+			result.add(qp.judgeRelevance());
+			
+			// add to batch to count the average final
+			precision += qp.precision;
+			recall += qp.recall;
+			niap += qp.niap;
 		}
+		
+		// count the average final
+		result.add("Precision = " + (precision/util.queries.size()) + "\n" +
+				"Recall = " + (recall/util.queries.size()) + "\n" +
+				"NIAP = " + (niap/util.queries.size()) + "\n" +
+				"The result of each query:" + "\n" + result);
 		
 		return result;
 	}
 	
 	// if numTopDocsRlv is -1, it is pseudo relevance feedback
-	public String relevanceFeedbackInteractive(String algo, boolean bSameDocs, boolean bQueryExpansion,
+	public List<String> relevanceFeedbackInteractive(String algo, boolean bSameDocs, boolean bQueryExpansion,
 			List<Integer> rlvDocs, List<Integer> irrlvDocs, int numTopDocsRlv){
-		String result = "";
+		List<String> result = new ArrayList<>();
 		
 		for(QueryProcess qp: queries){
 			// tentuin doc relevant & irrelevant
 			if(numTopDocsRlv == -1){
-				qp.relevantDocs = new ArrayList<>(rlvDocs);
-				qp.irrelevantDocs = new ArrayList<>(irrlvDocs);
+				qp.relevantDocs.addAll(rlvDocs);
+				qp.irrelevantDocs.addAll(irrlvDocs);
 			} else { // pseudo
 				qp.determineRelevantDocs(numTopDocsRlv);
 			}
 			
-			if(!bSameDocs){
-				qp.deleteDocs();
-			}
-			
 			// print query lama
-			result += "Query lama: \n" + qp.query.getTerms() + "\n";
-			result += "Bobot query lama = " + qp.query.getAllWeight() + "\n";
+			result.add("Query lama: \n" + qp.query.getTerms() + "\n");
 			
 			qp.reweighting(bQueryExpansion, algo);
 			
 			// print query baru
-			result += "Query baru: \n" + qp.query.getTerms() + "\n";
-			result += "Bobot query baru = " + qp.query.getAllWeight() + "\n";
+			result.add("Query baru: \n" + qp.query.getTerms() + "\n");
+			
+			if(!bSameDocs){
+				System.out.println("Delete docs...");
+				System.out.println(qp.util.docs.size());
+				qp.deleteDocs();
+				System.out.println(qp.util.docs.size());
+			}
 			
 			// print result
-			result += qp.search(-1);
-			result = result.substring(result.indexOf("\n")); // to delete query number line
+			result.addAll(qp.search(-1));
 		}
 		
 		return result;
 	}
 	
-	public String pseudoRlvFeedbackInteractive(String queryInput, String locStopwords, String locDocuments,
+	public List<String> pseudoRlvFeedbackInteractive(String queryInput, String locStopwords, String locDocuments,
 			boolean bSameDocs, boolean bQueryExpansion, int numTopDocsRlv){
-		String result = "";
+		List<String> result = new ArrayList<>();
 		
 		searchInteractive(queryInput,locStopwords,locDocuments);
-		result += relevanceFeedbackInteractive("rocchio", bSameDocs, bQueryExpansion,
-			null, null, numTopDocsRlv);
+		result.addAll(relevanceFeedbackInteractive("rocchio", bSameDocs, bQueryExpansion,
+			null, null, numTopDocsRlv));
 		
 		return result;
 	}
 	
-	public String pseudoRlvFeedbackExperiment(String locRlvJudge, String locQueries, String locStopwords, String locDocuments,
+	public List<String> pseudoRlvFeedbackExperiment(String locRlvJudge, String locQueries, String locStopwords, String locDocuments,
 			boolean bSameDocs, boolean bQueryExpansion, int numTopDocsRlv, int numDocsRetrieved){
-		String result = "";
+		List<String> result = new ArrayList<>();
 		
 		searchExperiment(locRlvJudge,locQueries,locStopwords,locDocuments,numDocsRetrieved);
-		result += relevanceFeedbackExperiment("rocchio", bSameDocs, bQueryExpansion,
-			numDocsRetrieved, numTopDocsRlv);
+		result.addAll(relevanceFeedbackExperiment("rocchio", bSameDocs, bQueryExpansion,
+			numDocsRetrieved, numTopDocsRlv));
 		
 		return result;
 	}

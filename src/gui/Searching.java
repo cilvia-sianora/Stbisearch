@@ -235,7 +235,8 @@ public class Searching extends javax.swing.JPanel {
         else if (interactive.isSelected()){
             experimentalValue=false;
             query = queryfield.getText();
-			result = mg.qp.searchInteractive(query, mg.dp.locStopwords, mg.dp.locDocuments);
+			//TODO
+//			result = mg.qp.searchInteractive(query, mg.dp.locStopwords, mg.dp.locDocuments);
         }
         
         JOptionPane.showMessageDialog(this, "Searching finished");

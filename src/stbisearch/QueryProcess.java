@@ -106,21 +106,20 @@ public class QueryProcess {
 	}
 
 	// print the rank of document
-	private String getDocResult(int queryNo) {
+	private List<String> getDocResult(int queryNo) {
 		numRlvDocsRetrieved = 0;
 		numDocsRetrieved = 0;
-
-		String result = "";
-		result += "Query Number = " + queryNo + "\n";
-		result += "Result:\n";
+		
+		List<String> result = new ArrayList<>();
+		result.add("Result:\n");
 
 		for (Entry<Double, List<Integer>> entry : resultSearch.entrySet()) {
 			for (Integer docNo : entry.getValue()) {
 				numDocsRetrieved++;
 
 				// print document retrieved
-				result += numDocsRetrieved + ". " + entry.getKey() + " - "
-				    + util.docs.get(docNo).title + " " + docNo + "\n";
+				result.add(numDocsRetrieved + ". " + entry.getKey() + " - "
+				    + util.docs.get(docNo).title + " " + docNo + "\n");
 
 				// get precision if document retrieved is relevant
 				if (isRelevantDoc(queryNo, docNo)) {
@@ -164,7 +163,7 @@ public class QueryProcess {
 	}
 
 	// do searching for 1 query
-	public String search(int numRetrieved){
+	public List<String> search(int numRetrieved){
 		double result;
 		resultSearch.clear();
 		Map<Double,List<Integer>> temp = new TreeMap<>(Collections.reverseOrder());

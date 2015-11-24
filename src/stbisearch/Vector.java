@@ -61,7 +61,7 @@ public class Vector {
 		String result = "";
 		for(Entry<String,double[]> entry: terms.entrySet()){
 			if(entry.getValue()[1] > 0){
-				result += entry.getKey() + " ";
+				result += entry.getKey() + "\t" + entry.getValue()[1] + "\n";
 			}
 		}
 		return result;

@@ -23,10 +23,10 @@ public class StbiSearch {
 	public static void main(String[] args) {
 		Util util;
 		util = new Util();
-		String locQueries = "Test Collection\\CISI\\query.text";
-		String locDocuments = "Test Collection\\CISI\\cisi.all";
+		String locQueries = "Test Collection\\ADI\\query.text";
+		String locDocuments = "Test Collection\\ADI\\adi.all";
 		String locStopwords = "Test Collection\\stopwords-porter.txt";
-		String locRlvJudge = "Test Collection\\CISI\\qrels.text";
+		String locRlvJudge = "Test Collection\\ADI\\qrels.text";
 		String tfMethod = "raw";
 		boolean idf = false;
 		boolean norm = false;
@@ -34,7 +34,7 @@ public class StbiSearch {
 		int numDocsRetrieved = 10;
 		int numTopDocsRlv = -1;
 		String algo = "rocchio";
-		boolean bSameDocs = true;
+		boolean bSameDocs = false;
 		boolean bQueryExpansion = false;
 //		String result;
 //		util.getDocuments(locDocuments);
@@ -43,15 +43,16 @@ public class StbiSearch {
 //		util.printQueries();
 //		util.getRelevanceJudgement(locRlvJudge);
 //		util.printJudgement();
-		DocumentProcess dp = new DocumentProcess();
-		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
+//		DocumentProcess dp = new DocumentProcess();
+//		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
 		Queries qp = new Queries();
 		qp.setQuerySetting(tfMethod,idf,norm,stem);
-		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments, numDocsRetrieved);
+		List<String> result = new ArrayList<>();
+		result.addAll(qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments, numDocsRetrieved));
 		System.out.println("-1ST RESULT-");
 		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
 		System.out.println(result);
-		result = qp.relevanceFeedbackExperiment(algo, bSameDocs, bQueryExpansion, numDocsRetrieved, numTopDocsRlv);
+		result.addAll(qp.relevanceFeedbackExperiment(algo, bSameDocs, bQueryExpansion, numDocsRetrieved, numTopDocsRlv));
 		System.out.println("-2ND RESULT-");
 		System.out.println(algo+" "+bSameDocs+" "+bQueryExpansion+" "+numTopDocsRlv);
 		System.out.println(result);
