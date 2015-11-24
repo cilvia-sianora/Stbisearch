@@ -204,9 +204,13 @@ public class ButtonColumn extends AbstractCellEditor
                 if(rel.contains(docno)){
                     irrel.add(docno);
                     rel.remove(rel.lastIndexOf(docno));
+                    JOptionPane.showMessageDialog(null, docno + " is now not relevant");
+
                 } else if (irrel.contains(docno)){
                     rel.add(docno);
                     irrel.remove(irrel.lastIndexOf(docno));
+                    JOptionPane.showMessageDialog(null, docno + " is now relevant");
+
                 }
                 
                 renderButton.setText("Relevant");
@@ -217,7 +221,6 @@ public class ButtonColumn extends AbstractCellEditor
 		//  Invoke the Action
 //		sa.initShiftAvailable(Integer.valueOf(table.getValueAt(table.getSelectedRow(), 0).toString()));
 //		sa.setVisible(true);
-                JOptionPane.showMessageDialog(null, docno + " Clicked");
                 
 
                 

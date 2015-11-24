@@ -117,6 +117,11 @@ public class Queries {
 		// read idf file
 		util.getIdfFile(invFile.getIdfLocation());
 		
+		// init for batch
+		precision = 0;
+		recall = 0;
+		niap = 0;
+		
 		// do searching for each query
 		System.out.println("searching..");
 		List<String> result = new ArrayList<>();
@@ -162,6 +167,11 @@ public class Queries {
 	
 	public List<String> relevanceFeedbackExperiment(int numDocsRetrieved){
 		List<String> result = new ArrayList<>();
+		
+		// init for batch
+		precision = 0;
+		recall = 0;
+		niap = 0;
 		
 		for(QueryProcess qp: queries){
 			// tentuin doc relevant & irrelevant

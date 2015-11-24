@@ -98,10 +98,15 @@ public class QueryProcess {
 
 	// compute Non-Interpolated Average Precision
 	private double getNIAP(int totalRlvDocs) {
+		if(query.no == 2) System.out.println("debug niap -getNIAP-");
 		double sum = 0;
 		for (double p : precisionAtRlvDoc) {
+			if(query.no == 2)
+				System.out.println("debug niap : "+p);
 			sum += p;
 		}
+		if(query.no == 2)
+			System.out.println("debug niap : "+sum+"/"+totalRlvDocs);
 		return sum / (double) totalRlvDocs;
 	}
 
@@ -109,6 +114,7 @@ public class QueryProcess {
 	private List<String> getDocResult(int queryNo) {
 		numRlvDocsRetrieved = 0;
 		numDocsRetrieved = 0;
+		precisionAtRlvDoc.clear();
 		
 		List<String> result = new ArrayList<>();
 		result.add("Result:\n");
@@ -116,7 +122,8 @@ public class QueryProcess {
 		for (Entry<Double, List<Integer>> entry : resultSearch.entrySet()) {
 			for (Integer docNo : entry.getValue()) {
 				numDocsRetrieved++;
-
+				if(queryNo == 2)
+					System.out.println(numDocsRetrieved+" "+docNo+" "+entry.getKey());
 				// print document retrieved
 				result.add(numDocsRetrieved + ". " + entry.getKey() + " - "
 				    + util.docs.get(docNo).title + " " + docNo + "\n");
@@ -124,6 +131,9 @@ public class QueryProcess {
 				// get precision if document retrieved is relevant
 				if (isRelevantDoc(queryNo, docNo)) {
 					numRlvDocsRetrieved++;
+					if(queryNo == 2) 
+						System.out.println("debug niap : "+getPrecision()+
+								" "+docNo+" "+numRlvDocsRetrieved+"/"+numDocsRetrieved);
 					precisionAtRlvDoc.add(getPrecision());
 				}
 			}
@@ -166,6 +176,10 @@ public class QueryProcess {
 	public List<String> search(int numRetrieved){
 		double result;
 		resultSearch.clear();
+		precision = 0;
+		recall = 0;
+		niap = 0;
+		
 		Map<Double,List<Integer>> temp = new TreeMap<>(Collections.reverseOrder());
 		for (Entry<Integer, Vector> doc : util.docs.entrySet()) {
 			result = similarity(query, doc.getValue());
