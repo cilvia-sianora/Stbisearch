@@ -193,7 +193,7 @@ public class ButtonColumn extends AbstractCellEditor
 		//  Invoke the Action
 //		sa.initShiftAvailable(Integer.valueOf(table.getValueAt(table.getSelectedRow(), 0).toString()));
 //		sa.setVisible(true);
-                JOptionPane.showMessageDialog(null, "Clicked");
+                JOptionPane.showMessageDialog(null, table.getValueAt(table.getSelectedRow(), 1) + " Clicked");
 
                 
 	}

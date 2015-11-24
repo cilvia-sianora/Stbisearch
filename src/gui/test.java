@@ -121,7 +121,7 @@ public class test extends javax.swing.JFrame {
             chxbox.setVisible(true);
             tempdatakar[0][4] =chxbox ;
         String[] columnNames = {
-                "NIP","Nama", "Alamat", "No HP", "ID Gaji", "Hari"
+                "No Document","Title", "Relevance"
             };
         return new JTable(tempdatakar, columnNames);
     }
