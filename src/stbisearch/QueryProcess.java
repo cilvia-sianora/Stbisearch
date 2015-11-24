@@ -389,7 +389,7 @@ public class QueryProcess {
 //			resultSearch.get(0.5).add(i);
 //		}
 		
-		if(numTopRlvDocs != -1){
+		if(numTopRlvDocs == -1){
 			//isi
 			Collection<List<Integer>> values = resultSearch.values();
 			for (List<Integer> list : values) {

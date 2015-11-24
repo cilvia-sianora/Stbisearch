@@ -23,17 +23,17 @@ public class StbiSearch {
 	public static void main(String[] args) {
 		Util util;
 		util = new Util();
-		String locQueries = "Test Collection\\CISI\\query.text";
-		String locDocuments = "Test Collection\\CISI\\cisi.all";
+		String locQueries = "Test Collection\\ADI\\query.text";
+		String locDocuments = "Test Collection\\ADI\\adi.all";
 		String locStopwords = "Test Collection\\stopwords-porter.txt";
-		String locRlvJudge = "Test Collection\\CISI\\qrels.text";
+		String locRlvJudge = "Test Collection\\ADI\\qrels.text";
 		String tfMethod = "raw";
 		boolean idf = false;
 		boolean norm = false;
 		boolean stem = true;
 		int numDocsRetrieved = 10;
 		int numTopDocsRlv = -1;
-		String algo = "dechi";
+		String algo = "rocchio";
 		boolean bSameDocs = true;
 		boolean bQueryExpansion = false;
 //		String result;
@@ -48,12 +48,21 @@ public class StbiSearch {
 		Queries qp = new Queries();
 		qp.setQuerySetting(tfMethod,idf,norm,stem);
 		List<String> result = new ArrayList<>();
-		result.addAll(qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments, numDocsRetrieved));
-		System.out.println("-1ST RESULT-");
+		
+		// for not pseudo
+//		result.addAll(qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments, numDocsRetrieved));
+//		System.out.println("-1ST RESULT-");
+//		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
+//		System.out.println(result);
+//		result.addAll(qp.relevanceFeedbackExperiment(algo, bSameDocs, bQueryExpansion, numDocsRetrieved, numTopDocsRlv));
+//		System.out.println("-2ND RESULT-");
+//		System.out.println(algo+" "+bSameDocs+" "+bQueryExpansion+" "+numTopDocsRlv);
+//		System.out.println(result);
+		
+		// for pseudo
+		result.addAll(qp.pseudoRlvFeedbackExperiment(locRlvJudge, locQueries, locStopwords, locDocuments, bSameDocs, bQueryExpansion, numTopDocsRlv, numDocsRetrieved));
+		System.out.println("-RESULT-");
 		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
-		System.out.println(result);
-		result.addAll(qp.relevanceFeedbackExperiment(algo, bSameDocs, bQueryExpansion, numDocsRetrieved, numTopDocsRlv));
-		System.out.println("-2ND RESULT-");
 		System.out.println(algo+" "+bSameDocs+" "+bQueryExpansion+" "+numTopDocsRlv);
 		System.out.println(result);
 		
