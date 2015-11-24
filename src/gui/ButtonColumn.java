@@ -33,6 +33,9 @@ public class ButtonColumn extends AbstractCellEditor
 	private JButton editButton;
 	private Object editorValue;
 	private boolean isButtonColumnEditor;
+        
+        public static List<Integer> rel;
+        public static List<Integer> irrel;
 	
 //	private ShiftAvailable sa;
 	
@@ -49,6 +52,9 @@ public class ButtonColumn extends AbstractCellEditor
 	 */
 	public ButtonColumn(JTable table, int column){
 		this.table = table;
+//                rel = new ArrayList<Integer>();
+//                irrel = new ArrayList<Integer>();
+
 //		sa = new ShiftAvailable();
 
 		renderButton = new JButton();
@@ -189,11 +195,30 @@ public class ButtonColumn extends AbstractCellEditor
 		System.out.println("action performed");
 		int row = table.convertRowIndexToModel( table.getEditingRow() );
 		fireEditingStopped();
+                
+                String doc = table.getValueAt(table.getSelectedRow(), 1).toString();
+                System.out.println(doc);
+                                
+                int docno = Integer.valueOf(doc.substring(doc.lastIndexOf(" ")+1).replaceAll("\n",""));
+                System.out.println(Integer.toString(docno));
+                if(rel.contains(docno)){
+                    irrel.add(docno);
+                    rel.remove(rel.lastIndexOf(docno));
+                } else if (irrel.contains(docno)){
+                    rel.add(docno);
+                    irrel.remove(irrel.lastIndexOf(docno));
+                }
+                
+                renderButton.setText("Relevant");
+                editButton.setText("Relevant");
+                System.out.println(rel.toString());
+                System.out.println(irrel.toString());
 
 		//  Invoke the Action
 //		sa.initShiftAvailable(Integer.valueOf(table.getValueAt(table.getSelectedRow(), 0).toString()));
 //		sa.setVisible(true);
-                JOptionPane.showMessageDialog(null, table.getValueAt(table.getSelectedRow(), 1) + " Clicked");
+                JOptionPane.showMessageDialog(null, docno + " Clicked");
+                
 
                 
 	}

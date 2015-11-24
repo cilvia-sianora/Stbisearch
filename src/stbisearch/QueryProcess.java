@@ -286,7 +286,14 @@ public class QueryProcess {
 			valueIrrlv = this.countWeightIrrelevantDoc(term, irrelevantDocs.size()) / irrelevantDocs.size();
 		}
 		
-		return query.terms.get(term)[1] + valueRlv - valueIrrlv;
+		double weightTerm;
+		if(query.terms.containsKey(term)){
+			weightTerm = query.terms.get(term)[1];
+		} else {
+			weightTerm = 0;
+		}
+		
+		return weightTerm + valueRlv - valueIrrlv;
 	}
 
 	/**
@@ -297,7 +304,14 @@ public class QueryProcess {
 	 * @return bobot term yang baru
 	 */
 	double ideReguler(String term) {
-		return query.terms.get(term)[1] + this.countWeightRelevantDoc(term) - this.countWeightIrrelevantDoc(term, irrelevantDocs.size());
+		double weightTerm;
+		if(query.terms.containsKey(term)){
+			weightTerm = query.terms.get(term)[1];
+		} else {
+			weightTerm = 0;
+		}
+		
+		return weightTerm + this.countWeightRelevantDoc(term) - this.countWeightIrrelevantDoc(term, irrelevantDocs.size());
 	}
 
 	/**
@@ -308,7 +322,14 @@ public class QueryProcess {
 	 * @return bobot term yang baru
 	 */
 	double decHi(String term) {
-		return query.terms.get(term)[1] + this.countWeightRelevantDoc(term) - this.countWeightIrrelevantDoc(term, 1);
+		double weightTerm;
+		if(query.terms.containsKey(term)){
+			weightTerm = query.terms.get(term)[1];
+		} else {
+			weightTerm = 0;
+		}
+		
+		return weightTerm + this.countWeightRelevantDoc(term) - this.countWeightIrrelevantDoc(term, 1);
 	}
 
 	/**
@@ -414,13 +435,15 @@ public class QueryProcess {
 					i += entry.getValue().size();
 				} else if (i < numTopRlvDocs){ // jika di entry sudah gak bisa dimasukkan semua ke relevan
 					relevantDocs.addAll(entry.getValue().subList(0,numTopRlvDocs-i));
-					i += entry.getValue().size();
-					if(i > numTopRlvDocs){ // jika di entry masih ada sisa yang harusnya dimasukkan ke irrelevan
-						irrelevantDocs.addAll(entry.getValue().subList(numTopRlvDocs-i,entry.getValue().size()-1));
-					}
-				} else { // jika sisa tinggal dimasukkan ke irrelevan
-					irrelevantDocs.addAll(entry.getValue());
-				}
+					break;
+//					i += entry.getValue().size();
+//					if(i > numTopRlvDocs){ // jika di entry masih ada sisa yang harusnya dimasukkan ke irrelevan
+//						irrelevantDocs.addAll(entry.getValue().subList(numTopRlvDocs-i,entry.getValue().size()-1));
+//					}
+				} 
+//				else { // jika sisa tinggal dimasukkan ke irrelevan
+//					irrelevantDocs.addAll(entry.getValue());
+//				}
 			}
 		}
 		

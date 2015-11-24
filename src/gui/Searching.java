@@ -6,6 +6,8 @@
 
 package gui;
 
+import static gui.ButtonColumn.irrel;
+import static gui.ButtonColumn.rel;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +24,15 @@ public class Searching extends javax.swing.JPanel {
 	MainGUI mg;
 	private String locRelevanceJudge;
 	private String locQueries;
-	
+        static ButtonColumn buttonColumn;
+        
     /**
      * Creates new form Searching
      */
     public Searching() {
         initComponents();
+        rel = new ArrayList<Integer>();
+        irrel = new ArrayList<Integer>();
         queryfield.setEnabled(false);
         uploadDoc.setEnabled(false);
         uploadRelevance.setEnabled(false);
@@ -39,19 +44,20 @@ public class Searching extends javax.swing.JPanel {
 
     }
     
-        private static JTable showResultsTable(List<String> results){
+        private static JTable showInteractiveResultsTable(List<String> results){
         Object[][] tempdatakar = new Object [results.size()][3];
         for(int i=0;i<=results.size()-1;i++){
             if(results.get(i).substring(0,1).matches("[0-9]")){
-                tempdatakar[i][0]= results.get(i).charAt(0);
+                tempdatakar[i][0]= Integer.valueOf(results.get(i).substring(results.get(i).lastIndexOf(" ")+1).replaceAll("\n",""));
                 tempdatakar[i][1]= results.get(i).substring(2);
+                irrel.add(Integer.valueOf(results.get(i).substring(results.get(i).lastIndexOf(" ")+1).replaceAll("\n","")));
                 }
             else {
                 tempdatakar[i][1]= results.get(i);
             }
             tempdatakar[i][2]="Relevance Check";
         }
-
+            System.out.println(irrel.toString());
 //        Object[][] tempdatakar = new Object [results.size()][2];
 //        for(int i=0;i<=results.size()-1;i++){
 //            if(results.get(i).substring(0,1).matches("[0-9]")){
@@ -74,6 +80,23 @@ public class Searching extends javax.swing.JPanel {
         return new JTable(tempdatakar, columnNames);
     }
 
+        private static JTable showExperimentalResultsTable(List<String> results){
+        Object[][] tempdatakar = new Object [results.size()][2];
+        for(int i=0;i<=results.size()-1;i++){
+            if(results.get(i).substring(0,1).matches("[0-9]")){
+                tempdatakar[i][0]= Integer.valueOf(results.get(i).substring(results.get(i).lastIndexOf(" ")+1).replaceAll("\n",""));
+                tempdatakar[i][1]= results.get(i).substring(2);
+                }
+            else {
+                tempdatakar[i][1]= results.get(i);
+            }
+        }
+
+        String[] columnNames = {
+                "No Document","Title"
+            };
+        return new JTable(tempdatakar, columnNames);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -339,23 +362,26 @@ public class Searching extends javax.swing.JPanel {
         
         List<String> result = new ArrayList<String>();
         
-        int topS= Integer.parseInt(tops.getText()) ;
+        
               
         if(experimental.isSelected()){
+            int topS= Integer.parseInt(tops.getText()) ;
             experimentalValue=true;
 			//TODO
 			result = mg.qp.searchExperiment(locRelevanceJudge, locQueries, mg.dp.locStopwords, mg.dp.locDocuments,topS);
+                        jTable3.setModel(showExperimentalResultsTable(result).getModel());
         }
         else if (interactive.isSelected()){
             experimentalValue=false;
             query = queryfield.getText();
 			//TODO
 			result = mg.qp.searchInteractive(query, mg.dp.locStopwords, mg.dp.locDocuments);
+                        jTable3.setModel(showInteractiveResultsTable(result).getModel());
+                        buttonColumn = new ButtonColumn(jTable3, 2);
+
         }
         
         JOptionPane.showMessageDialog(this, "Searching finished");
-        jTable3.setModel(showResultsTable(result).getModel());
-        ButtonColumn buttonColumn = new ButtonColumn(jTable3, 2);
 
 //		jTextArea1.setText(result);
                 
@@ -400,7 +426,37 @@ public class Searching extends javax.swing.JPanel {
     }//GEN-LAST:event_experimentalActionPerformed
 
     private void secondretActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_secondretActionPerformed
+        boolean experimentalValue;
+        String query;
         
+        List<String> result = new ArrayList<String>();
+        
+        int topS= Integer.parseInt(tops.getText()) ;
+              
+        if(experimental.isSelected()){
+            experimentalValue=true;
+            if(mg.qp.algo.contains("pseudo")){
+                System.out.println("Pseudo Experimental");
+                    result = mg.qp.pseudoRlvFeedbackExperiment(locRelevanceJudge, locQueries, mg.dp.locStopwords, mg.dp.locDocuments, topS);
+                }else {           
+			result = mg.qp.relevanceFeedbackExperiment(topS);
+            }
+        }
+        else if (interactive.isSelected()){
+            experimentalValue=false;
+            query = queryfield.getText();
+             if(mg.qp.algo.contains("pseudo")){
+                 System.out.println("Pseudo Interactive");
+                 result= mg.qp.pseudoRlvFeedbackInteractive(query, mg.dp.locStopwords, mg.dp.locDocuments);
+                }else {  
+                    result = mg.qp.relevanceFeedbackInteractive(rel,irrel);
+             }
+        }
+        
+        JOptionPane.showMessageDialog(this, "Second Retrival finished");
+        jTable3.setModel(showExperimentalResultsTable(result).getModel());
+        rel.clear();
+        irrel.clear();
     }//GEN-LAST:event_secondretActionPerformed
 
 

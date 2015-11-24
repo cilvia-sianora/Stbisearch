@@ -23,10 +23,10 @@ public class StbiSearch {
 	public static void main(String[] args) {
 		Util util;
 		util = new Util();
-		String locQueries = "Test Collection\\ADI\\query.text";
-		String locDocuments = "Test Collection\\ADI\\adi.all";
+		String locQueries = "Test Collection\\NPL\\QUERYACB";
+		String locDocuments = "Test Collection\\NPL\\NPL.ALL";
 		String locStopwords = "Test Collection\\stopwords-porter.txt";
-		String locRlvJudge = "Test Collection\\ADI\\qrels.text";
+		String locRlvJudge = "Test Collection\\NPL\\QRELSACA";
 		String tfMethod = "raw";
 		boolean idf = false;
 		boolean norm = false;
@@ -34,8 +34,8 @@ public class StbiSearch {
 		int numDocsRetrieved = 10;
 		int numTopDocsRlv = -1;
 		String algo = "rocchio";
-		boolean bSameDocs = true;
-		boolean bQueryExpansion = false;
+		boolean bSameDocs = false;
+		boolean bQueryExpansion = true;
 //		String result;
 //		util.getDocuments(locDocuments);
 //		util.getQueries(locQueries);
@@ -45,26 +45,25 @@ public class StbiSearch {
 //		util.printJudgement();
 //		DocumentProcess dp = new DocumentProcess();
 //		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
-		Queries qp = new Queries();
-		qp.setQuerySetting(tfMethod,idf,norm,stem);
-		List<String> result = new ArrayList<>();
+//		Queries qp = new Queries();
+//		qp.setQuerySetting(tfMethod,idf,norm,stem,algo,bSameDocs,bQueryExpansion);
+//		List<String> result = new ArrayList<>();
 		
 		// for not pseudo
 //		result.addAll(qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments, numDocsRetrieved));
 //		System.out.println("-1ST RESULT-");
 //		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
-//		System.out.println(result);
-//		result.addAll(qp.relevanceFeedbackExperiment(algo, bSameDocs, bQueryExpansion, numDocsRetrieved, numTopDocsRlv));
+//		result.addAll(qp.relevanceFeedbackExperiment(numDocsRetrieved));
 //		System.out.println("-2ND RESULT-");
 //		System.out.println(algo+" "+bSameDocs+" "+bQueryExpansion+" "+numTopDocsRlv);
 //		System.out.println(result);
 		
 		// for pseudo
-		result.addAll(qp.pseudoRlvFeedbackExperiment(locRlvJudge, locQueries, locStopwords, locDocuments, bSameDocs, bQueryExpansion, numTopDocsRlv, numDocsRetrieved));
-		System.out.println("-RESULT-");
-		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
-		System.out.println(algo+" "+bSameDocs+" "+bQueryExpansion+" "+numTopDocsRlv);
-		System.out.println(result);
+//		result.addAll(qp.pseudoRlvFeedbackExperiment(locRlvJudge, locQueries, locStopwords, locDocuments,numDocsRetrieved));
+//		System.out.println("-RESULT-");
+//		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
+//		System.out.println(algo+" "+bSameDocs+" "+bQueryExpansion+" "+numTopDocsRlv);
+//		System.out.println(result);
 		
 //		Map<Integer,List<Integer>> temp = new HashMap<>();
 //		

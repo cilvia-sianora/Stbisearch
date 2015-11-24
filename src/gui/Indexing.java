@@ -17,8 +17,8 @@ import stbisearch.DocumentProcess;
  */
 public class Indexing extends javax.swing.JPanel {
 	MainGUI mg;
-	private String locDocs;
-	private String locStopwords;
+	public String locDocs;
+	public String locStopwords;
 	
     /**
      * Creates new form Indexing

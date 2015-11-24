@@ -95,9 +95,7 @@ public class Util {
 							state = "title"; 
 						else if(line.equals(".W"))
 							state = "content";
-						else if(line.equals(".X"))
-							state = "";
-						else if(line.equals(".B"))
+						else if(line.equals(".X") || line.equals(".B") || line.equals(".N"))
 							state = "";
 						else if(line.startsWith(".I")){
 							if(no != -1){

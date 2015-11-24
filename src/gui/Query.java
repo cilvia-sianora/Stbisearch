@@ -466,7 +466,7 @@ public class Query extends javax.swing.JPanel {
             topN = Integer.parseInt(topn.getText());
         }
         else if (idereguler.isSelected()){
-            alg = "idereguler";
+            alg = "ide";
         }
         else if (dechi.isSelected()){
             alg = "dechi";
@@ -485,8 +485,8 @@ public class Query extends javax.swing.JPanel {
         else if(falsequeryexp.isSelected()){
             queryexp = false;
         }
-		
-		mg.qp.setQuerySetting(tf, idf, norm, stem);
+		//TODO
+		mg.qp.setQuerySetting(tf, idf, norm, stem,alg,samedoc,queryexp);
 		JOptionPane.showMessageDialog(this, "Setting done");
     }//GEN-LAST:event_indexingActionPerformed
 
