@@ -46,21 +46,20 @@ public class StbiSearch {
 //		DocumentProcess dp = new DocumentProcess();
 //		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
 		Queries qp = new Queries();
-		qp.setQuerySetting(tfMethod,idf,norm,stem);
+		qp.setQuerySetting(tfMethod,idf,norm,stem,algo,bSameDocs,bQueryExpansion);
 		List<String> result = new ArrayList<>();
 		
 		// for not pseudo
-//		result.addAll(qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments, numDocsRetrieved));
-//		System.out.println("-1ST RESULT-");
-//		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
-//		System.out.println(result);
-//		result.addAll(qp.relevanceFeedbackExperiment(algo, bSameDocs, bQueryExpansion, numDocsRetrieved, numTopDocsRlv));
-//		System.out.println("-2ND RESULT-");
-//		System.out.println(algo+" "+bSameDocs+" "+bQueryExpansion+" "+numTopDocsRlv);
-//		System.out.println(result);
+		result.addAll(qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments, numDocsRetrieved));
+		System.out.println("-1ST RESULT-");
+		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
+		result.addAll(qp.relevanceFeedbackExperiment(numDocsRetrieved));
+		System.out.println("-2ND RESULT-");
+		System.out.println(algo+" "+bSameDocs+" "+bQueryExpansion+" "+numTopDocsRlv);
+		System.out.println(result);
 		
 		// for pseudo
-		result.addAll(qp.pseudoRlvFeedbackExperiment(locRlvJudge, locQueries, locStopwords, locDocuments, bSameDocs, bQueryExpansion, numTopDocsRlv, numDocsRetrieved));
+		result.addAll(qp.pseudoRlvFeedbackExperiment(locRlvJudge, locQueries, locStopwords, locDocuments,numDocsRetrieved));
 		System.out.println("-RESULT-");
 		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
 		System.out.println(algo+" "+bSameDocs+" "+bQueryExpansion+" "+numTopDocsRlv);

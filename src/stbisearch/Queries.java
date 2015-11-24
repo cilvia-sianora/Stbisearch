@@ -16,8 +16,9 @@ public class Queries {
 	private double precision, recall, niap; // to count the average final
 	
 	// for configuration
-	private String tfMethod;
-	private boolean bIdf, bNormalization, bStemming;
+	private String tfMethod, algo;
+	private boolean bIdf, bNormalization, bStemming, bSameDocs, bQueryExpansion;
+	private int numTopRlvDocs;
 	
 	public Queries(){
 		queries = new ArrayList<>();
@@ -27,6 +28,10 @@ public class Queries {
 		bIdf = false;
 		bNormalization = false;
 		bStemming = false;
+		algo = "rocchio";
+		bSameDocs = true;
+		bQueryExpansion = false;
+		numTopRlvDocs = -1;
 		precision = 0;
 		recall = 0;
 		niap = 0;
@@ -34,14 +39,19 @@ public class Queries {
 	
 	// set the configuration for query
 	public void setQuerySetting(String tfMethod, boolean bIdf, 
-			boolean bNormalization, boolean bStemming){
+			boolean bNormalization, boolean bStemming, String algo,
+			boolean bSameDocs, boolean bQueryExpansion){
 		this.tfMethod = tfMethod;
 		this.bIdf = bIdf;
 		this.bNormalization = bNormalization;
 		this.bStemming = bStemming;
+		this.algo = algo;
+		this.bSameDocs = bSameDocs;
+		this.bQueryExpansion = bQueryExpansion;
 	}
 	
-	public List<String> searchInteractive(String queryInput, String locStopwords, String locDocuments){
+	public List<String> searchInteractive(String queryInput, String locStopwords, 
+			String locDocuments){
 //		String result;
 		queries.clear();
 		
@@ -80,8 +90,8 @@ public class Queries {
 		return result;
 	}
 	
-	public List<String> searchExperiment(String locRlvJudge, String locQueries, String locStopwords, 
-			String locDocuments, int numDocsRetrieved){
+	public List<String> searchExperiment(String locRlvJudge, String locQueries, 
+			String locStopwords, String locDocuments, int numDocsRetrieved){
 		queries.clear();
 
 		// get files
@@ -142,16 +152,15 @@ public class Queries {
 		}
 		
 		// count the average final
-		result.add("Precision = " + (precision/util.queries.size()) + "\n" +
+		result.add(0,"Precision = " + (precision/util.queries.size()) + "\n" +
 				"Recall = " + (recall/util.queries.size()) + "\n" +
 				"NIAP = " + (niap/util.queries.size()) + "\n" +
-				"The result of each query:" + "\n" + result);
+				"The result of each query:" + "\n");
 		
 		return result;
 	}
 	
-	public List<String> relevanceFeedbackExperiment(String algo, boolean bSameDocs, boolean bQueryExpansion, 
-			int numDocsRetrieved, int numTopDocsRlv){
+	public List<String> relevanceFeedbackExperiment(int numDocsRetrieved){
 		List<String> result = new ArrayList<>();
 		
 		for(QueryProcess qp: queries){
@@ -159,7 +168,7 @@ public class Queries {
 			// put numTopDocsRlv docs to relevantDocs
 			// if numTopDocsRlv is -1, pseudo
 			System.out.println("Determine relevant docs...");
-			qp.determineRelevantDocs(numTopDocsRlv);
+			qp.determineRelevantDocs(numTopRlvDocs);
 			
 			// print query lama
 			result.add("Query number = "+qp.query.no+"\n");
@@ -167,10 +176,6 @@ public class Queries {
 			
 			System.out.println("Reweighting...");
 			qp.reweighting(bQueryExpansion, algo);
-			
-//			System.out.println("After reweighting...");
-//			System.out.println("Query "+qp.query.no);
-//			qp.query.printTerms();
 			
 			// print query baru
 			result.add("Query baru: \n" + qp.query.getTerms());
@@ -195,26 +200,26 @@ public class Queries {
 		}
 		
 		// count the average final
-		result.add("Precision = " + (precision/util.queries.size()) + "\n" +
+		result.add(0,"Precision = " + (precision/util.queries.size()) + "\n" +
 				"Recall = " + (recall/util.queries.size()) + "\n" +
 				"NIAP = " + (niap/util.queries.size()) + "\n" +
-				"The result of each query:" + "\n" + result);
+				"The result of each query:" + "\n");
 		
 		return result;
 	}
 	
 	// if numTopDocsRlv is -1, it is pseudo relevance feedback
-	public List<String> relevanceFeedbackInteractive(String algo, boolean bSameDocs, boolean bQueryExpansion,
-			List<Integer> rlvDocs, List<Integer> irrlvDocs, int numTopDocsRlv){
+	public List<String> relevanceFeedbackInteractive(List<Integer> rlvDocs, 
+			List<Integer> irrlvDocs){
 		List<String> result = new ArrayList<>();
 		
 		for(QueryProcess qp: queries){
 			// tentuin doc relevant & irrelevant
-			if(numTopDocsRlv == -1){
+			if(numTopRlvDocs == -1){
 				qp.relevantDocs.addAll(rlvDocs);
 				qp.irrelevantDocs.addAll(irrlvDocs);
 			} else { // pseudo
-				qp.determineRelevantDocs(numTopDocsRlv);
+				qp.determineRelevantDocs(numTopRlvDocs);
 			}
 			
 			// print query lama
@@ -227,9 +232,7 @@ public class Queries {
 			
 			if(!bSameDocs){
 				System.out.println("Delete docs...");
-				System.out.println(qp.util.docs.size());
 				qp.deleteDocs();
-				System.out.println(qp.util.docs.size());
 			}
 			
 			// print result
@@ -239,24 +242,23 @@ public class Queries {
 		return result;
 	}
 	
-	public List<String> pseudoRlvFeedbackInteractive(String queryInput, String locStopwords, String locDocuments,
-			boolean bSameDocs, boolean bQueryExpansion, int numTopDocsRlv){
+	public List<String> pseudoRlvFeedbackInteractive(String queryInput,
+			String locStopwords, String locDocuments){
 		List<String> result = new ArrayList<>();
 		
 		searchInteractive(queryInput,locStopwords,locDocuments);
-		result.addAll(relevanceFeedbackInteractive("rocchio", bSameDocs, bQueryExpansion,
-			null, null, numTopDocsRlv));
+		result.addAll(relevanceFeedbackInteractive(null, null));
 		
 		return result;
 	}
 	
-	public List<String> pseudoRlvFeedbackExperiment(String locRlvJudge, String locQueries, String locStopwords, String locDocuments,
-			boolean bSameDocs, boolean bQueryExpansion, int numTopDocsRlv, int numDocsRetrieved){
+	public List<String> pseudoRlvFeedbackExperiment(String locRlvJudge, 
+			String locQueries, String locStopwords, String locDocuments,
+			int numDocsRetrieved){
 		List<String> result = new ArrayList<>();
 		
 		searchExperiment(locRlvJudge,locQueries,locStopwords,locDocuments,numDocsRetrieved);
-		result.addAll(relevanceFeedbackExperiment("rocchio", bSameDocs, bQueryExpansion,
-			numDocsRetrieved, numTopDocsRlv));
+		result.addAll(relevanceFeedbackExperiment(numDocsRetrieved));
 		
 		return result;
 	}

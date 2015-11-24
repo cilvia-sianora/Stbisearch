@@ -340,7 +340,8 @@ public class Query extends javax.swing.JPanel {
             stem=true;
         }
 		
-		mg.qp.setQuerySetting(tf, idf, norm, stem);
+		//TODO
+//		mg.qp.setQuerySetting(tf, idf, norm, stem);
 		JOptionPane.showMessageDialog(this, "Setting done");
     }//GEN-LAST:event_indexingActionPerformed
 
