@@ -3,12 +3,25 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/D:/Tgs/Sem7/Stbi/Stbisearch/src/gui/Searching.java</file>
             <file>file:/D:/Tgs/Sem7/Stbi/Stbisearch/src/gui/test.java</file>
             <file>file:/D:/Tgs/Sem7/Stbi/Stbisearch/src/stbisearch/InvertedFile.java</file>
             <file>file:/D:/Tgs/Sem7/Stbi/Stbisearch/src/gui/Query.java</file>
             <file>file:/D:/Tgs/Sem7/Stbi/Stbisearch/src/gui/ButtonColumn.java</file>
             <file>file:/D:/Tgs/Sem7/Stbi/Stbisearch/src/gui/MainGUI.java</file>
+=======
+            <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/stbisearch/DocumentProcess.java</file>
+            <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/gui/MainGUI.java</file>
+            <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/stbisearch/Vector.java</file>
+            <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/gui/Searching.java</file>
+            <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/stbisearch/StbiSearch.java</file>
+            <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/stbisearch/InvertedFile.java</file>
+            <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/stbisearch/Queries.java</file>
+            <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/stbisearch/Util.java</file>
+            <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/stbisearch/QueryProcess.java</file>
+            <file>file:/C:/Users/Anggi/Documents/NetBeansProjects/StbiSearch/src/gui/Query.java</file>
+>>>>>>> 70a206f93b6d36bca8174b7740fd52b51ead9b65
         </group>
     </open-files>
 </project-private>

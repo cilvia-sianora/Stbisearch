@@ -11,7 +11,7 @@ import stbisearch.*;
  */
 public class MainGUI {
 	public static DocumentProcess dp;
-	public static QueryProcess qp;
+	public static Queries qp;
 	static Indexing guiIndexing;
 	static Query guiQuerySetting;
 	static Searching guiSearching;
@@ -24,7 +24,7 @@ public class MainGUI {
 	
 	public void init(){
 		dp = new DocumentProcess();
-		qp = new QueryProcess();
+		qp = new Queries();
 		guiIndexing = new Indexing();
 		guiQuerySetting = new Query();
 		guiSearching = new Searching();

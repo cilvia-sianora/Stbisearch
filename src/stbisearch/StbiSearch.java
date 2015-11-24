@@ -23,14 +23,19 @@ public class StbiSearch {
 	public static void main(String[] args) {
 		Util util;
 		util = new Util();
-		String locQueries = "Test Collection\\CISI\\query.text";
-		String locDocuments = "Test Collection\\CISI\\cisi.all";
+		String locQueries = "Test Collection\\ADI\\query.text";
+		String locDocuments = "Test Collection\\ADI\\adi.all";
 		String locStopwords = "Test Collection\\stopwords-porter.txt";
-		String locRlvJudge = "Test Collection\\CISI\\qrels.text";
+		String locRlvJudge = "Test Collection\\ADI\\qrels.text";
 		String tfMethod = "raw";
-		boolean idf = true;
+		boolean idf = false;
 		boolean norm = false;
 		boolean stem = true;
+		int numDocsRetrieved = 10;
+		int numTopDocsRlv = -1;
+		String algo = "rocchio";
+		boolean bSameDocs = true;
+		boolean bQueryExpansion = false;
 //		String result;
 //		util.getDocuments(locDocuments);
 //		util.getQueries(locQueries);
@@ -40,185 +45,70 @@ public class StbiSearch {
 //		util.printJudgement();
 //		DocumentProcess dp = new DocumentProcess();
 //		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
-		QueryProcess qp = new QueryProcess();
+		Queries qp = new Queries();
 		qp.setQuerySetting(tfMethod,idf,norm,stem);
-		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
+		List<String> result = new ArrayList<>();
+		
+		// for not pseudo
+//		result.addAll(qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments, numDocsRetrieved));
+//		System.out.println("-1ST RESULT-");
+//		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
+//		System.out.println(result);
+//		result.addAll(qp.relevanceFeedbackExperiment(algo, bSameDocs, bQueryExpansion, numDocsRetrieved, numTopDocsRlv));
+//		System.out.println("-2ND RESULT-");
+//		System.out.println(algo+" "+bSameDocs+" "+bQueryExpansion+" "+numTopDocsRlv);
+//		System.out.println(result);
+		
+		// for pseudo
+		result.addAll(qp.pseudoRlvFeedbackExperiment(locRlvJudge, locQueries, locStopwords, locDocuments, bSameDocs, bQueryExpansion, numTopDocsRlv, numDocsRetrieved));
 		System.out.println("-RESULT-");
 		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
+		System.out.println(algo+" "+bSameDocs+" "+bQueryExpansion+" "+numTopDocsRlv);
 		System.out.println(result);
 		
-//		InvertedFile file = new InvertedFile();
-//		file.readIdf();
-		
-//		Map<String,Double> map = new HashMap<>();
+//		Map<Integer,List<Integer>> temp = new HashMap<>();
 //		
-//		map.put("satu",1.1);
-//		map.put("dua",2.2);
-//		int res=9999;
-//		System.out.println(map.get("tiga"));
-//		for(Map.Entry<String,Double> entry : map.entrySet()) {
-//			System.out.println(entry.getKey()+" "+entry.getValue());
-//		}
-		
-//		List<String> arrTf = new ArrayList<>();
-//		List<Boolean> arrIdf = new ArrayList<>();
-//		List<Boolean> arrNorm = new ArrayList<>();
-//		List<Boolean> arrStem = new ArrayList<>();
-//		arrTf.add("no");arrTf.add("raw");arrTf.add("binary");
-//		arrTf.add("aug");arrTf.add("log");
-//		arrIdf.add(true); arrIdf.add(false);
-//		arrNorm.add(true); arrNorm.add(false);
-//		arrStem.add(true); arrStem.add(false);
-		
-//		tfMethod = "no";
-//		idf = true;
-////		for(boolean aIdf: arrIdf){
-////			idf = aIdf;
-//			for(boolean aNorm: arrNorm){
-//				norm = aNorm;
-//				for(boolean aStem: arrStem){
-//					stem = aStem;
-////					if(idf){
-//						dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
-//						qp.setQuerySetting(tfMethod,idf,norm,stem);
-//						result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
-//						System.out.println("-RESULT-");
-//						System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
-//						System.out.println(result);
-////					}
-//				}
+//		temp.put(1, new ArrayList<>());
+//		temp.get(1).add(11);
+//		temp.get(1).add(12);
+//		temp.get(1).add(13);
+//		temp.put(2, new ArrayList<>());
+//		temp.get(2).add(21);
+//		
+//		for(Entry<Integer,List<Integer>> entry: temp.entrySet()){
+//			System.out.println(entry.getKey());
+//			for(Integer i: entry.getValue()){
+//				System.out.println(i);
 //			}
-////		}
-		
-//		tfMethod = "aug";
-////		for(String tf: arrTf){
-////			tfMethod = tf;
-//			for(boolean aIdf: arrIdf){
-//				idf = aIdf;
-//				for(boolean aNorm: arrNorm){
-//					norm = aNorm;
-//					for(boolean aStem: arrStem){
-//						stem = aStem;
-////						if(!tf.equals("no") || idf){
-//							dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
-//							qp.setQuerySetting(tfMethod,idf,norm,stem);
-//							result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
-//							System.out.println("-RESULT-");
-//							System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
-//							System.out.println(result);
-////						}
-//					}
-//				}
+//		}
+//		
+//		Map<Integer,List<Integer>> temp2 = new HashMap<>(temp);
+//		
+//		for(Entry<Integer,List<Integer>> entry: temp2.entrySet()){
+//			System.out.println(entry.getKey());
+//			for(Integer i: entry.getValue()){
+//				System.out.println(i);
 //			}
-////		}
+//		}
 		
-//	  String document = "the ibm data systems division technical\n"
-//		+ " information center (tic) provides an operating developmental\n"
-//		+ "system for integrated and compatible mechanized\n"
-//		+ " processing of technical information received within the organization.\n"
-//		+ "  the system offers several advantages :\n"
-//		+ "     1 . it is a sophisticated mechanized system for dissemination\n"
-//		+ "and retrieval;\n"
-//		+ "     2 . it is compatible with all library mechanized\n"
-//		+ "  records produced under a standard processing format\n"
-//		+ "  within ibm libraries, providing such traditional tools\n"
-//		+ "  as 3 x 5 catalog cards, circulation records and overdue\n"
-//		+ "notices;\n"
-//		+ "     3 . it is reversible, so that discontinuation of machine\n"
-//		+ "processing would not cause gaps in the library's\n"
-//		+ "  manual records;\n"
-//		+ "     4 . it is controlled, producing statistical evaluations\n"
-//		+ "of its own program efficiency;\n"
-//		+ "     5 . it is user-oriented, providing 24-hour copy access\n"
-//		+ "and immediate microfilm access to its documents;\n"
-//		+ "     6 . it is relatively simple, relying on the ibm 1401\n"
-//		+ "  data processing system for all its processing and output.\n"
-//		+ "\n"
-//		+ "  since the system has been operating for over a year, the\n"
-//		+ "conclusions drawn are based on actual experience .";
-//	  try {
-//		String removed = util.delimiter(document);
-//		removed = util.stopWordRemoval("Test Collection\\stopwords-porter.txt", removed);
-//		removed = util.stemming(removed);
-//		System.out.println(removed);
-//	  } catch (IOException ex) {
-//		Logger.getLogger(StbiSearch.class.getName()).log(Level.SEVERE, null, ex);
-//	  }
+//		Vector temp = new Vector();
+//		for(int i=0;i<4;i++){
+//			double[] value = new double[2];
+//			value[0] = 0;
+//			value[1] = i;
+//			temp.terms.put(String.valueOf(i), value);
+//		}
+//		temp.printTerms();
+//		
+//		temp.terms.get("1")[0] = 9;
+//		temp.printTerms();
+//		QueryProcess QP = new QueryProcess();
+//		QP.determineRelevantDocs(10);
+//		double countWeightRelevantDoc = QP.countWeightRelevantDoc("system");
+//		System.out.println(countWeightRelevantDoc);
+//		double countWeightIRRelevantDoc = QP.countWeightIrrelevantDoc("system", 3);
+//		System.out.println(countWeightIRRelevantDoc);
 		
-		long start;
-//		HashSet<String> hashSet = new HashSet<>();
-//		Map<String,String> hashMap = new HashMap<>();
-//		ArrayList<String> arrayList = new ArrayList<String>();
-//
-//		start = System.currentTimeMillis();
-//		for (int i = 0; i < 900000; i++) {
-//			hashSet.add(String.valueOf(i));
-//		}
-//
-//		System.out.println("Insert HashSet Time: " + (System.currentTimeMillis() - start));
-//
-//
-//		start = System.currentTimeMillis();
-//
-//		for (int i = 0; i < 900000; i++) {
-//			arrayList.add(String.valueOf(i));
-//		}
-//		System.out.println("Insert ArrayList Time: " + (System.currentTimeMillis() - start));
-//		
-//
-//		start = System.currentTimeMillis();
-//
-//		for (int i = 0; i < 900000; i++) {
-//			hashMap.put(String.valueOf(i),String.valueOf(i));
-//		}
-//		System.out.println("Insert HashMap Time: " + (System.currentTimeMillis() - start));
-//		
-//		start = System.currentTimeMillis();
-//		for (String s: hashSet) {	
-//		}
-//		System.out.println("Get HashSet Time: " + (System.currentTimeMillis() - start));
-//		
-//		start = System.currentTimeMillis();
-//		for (String s: arrayList) {
-//		}
-//		System.out.println("Get ArrayList Time: " + (System.currentTimeMillis() - start));
-//		
-//		start = System.currentTimeMillis();
-//		for (Entry<String,String> s: hashMap.entrySet()) {
-//		}
-//		System.out.println("Get HashMap Time: " + (System.currentTimeMillis() - start));
-
-//		start = System.currentTimeMillis();
-//		for (String s: hashSet) {	
-//			hashSet.contains(s);
-//		}
-//		System.out.println("Contain HashSet Time: " + (System.currentTimeMillis() - start));
-//		
-//		start = System.currentTimeMillis();
-//		for (String s: arrayList) {
-//			arrayList.contains(s);
-//		}
-//		System.out.println("Contain ArrayList Time: " + (System.currentTimeMillis() - start));
-//		
-//		start = System.currentTimeMillis();
-//		for (Entry<String,String> s: hashMap.entrySet()) {
-//			hashMap.containsKey(s.getKey());
-//		}
-//		System.out.println("Contain Key HashMap Time: " + (System.currentTimeMillis() - start));
-//		
-//		start = System.currentTimeMillis();
-//		for (Entry<String,String> s: hashMap.entrySet()) {
-//			hashMap.containsKey(s.getValue());
-//		}
-//		System.out.println("Contain Value HashMap Time: " + (System.currentTimeMillis() - start));
-		
-//		start = System.currentTimeMillis();
-//		util.readFilePerLine(locDocuments);
-//		System.out.println("read file per line Time: " + (System.currentTimeMillis() - start));
-//		
-//		start = System.currentTimeMillis();
-//			util.readFile(locDocuments);
-//		System.out.println("read file all lines Time: " + (System.currentTimeMillis() - start));
 	}
 
 }

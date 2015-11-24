@@ -44,8 +44,35 @@ public class Vector {
 		maxTf = 0;
 	}
 	
+	public void copy(Vector v){
+		no = v.no;
+		title = v.title;
+		content = v.content;
+		author = v.author;
+		maxTf = v.maxTf;
+		terms = new HashMap<>(v.terms); 
+	}
+	
 	private String getAllText(){
 		return author + " " + title + " " + content;
+	}
+	
+	public String getTerms(){
+		String result = "";
+		for(Entry<String,double[]> entry: terms.entrySet()){
+			if(entry.getValue()[1] > 0){
+				result += entry.getKey() + "\t" + entry.getValue()[1] + "\n";
+			}
+		}
+		return result;
+	}
+	
+	public Double getAllWeight(){
+		double sum = 0;
+		for(Entry<String,double[]> entry: terms.entrySet()){
+			sum += entry.getValue()[1];
+		}
+		return sum;
 	}
 	
 	// preprocessing: delimiter->stopwordremoval->stemming
@@ -66,10 +93,10 @@ public class Vector {
 	// count frequency of term from raw document/query
 	public void countFreq(String text){
 		terms.clear();
-		double[] temp = new double[2];
-		temp[1] = 1;
 		for (String term: text.split("\\s+")){
 			if(term.length()>0){
+				double[] temp = new double[2];
+				temp[1] = 1;
 				if(terms.containsKey(term)){
 					temp[0] = terms.get(term)[0]+1;
 				} else {
@@ -111,12 +138,8 @@ public class Vector {
 	// do normalization to document/query
 	public void normalization(){
 		double length = getLength();
-		double[] temp = new double[2];
 		for(Map.Entry<String,double[]> entry : terms.entrySet()) {
-			temp[0] = entry.getValue()[0];
-			temp[1] = entry.getValue()[1];
-			temp[1] = temp[1]/length;
-			terms.put(entry.getKey(), temp);
+			entry.getValue()[1] = entry.getValue()[1]/length;
 		}
 	}
 	

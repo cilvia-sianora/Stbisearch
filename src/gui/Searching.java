@@ -36,25 +36,41 @@ public class Searching extends javax.swing.JPanel {
 		mg = new MainGUI();
 		locQueries = "";
 		locRelevanceJudge = "";
-        jTable3.setModel(showResultsTable().getModel());
-        ButtonColumn buttonColumn = new ButtonColumn(jTable3, 2);
 
     }
     
-        private static JTable showResultsTable(){
-            List<String> results = new ArrayList<String>();
-            results.add("aaaa");
-            results.add("bbb");
-            results.add("ccc");
+        private static JTable showResultsTable(List<String> results){
         Object[][] tempdatakar = new Object [results.size()][3];
         for(int i=0;i<=results.size()-1;i++){
-            tempdatakar[i][0]= "aaa";
-            tempdatakar[i][1]= results.get(i);
+            if(results.get(i).substring(0,1).matches("[0-9]")){
+                tempdatakar[i][0]= results.get(i).charAt(0);
+                tempdatakar[i][1]= results.get(i).substring(2);
+                }
+            else {
+                tempdatakar[i][1]= results.get(i);
+            }
             tempdatakar[i][2]="Relevance Check";
         }
+
+//        Object[][] tempdatakar = new Object [results.size()][2];
+//        for(int i=0;i<=results.size()-1;i++){
+//            if(results.get(i).substring(0,1).matches("[0-9]")){
+//                tempdatakar[i][0]= results.get(i).charAt(0);
+//                tempdatakar[i][1]= results.get(i).substring(2);
+//                }
+//            else {
+//                tempdatakar[i][0]= results.get(i);
+//            }
+//            tempdatakar[i][1]="Relevance Check";
+//        }
+
         String[] columnNames = {
                 "No Document","Title", "Relevance"
             };
+//        String[] columnNames = {
+//                "Title", "Relevance"
+//            };
+
         return new JTable(tempdatakar, columnNames);
     }
 
@@ -79,8 +95,6 @@ public class Searching extends javax.swing.JPanel {
         interactive = new javax.swing.JRadioButton();
         queryfield = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         uploadDoc = new javax.swing.JButton();
@@ -91,6 +105,7 @@ public class Searching extends javax.swing.JPanel {
         jTable3 = new javax.swing.JTable();
         tops = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        secondret = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -154,10 +169,6 @@ public class Searching extends javax.swing.JPanel {
             }
         });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
-
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Search Result");
 
@@ -189,18 +200,25 @@ public class Searching extends javax.swing.JPanel {
 
         jTable3.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null},
+                {null},
+                {null},
+                {null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Result"
             }
         ));
         jScrollPane4.setViewportView(jTable3);
 
         jLabel3.setText("Retrive Documents");
+
+        secondret.setText("Second Retrival");
+        secondret.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                secondretActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -213,13 +231,12 @@ public class Searching extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(jLabel2)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jScrollPane1)))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(experimental)
@@ -256,6 +273,10 @@ public class Searching extends javax.swing.JPanel {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(queryfield, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(secondret)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -268,7 +289,6 @@ public class Searching extends javax.swing.JPanel {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(experimental)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(25, 25, 25)
@@ -278,9 +298,9 @@ public class Searching extends javax.swing.JPanel {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(uploadDoc)
                                 .addComponent(filepathlabel)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tops, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tops, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -291,10 +311,9 @@ public class Searching extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(secondret))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -318,21 +337,27 @@ public class Searching extends javax.swing.JPanel {
         boolean experimentalValue;
         String query;
         
-        String topS=tops.getText();
+        List<String> result = new ArrayList<String>();
         
-		String result = "";
+        int topS= Integer.parseInt(tops.getText()) ;
+              
         if(experimental.isSelected()){
             experimentalValue=true;
-			result = mg.qp.searchExperiment(locRelevanceJudge, locQueries, mg.dp.locStopwords, mg.dp.locDocuments);
+			//TODO
+			result = mg.qp.searchExperiment(locRelevanceJudge, locQueries, mg.dp.locStopwords, mg.dp.locDocuments,topS);
         }
         else if (interactive.isSelected()){
             experimentalValue=false;
             query = queryfield.getText();
+			//TODO
 			result = mg.qp.searchInteractive(query, mg.dp.locStopwords, mg.dp.locDocuments);
         }
         
         JOptionPane.showMessageDialog(this, "Searching finished");
-		jTextArea1.setText(result);
+        jTable3.setModel(showResultsTable(result).getModel());
+        ButtonColumn buttonColumn = new ButtonColumn(jTable3, 2);
+
+//		jTextArea1.setText(result);
                 
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -374,6 +399,10 @@ public class Searching extends javax.swing.JPanel {
         queryfield.setEnabled(false);
     }//GEN-LAST:event_experimentalActionPerformed
 
+    private void secondretActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_secondretActionPerformed
+        
+    }//GEN-LAST:event_secondretActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton experimental;
@@ -386,16 +415,15 @@ public class Searching extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField queryfield;
     private javax.swing.ButtonGroup searching;
+    private javax.swing.JButton secondret;
     private javax.swing.JTextField tops;
     private javax.swing.JButton uploadDoc;
     private javax.swing.JButton uploadRelevance;

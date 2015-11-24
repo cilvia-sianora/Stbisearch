@@ -62,26 +62,6 @@ public class Query extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         rocchio = new javax.swing.JRadioButton();
-        jPanel1 = new javax.swing.JPanel();
-        indexing1 = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
-        noStem1 = new javax.swing.JRadioButton();
-        noNorm1 = new javax.swing.JRadioButton();
-        usingNorm1 = new javax.swing.JRadioButton();
-        usingStem1 = new javax.swing.JRadioButton();
-        noIDF1 = new javax.swing.JRadioButton();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        usingIDF1 = new javax.swing.JRadioButton();
-        binaryTF1 = new javax.swing.JRadioButton();
-        logaritmicTF1 = new javax.swing.JRadioButton();
-        rawTF1 = new javax.swing.JRadioButton();
-        noTF1 = new javax.swing.JRadioButton();
-        jLabel11 = new javax.swing.JLabel();
-        augmentedTF1 = new javax.swing.JRadioButton();
-        jButton2 = new javax.swing.JButton();
-        topn = new javax.swing.JTextField();
         idereguler = new javax.swing.JRadioButton();
         dechi = new javax.swing.JRadioButton();
         pseudo = new javax.swing.JRadioButton();
@@ -89,8 +69,9 @@ public class Query extends javax.swing.JPanel {
         truesamedoc = new javax.swing.JRadioButton();
         falsesamedoc = new javax.swing.JRadioButton();
         jLabel14 = new javax.swing.JLabel();
-        truesamedoc1 = new javax.swing.JRadioButton();
-        falsesamedoc1 = new javax.swing.JRadioButton();
+        truequeryexp = new javax.swing.JRadioButton();
+        falsequeryexp = new javax.swing.JRadioButton();
+        topn = new javax.swing.JTextField();
 
         indexing.setText("OK");
         indexing.addActionListener(new java.awt.event.ActionListener() {
@@ -226,212 +207,6 @@ public class Query extends javax.swing.JPanel {
         firstret.add(rocchio);
         rocchio.setText("Rocchio");
 
-        indexing1.setText("OK");
-        indexing1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                indexing1ActionPerformed(evt);
-            }
-        });
-
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel7.setText("Stemming");
-
-        stem.add(noStem1);
-        noStem1.setText("no Stemming");
-        noStem1.setToolTipText("");
-        noStem1.setActionCommand("");
-
-        normal.add(noNorm1);
-        noNorm1.setText("no Normalization");
-        noNorm1.setToolTipText("");
-        noNorm1.setActionCommand("");
-        noNorm1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                noNorm1ActionPerformed(evt);
-            }
-        });
-
-        normal.add(usingNorm1);
-        usingNorm1.setText("using Normalization");
-        usingNorm1.setToolTipText("");
-        usingNorm1.setActionCommand("");
-        usingNorm1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                usingNorm1ActionPerformed(evt);
-            }
-        });
-
-        stem.add(usingStem1);
-        usingStem1.setText("using Stemming");
-
-        idf.add(noIDF1);
-        noIDF1.setText("no IDF");
-        noIDF1.setToolTipText("");
-        noIDF1.setActionCommand("");
-        noIDF1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                noIDF1ActionPerformed(evt);
-            }
-        });
-
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel8.setText("Normalization");
-
-        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel9.setText("TF");
-
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel10.setText("Setting Query");
-
-        idf.add(usingIDF1);
-        usingIDF1.setText("using IDF");
-        usingIDF1.setToolTipText("");
-        usingIDF1.setActionCommand("");
-        usingIDF1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                usingIDF1ActionPerformed(evt);
-            }
-        });
-
-        tf.add(binaryTF1);
-        binaryTF1.setText("binary TF");
-        binaryTF1.setToolTipText("");
-        binaryTF1.setActionCommand("");
-        binaryTF1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                binaryTF1ActionPerformed(evt);
-            }
-        });
-
-        tf.add(logaritmicTF1);
-        logaritmicTF1.setText("logaritmic TF");
-        logaritmicTF1.setToolTipText("");
-        logaritmicTF1.setActionCommand("");
-        logaritmicTF1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                logaritmicTF1ActionPerformed(evt);
-            }
-        });
-
-        tf.add(rawTF1);
-        rawTF1.setText("raw TF");
-        rawTF1.setToolTipText("");
-        rawTF1.setActionCommand("");
-        rawTF1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rawTF1ActionPerformed(evt);
-            }
-        });
-
-        tf.add(noTF1);
-        noTF1.setText("no TF");
-        noTF1.setToolTipText("");
-        noTF1.setActionCommand("");
-        noTF1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                noTF1ActionPerformed(evt);
-            }
-        });
-
-        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel11.setText("IDF");
-
-        tf.add(augmentedTF1);
-        augmentedTF1.setText("augmented TF");
-        augmentedTF1.setToolTipText("");
-        augmentedTF1.setActionCommand("");
-        augmentedTF1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                augmentedTF1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        jButton2.setText("<");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        topn.setText("N rel doc");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rawTF1)
-                            .addComponent(logaritmicTF1)
-                            .addComponent(binaryTF1)
-                            .addComponent(augmentedTF1)
-                            .addComponent(indexing1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel9)
-                                    .addComponent(noTF1))
-                                .addGap(73, 73, 73)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel11)
-                                    .addComponent(noIDF1)
-                                    .addComponent(usingIDF1, javax.swing.GroupLayout.Alignment.TRAILING))
-                                .addGap(23, 23, 23)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(noNorm1)
-                                    .addComponent(usingNorm1)
-                                    .addComponent(jLabel8))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(usingStem1)
-                                    .addComponent(noStem1)
-                                    .addComponent(topn, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(24, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(noTF1)
-                    .addComponent(noIDF1)
-                    .addComponent(noNorm1)
-                    .addComponent(noStem1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(usingStem1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(rawTF1)
-                        .addComponent(usingIDF1)
-                        .addComponent(usingNorm1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(logaritmicTF1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(binaryTF1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(augmentedTF1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
-                .addComponent(topn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(102, 102, 102)
-                .addComponent(indexing1)
-                .addContainerGap())
-        );
-
         firstret.add(idereguler);
         idereguler.setText("Ide Reguler");
         idereguler.addActionListener(new java.awt.event.ActionListener() {
@@ -468,11 +243,13 @@ public class Query extends javax.swing.JPanel {
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel14.setText("Use Query Expansion");
 
-        queryexpand.add(truesamedoc1);
-        truesamedoc1.setText("True");
+        queryexpand.add(truequeryexp);
+        truequeryexp.setText("True");
 
-        queryexpand.add(falsesamedoc1);
-        falsesamedoc1.setText("False");
+        queryexpand.add(falsequeryexp);
+        falsequeryexp.setText("False");
+
+        topn.setText("topn");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -528,19 +305,16 @@ public class Query extends javax.swing.JPanel {
                                             .addGap(18, 18, 18)
                                             .addComponent(falsesamedoc))
                                         .addGroup(layout.createSequentialGroup()
-                                            .addComponent(truesamedoc1)
+                                            .addComponent(truequeryexp)
                                             .addGap(18, 18, 18)
-                                            .addComponent(falsesamedoc1)))
+                                            .addComponent(falsequeryexp)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(pseudo)
-                                        .addGap(69, 69, 69)))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(topn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(1, 1, 1)))
                                 .addGap(34, 34, 34)))))
                 .addContainerGap(24, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -580,8 +354,9 @@ public class Query extends javax.swing.JPanel {
                     .addComponent(rocchio)
                     .addComponent(idereguler)
                     .addComponent(dechi)
-                    .addComponent(pseudo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                    .addComponent(pseudo)
+                    .addComponent(topn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(truesamedoc)
                     .addComponent(falsesamedoc)
@@ -589,19 +364,14 @@ public class Query extends javax.swing.JPanel {
                 .addGap(3, 3, 3)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(truesamedoc1)
-                        .addComponent(falsesamedoc1))
+                        .addComponent(truequeryexp)
+                        .addComponent(falsequeryexp))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(2, 2, 2)
                         .addComponent(jLabel14)))
                 .addGap(37, 37, 37)
                 .addComponent(indexing)
-                .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(18, 18, 18))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -642,10 +412,14 @@ public class Query extends javax.swing.JPanel {
     }//GEN-LAST:event_augmentedTFActionPerformed
 
     private void indexingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_indexingActionPerformed
+        String alg="";
         String tf = "";
         boolean idf = false;
-		boolean norm = false;
-		boolean stem = false;
+        boolean samedoc = false;
+        boolean queryexp = false;
+        boolean norm = false;
+        boolean stem = false;
+        int topN = -1 ;
         
         if(noTF.isSelected()){
             tf="no";
@@ -683,6 +457,34 @@ public class Query extends javax.swing.JPanel {
         else if (usingStem.isSelected()){
             stem=true;
         }
+        
+        if(rocchio.isSelected()){
+            alg = "rocchio";
+        }
+        else if (pseudo.isSelected()){
+            alg = "pseudo";
+            topN = Integer.parseInt(topn.getText());
+        }
+        else if (idereguler.isSelected()){
+            alg = "idereguler";
+        }
+        else if (dechi.isSelected()){
+            alg = "dechi";
+        }
+        
+        if(truesamedoc.isSelected()){
+            samedoc = true;
+        }
+        else if(falsesamedoc.isSelected()){
+            samedoc = false;
+        }
+        
+        if(truequeryexp.isSelected()){
+            queryexp = true;
+        }
+        else if(falsequeryexp.isSelected()){
+            queryexp = false;
+        }
 		
 		mg.qp.setQuerySetting(tf, idf, norm, stem);
 		JOptionPane.showMessageDialog(this, "Setting done");
@@ -691,50 +493,6 @@ public class Query extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         mg.showSearchingPanel();
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void indexing1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_indexing1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_indexing1ActionPerformed
-
-    private void noNorm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noNorm1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_noNorm1ActionPerformed
-
-    private void usingNorm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usingNorm1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_usingNorm1ActionPerformed
-
-    private void noIDF1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noIDF1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_noIDF1ActionPerformed
-
-    private void usingIDF1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usingIDF1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_usingIDF1ActionPerformed
-
-    private void binaryTF1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_binaryTF1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_binaryTF1ActionPerformed
-
-    private void logaritmicTF1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logaritmicTF1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_logaritmicTF1ActionPerformed
-
-    private void rawTF1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rawTF1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rawTF1ActionPerformed
-
-    private void noTF1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noTF1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_noTF1ActionPerformed
-
-    private void augmentedTF1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_augmentedTF1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_augmentedTF1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     private void ideregulerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ideregulerActionPerformed
         // TODO add your handling code here:
@@ -751,22 +509,16 @@ public class Query extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton augmentedTF;
-    private javax.swing.JRadioButton augmentedTF1;
     private javax.swing.JRadioButton binaryTF;
-    private javax.swing.JRadioButton binaryTF1;
     private javax.swing.JRadioButton dechi;
+    private javax.swing.JRadioButton falsequeryexp;
     private javax.swing.JRadioButton falsesamedoc;
-    private javax.swing.JRadioButton falsesamedoc1;
     private javax.swing.ButtonGroup firstret;
     private javax.swing.JRadioButton idereguler;
     private javax.swing.ButtonGroup idf;
     private javax.swing.JButton indexing;
-    private javax.swing.JButton indexing1;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
@@ -774,37 +526,24 @@ public class Query extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton logaritmicTF;
-    private javax.swing.JRadioButton logaritmicTF1;
     private javax.swing.JRadioButton noIDF;
-    private javax.swing.JRadioButton noIDF1;
     private javax.swing.JRadioButton noNorm;
-    private javax.swing.JRadioButton noNorm1;
     private javax.swing.JRadioButton noStem;
-    private javax.swing.JRadioButton noStem1;
     private javax.swing.JRadioButton noTF;
-    private javax.swing.JRadioButton noTF1;
     private javax.swing.ButtonGroup normal;
     private javax.swing.JRadioButton pseudo;
     private javax.swing.ButtonGroup queryexpand;
     private javax.swing.JRadioButton rawTF;
-    private javax.swing.JRadioButton rawTF1;
     private javax.swing.JRadioButton rocchio;
     private javax.swing.ButtonGroup samedoc;
     private javax.swing.ButtonGroup stem;
     private javax.swing.ButtonGroup tf;
     private javax.swing.JTextField topn;
+    private javax.swing.JRadioButton truequeryexp;
     private javax.swing.JRadioButton truesamedoc;
-    private javax.swing.JRadioButton truesamedoc1;
     private javax.swing.JRadioButton usingIDF;
-    private javax.swing.JRadioButton usingIDF1;
     private javax.swing.JRadioButton usingNorm;
-    private javax.swing.JRadioButton usingNorm1;
     private javax.swing.JRadioButton usingStem;
-    private javax.swing.JRadioButton usingStem1;
     // End of variables declaration//GEN-END:variables
 }

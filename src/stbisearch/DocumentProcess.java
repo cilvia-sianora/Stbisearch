@@ -29,7 +29,7 @@ public class DocumentProcess {
 		
 		// put to inverted file
 		for(Entry<Integer,Vector> doc: util.docs.entrySet()){
-			util.termWeighting(doc.getValue(),tfMethod,bIdf,bNormalization);
+			util.termWeighting(doc.getValue(),tfMethod,bIdf,bNormalization,false);
 			for(Entry<String,double[]> t: doc.getValue().terms.entrySet()){
 				invFile.put(t.getKey(), doc.getKey(), t.getValue()[1]);
 			}
