@@ -120,7 +120,7 @@ public class QueryProcess {
 
 				// print document retrieved
 				result += numDocsRetrieved + ". " + entry.getKey() + " - "
-				    + docNo + " " + util.docs.get(docNo).title + "\n";
+				    + util.docs.get(docNo).title + " " + docNo + "\n";
 
 				// get precision if document retrieved is relevant
 				if (isRelevantDoc(queryNo, docNo)) {
@@ -158,6 +158,7 @@ public class QueryProcess {
 		double sum = 0;
 		for (Entry<String, double[]> entry : query.terms.entrySet()) {
 			sum += entry.getValue()[1] * invFile.getWeight(entry.getKey(), doc.no);
+//			System.out.println("");
 		}
 		return sum;
 	}
@@ -165,6 +166,7 @@ public class QueryProcess {
 	// do searching for 1 query
 	public String search(int numRetrieved){
 		double result;
+		resultSearch.clear();
 		Map<Double,List<Integer>> temp = new TreeMap<>(Collections.reverseOrder());
 		for (Entry<Integer, Vector> doc : util.docs.entrySet()) {
 			result = similarity(query, doc.getValue());
@@ -184,7 +186,7 @@ public class QueryProcess {
 					resultSearch.put(entry.getKey(), new ArrayList<>(entry.getValue()));
 					i += entry.getValue().size();
 				} else {
-					resultSearch.put(entry.getKey(), new ArrayList<>(entry.getValue().subList(0,numRetrieved-i-1)));
+					resultSearch.put(entry.getKey(), new ArrayList<>(entry.getValue().subList(0,numRetrieved-i)));
 					break;
 				}
 			}
@@ -194,20 +196,23 @@ public class QueryProcess {
 
 		return getDocResult(query.no);
 	}
+	
 
 	/**
 	 * BAGIAN FELI *
 	 */
 	void reweighting(boolean bQueryExpansion, String algo) {
-
+//		System.out.println("-REWEIGHTING-");
+		Set<String> keySet = query.terms.keySet();
+//		System.out.println(keySet.size());
+		
 		// itung ulang weight berdasarkan algo
 		if (bQueryExpansion) { // if using query expansion
 			// iterasi seluruh term dari inverted file
 			// update weight tiap term dari vector query
-			Set<String> keySet = query.terms.keySet();
 			Set<String> allTerms = this.invFile.file.keySet();
 			for (String aTerm : allTerms) {
-				if (!keySet.contains(aTerm)) {
+				if (!keySet.contains(aTerm)) { // term yang gak ada di query
 					//hitung w baru
 					double res = 0;
 					switch (algo) {
@@ -219,57 +224,44 @@ public class QueryProcess {
 							res = this.decHi(aTerm);
 					}
 					
-					if (res > 0){
+					if (res > 0){ // masukin kalo weight lebih dari 0
 						double[] resArr;
 						resArr = new double[2];
 						resArr[0] = 0; resArr[1] = res;
 						query.terms.put(aTerm, resArr);
 					}
-				} else {
-					switch (algo) {
-						case "rocchio":
-							for (String theTerm : keySet) {
-								if (rocchio(theTerm) > 0)
-									query.terms.get(theTerm)[1] = rocchio(theTerm);
-								else 
-									query.terms.remove(theTerm);
-							}
-						case "ide":
-							for (String theTerm : keySet) {
-								if (ideReguler(theTerm) > 0)
-									query.terms.get(theTerm)[1] = ideReguler(theTerm);
-								else 
-									query.terms.remove(theTerm);
-							}
-						case "dechi":
-							for (String theTerm : keySet) {
-								if (decHi(theTerm) > 0)
-									query.terms.get(theTerm)[1] = decHi(theTerm);
-								else 
-									query.terms.remove(theTerm);
-							}
-					}
-				}
+				}	
 			}
 
-		} else {
-			// iterasi seluruh term dari term yang ada di vector query
-			// update weight tiap term dari vector query
-			Set<String> keySet = query.terms.keySet();
-			switch (algo) {
-				case "rocchio":
-					for (String theTerm : keySet) {
+		}
+		
+		// if not using query expansion
+		// iterasi seluruh term dari term yang ada di vector query
+		// update weight tiap term dari vector query
+		switch (algo) {
+			case "rocchio":
+				System.out.println("-rocchio-");
+				for (String theTerm : keySet) {
+//					System.out.println(theTerm+" "+rocchio(theTerm));
+					if (rocchio(theTerm) > 0) // if weight result > 0
 						query.terms.get(theTerm)[1] = rocchio(theTerm);
-					}
-				case "ide":
-					for (String theTerm : keySet) {
+					else 
+						query.terms.get(theTerm)[1] = 0;
+				}
+			case "ide":
+				for (String theTerm : keySet) {
+					if (ideReguler(theTerm) > 0)
 						query.terms.get(theTerm)[1] = ideReguler(theTerm);
-					}
-				case "dechi":
-					for (String theTerm : keySet) {
+					else 
+						query.terms.get(theTerm)[1] = 0;
+				}
+			case "dechi":
+				for (String theTerm : keySet) {
+					if (decHi(theTerm) > 0)
 						query.terms.get(theTerm)[1] = decHi(theTerm);
-					}
-			}
+					else 
+						query.terms.get(theTerm)[1] = 0;
+				}
 		}
 	}
 
@@ -281,7 +273,21 @@ public class QueryProcess {
 	 * @return bobot term yang baru
 	 */
 	double rocchio(String term) {
-		return query.terms.get(term)[1] + (this.countWeightRelevantDoc(term) / relevantDocs.size()) - (this.countWeightIrrelevantDoc(term, irrelevantDocs.size()) / irrelevantDocs.size());
+		double valueRlv;
+		if(relevantDocs.isEmpty()){
+			valueRlv = 0;
+		} else {
+			valueRlv = this.countWeightRelevantDoc(term) / relevantDocs.size();
+		}
+		
+		double valueIrrlv;
+		if(irrelevantDocs.isEmpty()){
+			valueIrrlv = 0;
+		} else {
+			valueIrrlv = this.countWeightIrrelevantDoc(term, irrelevantDocs.size()) / irrelevantDocs.size();
+		}
+		
+		return query.terms.get(term)[1] + valueRlv - valueIrrlv;
 	}
 
 	/**
@@ -364,7 +370,7 @@ public class QueryProcess {
 	 * Menentukan dokumen mana yang relevan dan tidak dari dokumen-dokumen
 	 * yang sudah di-retrieve. Untuk experimental query!
 	 */
-	void determineRelevantDocs(int noQuery) {
+	void determineRelevantDocs(int numTopRlvDocs) {
 		// isi relevantDocs dan irrelevantDocs dari nentuin resultSearch
 		//testing
 //		this.tfMethod = "raw";
@@ -383,24 +389,43 @@ public class QueryProcess {
 //		for (int i = 1; i < 20; i++) {
 //			resultSearch.get(0.5).add(i);
 //		}
+		
+		if(numTopRlvDocs != -1){
+			//isi
+			Collection<List<Integer>> values = resultSearch.values();
+			for (List<Integer> list : values) {
+				for (int i : list) {
+					if (this.isRelevantDoc(query.no, i)) {
+						if (!relevantDocs.contains(i)) {
+							relevantDocs.add(i);
+						}
+					} else {
+						if (!irrelevantDocs.contains(i)) {
+							irrelevantDocs.add(i);
+						}
+					}
 
-		//isi
-		Collection<List<Integer>> values = resultSearch.values();
-		for (List<Integer> list : values) {
-			for (int i : list) {
-				if (this.isRelevantDoc(noQuery, i)) {
-					if (!relevantDocs.contains(i)) {
-						relevantDocs.add(i);
-					}
-				} else {
-					if (!irrelevantDocs.contains(i)) {
-						irrelevantDocs.add(i);
-					}
 				}
-
+			}
+		} else { // pseudo
+			int i = 0;
+			for(Entry<Double,List<Integer>> entry: resultSearch.entrySet()){
+				if( i+entry.getValue().size() < numTopRlvDocs){ // jika di entry masih bisa dimasukkan semua ke relevan
+					relevantDocs.addAll(entry.getValue());
+					i += entry.getValue().size();
+				} else if (i < numTopRlvDocs){ // jika di entry sudah gak bisa dimasukkan semua ke relevan
+					relevantDocs.addAll(entry.getValue().subList(0,numTopRlvDocs-i));
+					i += entry.getValue().size();
+					if(i > numTopRlvDocs){ // jika di entry masih ada sisa yang harusnya dimasukkan ke irrelevan
+						irrelevantDocs.addAll(entry.getValue().subList(numTopRlvDocs-i,entry.getValue().size()-1));
+					}
+				} else { // jika sisa tinggal dimasukkan ke irrelevan
+					irrelevantDocs.addAll(entry.getValue());
+				}
 			}
 		}
-		System.out.println("rel: ");
+		
+		System.out.print("rel: ");
 		for (int i : relevantDocs) {
 			System.out.print(i + " ");
 		}
@@ -408,6 +433,7 @@ public class QueryProcess {
 		for (int i : irrelevantDocs) {
 			System.out.print(i + " ");
 		}
+		System.out.println("");
 
 	}
 

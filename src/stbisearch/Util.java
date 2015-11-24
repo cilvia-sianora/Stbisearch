@@ -301,28 +301,24 @@ public class Util {
 	 * @param bNormalize normalization or not
 	 */
 	public void termWeighting(Vector vec, String methodTF, boolean bIdf, boolean bNormalize, boolean searchProcess){
-		double[] temp = new double[2];
 		for(Entry<String,double[]> entry: vec.terms.entrySet()){
-			temp[0] = entry.getValue()[0];
-			temp[1] = entry.getValue()[1];
 			switch(methodTF){
 				case "raw":
-					temp[1] *= rawTF(vec,entry.getKey());
+					entry.getValue()[1] *= rawTF(vec,entry.getKey());
 					break;
 				case "log":
-					temp[1] *= logTF(vec,entry.getKey());
+					entry.getValue()[1] *= logTF(vec,entry.getKey());
 					break;
 				case "binary":
-					temp[1] *= binaryTF(vec,entry.getKey());
+					entry.getValue()[1] *= binaryTF(vec,entry.getKey());
 					break;
 				case "aug":
-					temp[1] *= augTF(vec,entry.getKey());
+					entry.getValue()[1] *= augTF(vec,entry.getKey());
 					break;
 			}
 			if(bIdf){
-				temp[1] *= idf(entry.getKey(),searchProcess);
+				entry.getValue()[1] *= idf(entry.getKey(),searchProcess);
 			}
-			vec.terms.put(entry.getKey(), temp);
 		}
 		if(bNormalize){
 			vec.normalization();

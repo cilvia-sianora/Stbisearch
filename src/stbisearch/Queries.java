@@ -120,8 +120,9 @@ public class Queries {
 			
 			if(qp.doesHaveRelevantDoc(query.getKey())){
 				qp.query.copy(query.getValue());
-
+				
 				// do term-weighting for query
+				System.out.println("Termweighting query "+qp.query.no+" ...");
 				qp.util.termWeighting(qp.query,tfMethod,bIdf,bNormalization,true);
 				
 				// searching
@@ -155,24 +156,30 @@ public class Queries {
 		
 		for(QueryProcess qp: queries){
 			// tentuin doc relevant & irrelevant
-			if(numTopDocsRlv == -1){
-				qp.determineRelevantDocs(qp.query.no);
-			} else { // pseudo
-				// put numTopDocsRlv docs to relevantDocs 
-			}
-			
-			if(bSameDocs){
+			// put numTopDocsRlv docs to relevantDocs
+			// if numTopDocsRlv is -1, pseudo
+			System.out.println("Determine relevant docs...");
+			qp.determineRelevantDocs(numTopDocsRlv);
+			System.out.println(qp.util.docs.size());
+			if(!bSameDocs){
+				System.out.println("Delete docs...");
 				qp.deleteDocs();
 			}
+			System.out.println(qp.util.docs.size());
 			
 			// print query lama
-			result += "Query lama = \n" + qp.query.content + "\n";
+			result += "Query lama: \n" + qp.query.getTerms() + "\n";
 			result += "Bobot query lama = " + qp.query.getAllWeight() + "\n";
 			
+			System.out.println("Reweighting...");
 			qp.reweighting(bQueryExpansion, algo);
 			
+//			System.out.println("After reweighting...");
+//			System.out.println("Query "+qp.query.no);
+//			qp.query.printTerms();
+			
 			// print query baru
-			result += "Query baru = \n" + qp.query.content + "\n";
+			result += "Query baru: \n" + qp.query.getTerms() + "\n";
 			result += "Bobot query baru = " + qp.query.getAllWeight() + "\n";
 			
 			// print result
@@ -194,21 +201,21 @@ public class Queries {
 				qp.relevantDocs = new ArrayList<>(rlvDocs);
 				qp.irrelevantDocs = new ArrayList<>(irrlvDocs);
 			} else { // pseudo
-				// put numTopDocsRlv docs to relevantDocs 
+				qp.determineRelevantDocs(numTopDocsRlv);
 			}
 			
-			if(bSameDocs){
+			if(!bSameDocs){
 				qp.deleteDocs();
 			}
 			
 			// print query lama
-			result += "Query lama = \n" + qp.query.content + "\n";
+			result += "Query lama: \n" + qp.query.getTerms() + "\n";
 			result += "Bobot query lama = " + qp.query.getAllWeight() + "\n";
 			
 			qp.reweighting(bQueryExpansion, algo);
 			
 			// print query baru
-			result += "Query baru = \n" + qp.query.content + "\n";
+			result += "Query baru: \n" + qp.query.getTerms() + "\n";
 			result += "Bobot query baru = " + qp.query.getAllWeight() + "\n";
 			
 			// print result

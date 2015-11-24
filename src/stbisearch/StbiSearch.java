@@ -28,9 +28,14 @@ public class StbiSearch {
 		String locStopwords = "Test Collection\\stopwords-porter.txt";
 		String locRlvJudge = "Test Collection\\CISI\\qrels.text";
 		String tfMethod = "raw";
-		boolean idf = true;
+		boolean idf = false;
 		boolean norm = false;
 		boolean stem = true;
+		int numDocsRetrieved = 10;
+		int numTopDocsRlv = -1;
+		String algo = "rocchio";
+		boolean bSameDocs = true;
+		boolean bQueryExpansion = false;
 //		String result;
 //		util.getDocuments(locDocuments);
 //		util.getQueries(locQueries);
@@ -38,14 +43,18 @@ public class StbiSearch {
 //		util.printQueries();
 //		util.getRelevanceJudgement(locRlvJudge);
 //		util.printJudgement();
-//		DocumentProcess dp = new DocumentProcess();
-//		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
-//		Queries qp = new Queries();
-//		qp.setQuerySetting(tfMethod,idf,norm,stem);
-//		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments);
-//		System.out.println("-RESULT-");
-//		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
-//		System.out.println(result);
+		DocumentProcess dp = new DocumentProcess();
+		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
+		Queries qp = new Queries();
+		qp.setQuerySetting(tfMethod,idf,norm,stem);
+		String result = qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments, numDocsRetrieved);
+		System.out.println("-1ST RESULT-");
+		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
+		System.out.println(result);
+		result = qp.relevanceFeedbackExperiment(algo, bSameDocs, bQueryExpansion, numDocsRetrieved, numTopDocsRlv);
+		System.out.println("-2ND RESULT-");
+		System.out.println(algo+" "+bSameDocs+" "+bQueryExpansion+" "+numTopDocsRlv);
+		System.out.println(result);
 		
 //		Map<Integer,List<Integer>> temp = new HashMap<>();
 //		
@@ -72,12 +81,23 @@ public class StbiSearch {
 //			}
 //		}
 		
-		QueryProcess QP = new QueryProcess();
-		QP.determineRelevantDocs(10);
-		double countWeightRelevantDoc = QP.countWeightRelevantDoc("system");
-		System.out.println(countWeightRelevantDoc);
-		double countWeightIRRelevantDoc = QP.countWeightIrrelevantDoc("system", 3);
-		System.out.println(countWeightIRRelevantDoc);
+//		Vector temp = new Vector();
+//		for(int i=0;i<4;i++){
+//			double[] value = new double[2];
+//			value[0] = 0;
+//			value[1] = i;
+//			temp.terms.put(String.valueOf(i), value);
+//		}
+//		temp.printTerms();
+//		
+//		temp.terms.get("1")[0] = 9;
+//		temp.printTerms();
+//		QueryProcess QP = new QueryProcess();
+//		QP.determineRelevantDocs(10);
+//		double countWeightRelevantDoc = QP.countWeightRelevantDoc("system");
+//		System.out.println(countWeightRelevantDoc);
+//		double countWeightIRRelevantDoc = QP.countWeightIrrelevantDoc("system", 3);
+//		System.out.println(countWeightIRRelevantDoc);
 		
 	}
 
