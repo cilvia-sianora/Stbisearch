@@ -486,7 +486,7 @@ public class Query extends javax.swing.JPanel {
             queryexp = false;
         }
 		//TODO
-		mg.qp.setQuerySetting(tf, idf, norm, stem,alg,samedoc,queryexp);
+		mg.qp.setQuerySetting(tf, idf, norm, stem,alg,samedoc,queryexp,topN);
 		JOptionPane.showMessageDialog(this, "Setting done");
     }//GEN-LAST:event_indexingActionPerformed
 

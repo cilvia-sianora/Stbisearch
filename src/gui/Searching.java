@@ -45,13 +45,18 @@ public class Searching extends javax.swing.JPanel {
     }
     
         private static JTable showInteractiveResultsTable(List<String> results){
+        
         Object[][] tempdatakar = new Object [results.size()][3];
         for(int i=0;i<=results.size()-1;i++){
             if(results.get(i).substring(0,1).matches("[0-9]")){
-                tempdatakar[i][0]= Integer.valueOf(results.get(i).substring(results.get(i).lastIndexOf(" ")+1).replaceAll("\n",""));
-                tempdatakar[i][1]= results.get(i).substring(2);
-                irrel.add(Integer.valueOf(results.get(i).substring(results.get(i).lastIndexOf(" ")+1).replaceAll("\n","")));
+                if(results.get(i).substring(0,results.get(i).indexOf(" ")).matches("\\d{1,4}\\.")){
+                    tempdatakar[i][0]= Integer.valueOf(results.get(i).substring(results.get(i).lastIndexOf(" ")+1).replaceAll("\n",""));
+                    tempdatakar[i][1]= results.get(i);
+                    irrel.add(Integer.valueOf(results.get(i).substring(results.get(i).lastIndexOf(" ")+1).replaceAll("\n","")));
+                } else {
+                    tempdatakar[i][1]= results.get(i);
                 }
+            }
             else {
                 tempdatakar[i][1]= results.get(i);
             }
@@ -84,9 +89,17 @@ public class Searching extends javax.swing.JPanel {
         Object[][] tempdatakar = new Object [results.size()][2];
         for(int i=0;i<=results.size()-1;i++){
             if(results.get(i).substring(0,1).matches("[0-9]")){
-                tempdatakar[i][0]= Integer.valueOf(results.get(i).substring(results.get(i).lastIndexOf(" ")+1).replaceAll("\n",""));
-                tempdatakar[i][1]= results.get(i).substring(2);
+//                System.out.println(results.get(i));
+//                System.out.println(results.get(i).substring(0,results.get(i).indexOf(" ")));
+                if(results.get(i).substring(0,results.get(i).indexOf(" ")).matches("\\d{1,4}\\.")){
+//                System.out.println(results.get(i));
+                    System.out.println("debug: "+results.get(i).substring(results.get(i).lastIndexOf(" ")+1).replaceAll("\n",""));
+                    tempdatakar[i][0]= Integer.valueOf(results.get(i).substring(results.get(i).lastIndexOf(" ")+1).replaceAll("\n",""));
+                    tempdatakar[i][1]= results.get(i);
+                } else {
+                    tempdatakar[i][1]= results.get(i);
                 }
+            }
             else {
                 tempdatakar[i][1]= results.get(i);
             }
@@ -359,6 +372,8 @@ public class Searching extends javax.swing.JPanel {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         boolean experimentalValue;
         String query;
+        rel.clear();
+        irrel.clear();
         
         List<String> result = new ArrayList<String>();
         
@@ -368,16 +383,27 @@ public class Searching extends javax.swing.JPanel {
             int topS= Integer.parseInt(tops.getText()) ;
             experimentalValue=true;
 			//TODO
+                        if(mg.qp.algo.contains("pseudo")){
+                System.out.println("Pseudo Experimental");
+                    result = mg.qp.pseudoRlvFeedbackExperiment(locRelevanceJudge, locQueries, mg.dp.locStopwords, mg.dp.locDocuments, topS);
+                }else {           
 			result = mg.qp.searchExperiment(locRelevanceJudge, locQueries, mg.dp.locStopwords, mg.dp.locDocuments,topS);
+            }
                         jTable3.setModel(showExperimentalResultsTable(result).getModel());
         }
         else if (interactive.isSelected()){
             experimentalValue=false;
             query = queryfield.getText();
 			//TODO
-			result = mg.qp.searchInteractive(query, mg.dp.locStopwords, mg.dp.locDocuments);
+            if(mg.qp.algo.contains("pseudo")){
+                 result= mg.qp.pseudoRlvFeedbackInteractive(query, mg.dp.locStopwords, mg.dp.locDocuments);
+                        jTable3.setModel(showExperimentalResultsTable(result).getModel());
+            }else {  
+                result = mg.qp.searchInteractive(query, mg.dp.locStopwords, mg.dp.locDocuments);
                         jTable3.setModel(showInteractiveResultsTable(result).getModel());
                         buttonColumn = new ButtonColumn(jTable3, 2);
+
+             }
 
         }
         
@@ -431,9 +457,10 @@ public class Searching extends javax.swing.JPanel {
         
         List<String> result = new ArrayList<String>();
         
-        int topS= Integer.parseInt(tops.getText()) ;
+        
               
         if(experimental.isSelected()){
+            int topS= Integer.parseInt(tops.getText()) ;
             experimentalValue=true;
             if(mg.qp.algo.contains("pseudo")){
                 System.out.println("Pseudo Experimental");

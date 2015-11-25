@@ -143,16 +143,16 @@ public class QueryProcess {
 	}
 
 	//print the result of experiment judgement
-	public String judgeRelevance() {
-		String result = "";
+	public List<String> judgeRelevance() {
+		List<String> result = new ArrayList<>();
 
 		// count number of total relevant documents of query
 		int totalRlvDocs = countAllRelevantDocs(query.no);
 
 		// print precision, recall, NIAP
-		result += "Precision = " + getPrecision() + "\n";
-		result += "Recall = " + getRecall(totalRlvDocs) + "\n";
-		result += "NIAP = " + getNIAP(totalRlvDocs) + "\n";
+		result.add("Precision = " + getPrecision() + "\n");
+		result.add("Recall = " + getRecall(totalRlvDocs) + "\n");
+		result.add("NIAP = " + getNIAP(totalRlvDocs) + "\n");
 
 		// add to batch to count the average final
 		precision += getPrecision();

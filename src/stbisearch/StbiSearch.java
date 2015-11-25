@@ -23,17 +23,17 @@ public class StbiSearch {
 	public static void main(String[] args) {
 		Util util;
 		util = new Util();
-		String locQueries = "Test Collection\\ADI\\query.text";
-		String locDocuments = "Test Collection\\ADI\\adi.all";
+		String locQueries = "Test Collection\\CISI\\query.text";
+		String locDocuments = "Test Collection\\CISI\\cisi.all";
 		String locStopwords = "Test Collection\\stopwords-porter.txt";
-		String locRlvJudge = "Test Collection\\ADI\\qrels.text";
+		String locRlvJudge = "Test Collection\\CISI\\qrels.text";
 		String tfMethod = "raw";
-		boolean idf = false;
+		boolean idf = true;
 		boolean norm = false;
 		boolean stem = true;
-		int numDocsRetrieved = -1;
+		int numDocsRetrieved = 20;
 		int numTopDocsRlv = -1;
-		String algo = "rocchio";
+		String algo = "dechi";
 		boolean bSameDocs = true;
 		boolean bQueryExpansion = false;
 //		String result;
@@ -43,20 +43,23 @@ public class StbiSearch {
 //		util.printQueries();
 //		util.getRelevanceJudgement(locRlvJudge);
 //		util.printJudgement();
-		DocumentProcess dp = new DocumentProcess();
-		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
-		Queries qp = new Queries();
-		qp.setQuerySetting(tfMethod,idf,norm,stem,algo,bSameDocs,bQueryExpansion);
-		List<String> result = new ArrayList<>();
-		
-		// for not pseudo
-		result.addAll(qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments, numDocsRetrieved));
-		System.out.println("-1ST RESULT-");
-		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
-		result.addAll(qp.relevanceFeedbackExperiment(numDocsRetrieved));
-		System.out.println("-2ND RESULT-");
-		System.out.println(algo+" "+bSameDocs+" "+bQueryExpansion+" "+numTopDocsRlv);
-		System.out.println(result);
+//		DocumentProcess dp = new DocumentProcess();
+//		dp.indexing(locDocuments,locStopwords,tfMethod,idf,norm,stem);
+//		Queries qp = new Queries();
+//		qp.setQuerySetting(tfMethod,idf,norm,stem,algo,bSameDocs,bQueryExpansion);
+//		List<String> result = new ArrayList<>();
+                String temp = "1. 3.2346273849 - hahahahaha 12";
+                System.out.println(temp.substring(0,temp.indexOf(" ")));
+                
+//		
+//		// for not pseudo
+//		result.addAll(qp.searchExperiment(locRlvJudge, locQueries, locStopwords, locDocuments, numDocsRetrieved));
+//		System.out.println("-1ST RESULT-");
+//		System.out.println(tfMethod+" "+idf+" "+norm+" "+stem);
+//		result.addAll(qp.relevanceFeedbackExperiment(numDocsRetrieved));
+//		System.out.println("-2ND RESULT-");
+//		System.out.println(algo+" "+bSameDocs+" "+bQueryExpansion+" "+numTopDocsRlv);
+//		System.out.println(result);
 		
 		// for pseudo
 //		result.addAll(qp.pseudoRlvFeedbackExperiment(locRlvJudge, locQueries, locStopwords, locDocuments,numDocsRetrieved));

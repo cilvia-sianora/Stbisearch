@@ -40,7 +40,8 @@ public class Queries {
 	// set the configuration for query
 	public void setQuerySetting(String tfMethod, boolean bIdf, 
 			boolean bNormalization, boolean bStemming, String algo,
-			boolean bSameDocs, boolean bQueryExpansion){
+			boolean bSameDocs, boolean bQueryExpansion,
+                        int numTopRlvDocs){
 		this.tfMethod = tfMethod;
 		this.bIdf = bIdf;
 		this.bNormalization = bNormalization;
@@ -48,6 +49,7 @@ public class Queries {
 		this.algo = algo;
 		this.bSameDocs = bSameDocs;
 		this.bQueryExpansion = bQueryExpansion;
+                this.numTopRlvDocs = numTopRlvDocs;
 	}
 	
 	public List<String> searchInteractive(String queryInput, String locStopwords, 
@@ -144,7 +146,7 @@ public class Queries {
 				result.addAll(qp.search(numDocsRetrieved));
 				
 				// get relevance judgement result
-				result.add(qp.judgeRelevance());
+				result.addAll(qp.judgeRelevance());
 				
 				// add to batch to count the average final
 				precision += qp.precision;
@@ -157,10 +159,11 @@ public class Queries {
 		}
 		
 		// count the average final
-		result.add(0,"Precision = " + (precision/util.queries.size()) + "\n" +
-				"Recall = " + (recall/util.queries.size()) + "\n" +
-				"NIAP = " + (niap/util.queries.size()) + "\n" +
-				"The result of each query:" + "\n");
+		result.add(0,"The result of each query:" + "\n");
+                result.add(0,"NIAP = " + (niap/util.queries.size()) + "\n" );
+                result.add(0,"Recall = " + (recall/util.queries.size()) + "\n");
+                result.add(0,"Precision = " + (precision/util.queries.size()) + "\n");
+                
 		
 		return result;
 	}
@@ -182,14 +185,16 @@ public class Queries {
 			
 			// print query lama
 			result.add("Query number = "+qp.query.no+"\n");
-			result.add("Query lama: \n" + qp.query.getTerms());
-			
+			result.add("Query lama: \n");
+			result.addAll(qp.query.getTerms());
+                        
 			System.out.println("Reweighting...");
 			qp.reweighting(bQueryExpansion, algo);
 			
 			// print query baru
-			result.add("Query baru: \n" + qp.query.getTerms());
-			
+			result.add("Query baru: \n");
+			result.addAll(qp.query.getTerms());
+                        
 			if(!bSameDocs){
 				System.out.println("Delete docs...");
 				System.out.println(qp.util.docs.size());
@@ -201,7 +206,7 @@ public class Queries {
 			result.addAll(qp.search(numDocsRetrieved));
 			
 			// get relevance judgement result
-			result.add(qp.judgeRelevance());
+			result.addAll(qp.judgeRelevance());
 			
 			// add to batch to count the average final
 			precision += qp.precision;
@@ -210,10 +215,10 @@ public class Queries {
 		}
 		
 		// count the average final
-		result.add(0,"Precision = " + (precision/util.queries.size()) + "\n" +
-				"Recall = " + (recall/util.queries.size()) + "\n" +
-				"NIAP = " + (niap/util.queries.size()) + "\n" +
-				"The result of each query:" + "\n");
+		result.add(0,"The result of each query:" + "\n");
+                result.add(0,"NIAP = " + (niap/util.queries.size()) + "\n" );
+                result.add(0,"Recall = " + (recall/util.queries.size()) + "\n");
+                result.add(0,"Precision = " + (precision/util.queries.size()) + "\n");
 		
 		return result;
 	}
@@ -233,12 +238,14 @@ public class Queries {
 			}
 			
 			// print query lama
-			result.add("Query lama: \n" + qp.query.getTerms() + "\n");
+			result.add("Query lama: \n");
+                        result.addAll(qp.query.getTerms());
 			
 			qp.reweighting(bQueryExpansion, algo);
 			
 			// print query baru
-			result.add("Query baru: \n" + qp.query.getTerms() + "\n");
+			result.add("Query baru: \n");
+                        result.addAll(qp.query.getTerms());
 			
 			if(!bSameDocs){
 				System.out.println("Delete docs...");

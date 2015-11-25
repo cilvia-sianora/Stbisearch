@@ -1,7 +1,9 @@
 package stbisearch;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
@@ -57,11 +59,11 @@ public class Vector {
 		return author + " " + title + " " + content;
 	}
 	
-	public String getTerms(){
-		String result = "";
+	public List<String> getTerms(){
+		List<String> result = new ArrayList<>();
 		for(Entry<String,double[]> entry: terms.entrySet()){
 			if(entry.getValue()[1] > 0){
-				result += entry.getKey() + "\t" + entry.getValue()[1] + "\n";
+				result.add(entry.getKey() + " " + entry.getValue()[1] + "\n");
 			}
 		}
 		return result;
